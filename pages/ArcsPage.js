@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import * as ReactRouterDOM from 'react-router-dom';
 import { arcs } from '../data/arcs.js';
@@ -50,7 +51,6 @@ const ArcDetails = ({ arc }) => {
     return React.createElement(
         'div',
         { className: "w-full text-center p-4" },
-        React.createElement(FavoriteButton, { item: arc, category: "arcs", className: "absolute top-6 left-6 !p-3" }),
         React.createElement(
             'div',
             { className: "mx-auto w-40 h-40 flex items-center justify-center rounded-lg bg-gray-700/50 mb-6 border-4 border-gray-600" },

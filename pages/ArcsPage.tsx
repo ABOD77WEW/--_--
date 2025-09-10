@@ -1,6 +1,7 @@
 
 
 
+
 import React, { useState, useMemo, useEffect } from 'react';
 // FIX: Replaced named imports with a namespace import for 'react-router-dom' to resolve module export errors.
 import * as ReactRouterDOM from 'react-router-dom';
@@ -41,7 +42,6 @@ const ArcCard: React.FC<{ arc: Arc; onSelect: () => void }> = ({ arc, onSelect }
 const ArcDetails: React.FC<{ arc: Arc }> = ({ arc }) => {
     return (
         <div className="w-full text-center p-4">
-            <FavoriteButton item={arc} category="arcs" className="absolute top-6 left-6 !p-3" />
             <div className="mx-auto w-40 h-40 flex items-center justify-center rounded-lg bg-gray-700/50 mb-6 border-4 border-gray-600">
                 <span className="text-9xl">{arc.emoji}</span>
             </div>

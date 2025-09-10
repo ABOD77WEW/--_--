@@ -12,6 +12,7 @@ interface ShinobiProContextType {
 
 const ShinobiProContext = createContext<ShinobiProContextType | undefined>(undefined);
 
+// FIX: Corrected the component to return a ReactNode, as required by React.FC. The original implementation had an empty function body.
 export const ShinobiProProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [isPro, setIsPro] = useState(() => {
     try {

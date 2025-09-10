@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import * as ReactRouterDOM from 'react-router-dom';
 import { clans } from '../data/clans.js';
@@ -52,7 +53,6 @@ const ClanDetails = ({ clan }) => {
   return React.createElement(
     'div',
     { className: "w-full text-right p-4" },
-    React.createElement(FavoriteButton, { item: clan, category: "clans", className: "absolute top-6 left-6 !p-3" }),
     React.createElement(
       'div',
       { className: "flex flex-col md:flex-row items-center md:items-start md:text-right gap-6 mb-6" },

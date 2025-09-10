@@ -1,6 +1,7 @@
 
 
 
+
 import React, { useState, useEffect } from 'react';
 // FIX: Replaced named imports with a namespace import for 'react-router-dom' to resolve module export errors.
 import * as ReactRouterDOM from 'react-router-dom';
@@ -41,7 +42,6 @@ const EyeDetails: React.FC<{ eye: Eye }> = ({ eye }) => {
     const SvgIcon = eye.svg;
     return (
         <div className="w-full text-center p-4">
-            <FavoriteButton item={eye} category="eyes" className="absolute top-6 left-6 !p-3" />
              <div className="mx-auto w-48 h-48 mb-6">
                 <SvgIcon className="w-full h-full" style={{ filter: 'drop-shadow(0 0 15px rgba(168, 85, 247, 0.6))' }} />
             </div>

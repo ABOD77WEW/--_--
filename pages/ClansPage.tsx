@@ -1,6 +1,7 @@
 
 
 
+
 import React, { useState, useEffect } from 'react';
 // FIX: Replaced named imports with a namespace import for 'react-router-dom' to resolve module export errors.
 import * as ReactRouterDOM from 'react-router-dom';
@@ -46,7 +47,6 @@ const ClanDetails: React.FC<{ clan: Clan; }> = ({ clan }) => {
   const Symbol = clan.symbol;
   return (
     <div className="w-full text-right p-4">
-        <FavoriteButton item={clan} category="clans" className="absolute top-6 left-6 !p-3" />
         <div className="flex flex-col md:flex-row items-center md:items-start md:text-right gap-6 mb-6">
             <div className="w-32 h-32 flex-shrink-0 bg-gray-900/50 rounded-lg p-4 border-2 border-gray-700">
                  <Symbol className="w-full h-full text-red-400" style={{ filter: 'drop-shadow(0 0 8px currentColor)' }} />

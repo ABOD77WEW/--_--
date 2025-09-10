@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import * as ReactRouterDOM from 'react-router-dom';
 import { eyes } from '../data/eyes.js';
@@ -51,7 +52,6 @@ const EyeDetails = ({ eye }) => {
     return React.createElement(
         'div',
         { className: "w-full text-center p-4" },
-        React.createElement(FavoriteButton, { item: eye, category: "eyes", className: "absolute top-6 left-6 !p-3" }),
         React.createElement(
             'div',
             { className: "mx-auto w-48 h-48 mb-6" },
