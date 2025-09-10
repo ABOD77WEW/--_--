@@ -1,12 +1,10 @@
-// FIX: Converted to a TypeScript module, added type annotations, and removed .js extensions from imports.
-import { Clan } from '../types';
-import UchihaSymbol from '../components/icons/UchihaSymbol';
-import AkatsukiSymbol from '../components/icons/AkatsukiSymbol';
-import AnbuSymbol from '../components/icons/AnbuSymbol';
-import SenjuSymbol from '../components/icons/SenjuSymbol';
-import HyugaSymbol from '../components/icons/HyugaSymbol';
+import UchihaSymbol from '../components/icons/UchihaSymbol.js';
+import AkatsukiSymbol from '../components/icons/AkatsukiSymbol.js';
+import AnbuSymbol from '../components/icons/AnbuSymbol.js';
+import SenjuSymbol from '../components/icons/SenjuSymbol.js';
+import HyugaSymbol from '../components/icons/HyugaSymbol.js';
 
-export const clans: Clan[] = [
+export const clans = [
   {
     id: 1,
     name: "عشيرة الأوتشيها",

@@ -1,35 +1,41 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { FavoriteItem, FavoriteCategory } from '../types';
+// FIX: Rewrote as a TypeScript module with JSX and strong types for context, resolving module and typing errors.
+import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
 import { characters } from '../data/characters';
 import { arcs } from '../data/arcs';
 import { eyes } from '../data/eyes';
 import { clans } from '../data/clans';
+import { FavoriteCategory, FavoriteItem, Character, Arc, Eye, Clan } from '../types';
 
-interface FavoritesState {
-  characters: number[];
-  arcs: number[];
-  eyes: number[];
-  clans: number[];
+interface Favorites {
+    characters: number[];
+    arcs: number[];
+    eyes: number[];
+    clans: number[];
 }
 
 interface FavoritesContextType {
-  favorites: FavoritesState;
-  toggleFavorite: (item: FavoriteItem, category: FavoriteCategory) => void;
-  isFavorite: (id: number, category: FavoriteCategory) => boolean;
-  getFavoriteItems: () => { [key in FavoriteCategory]: FavoriteItem[] };
+    favorites: Favorites;
+    toggleFavorite: (item: FavoriteItem, category: FavoriteCategory) => void;
+    isFavorite: (id: number, category: FavoriteCategory) => boolean;
+    getFavoriteItems: () => {
+        characters: Character[];
+        arcs: Arc[];
+        eyes: Eye[];
+        clans: Clan[];
+    };
 }
 
 const FavoritesContext = createContext<FavoritesContextType | undefined>(undefined);
 
-const initialFavorites: FavoritesState = {
+const initialFavorites: Favorites = {
   characters: [],
   arcs: [],
   eyes: [],
   clans: [],
 };
 
-export const FavoritesProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [favorites, setFavorites] = useState<FavoritesState>(() => {
+export const FavoritesProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const [favorites, setFavorites] = useState<Favorites>(() => {
     try {
       const item = window.localStorage.getItem('naruto-favorites');
       return item ? JSON.parse(item) : initialFavorites;
@@ -67,12 +73,10 @@ export const FavoritesProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     };
   }, [favorites]);
 
-  // FIX: Replaced JSX with React.createElement to be valid in a .ts file.
-  // This resolves all parsing errors related to using JSX syntax in a non-JSX file.
-  return React.createElement(
-    FavoritesContext.Provider,
-    { value: { favorites, toggleFavorite, isFavorite, getFavoriteItems } },
-    children
+  return (
+    <FavoritesContext.Provider value={{ favorites, toggleFavorite, isFavorite, getFavoriteItems }}>
+      {children}
+    </FavoritesContext.Provider>
   );
 };
 

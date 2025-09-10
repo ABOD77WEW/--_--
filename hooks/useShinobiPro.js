@@ -1,18 +1,8 @@
-// FIX: Rewrote as a TypeScript module with JSX and strong types for context, resolving module errors.
-import React, { createContext, useContext, useState, useEffect, ReactNode, Dispatch, SetStateAction } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
-interface ShinobiProContextType {
-    isPro: boolean;
-    activatePro: () => void;
-    isActivating: boolean;
-    setIsActivating: Dispatch<SetStateAction<boolean>>;
-    isAkatsukiTheme: boolean;
-    toggleAkatsukiTheme: () => void;
-}
+const ShinobiProContext = createContext(undefined);
 
-const ShinobiProContext = createContext<ShinobiProContextType | undefined>(undefined);
-
-export const ShinobiProProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const ShinobiProProvider = ({ children }) => {
   const [isPro, setIsPro] = useState(() => {
     try {
       const item = window.localStorage.getItem('shinobi-pro-status');
@@ -55,10 +45,10 @@ export const ShinobiProProvider: React.FC<{ children: ReactNode }> = ({ children
     }
   };
 
-  return (
-    <ShinobiProContext.Provider value={{ isPro, activatePro, isActivating, setIsActivating, isAkatsukiTheme, toggleAkatsukiTheme }}>
-      {children}
-    </ShinobiProContext.Provider>
+  return React.createElement(
+    ShinobiProContext.Provider,
+    { value: { isPro, activatePro, isActivating, setIsActivating, isAkatsukiTheme, toggleAkatsukiTheme } },
+    children
   );
 };
 
