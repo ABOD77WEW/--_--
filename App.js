@@ -17,19 +17,21 @@ import { useShinobiPro, ShinobiProProvider } from './hooks/useShinobiPro.js';
 
 const PageWrapper = ({ children }) => {
   const location = ReactRouterDOM.useLocation();
-  const [animationClass, setAnimationClass] = useState('opacity-0');
+  const [animationClass, setAnimationClass] = useState('opacity-0 translate-y-5');
 
   useEffect(() => {
-    setAnimationClass('opacity-0');
+    // On location change, we want to reset the animation state for the new page
+    setAnimationClass('opacity-0 translate-y-5');
     const timer = setTimeout(() => {
-      setAnimationClass('opacity-100');
-    }, 50);
+      // Then trigger the fade-in and slide-up animation
+      setAnimationClass('opacity-100 translate-y-0');
+    }, 50); // A small delay is needed to ensure the browser registers the state change and applies the transition
     return () => clearTimeout(timer);
   }, [location.pathname]);
 
   return React.createElement(
     'main',
-    { className: `transition-opacity duration-500 ease-in-out ${animationClass}` },
+    { className: `transition-all duration-500 ease-out ${animationClass}` },
     children
   );
 };
