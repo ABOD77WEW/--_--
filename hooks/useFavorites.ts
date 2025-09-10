@@ -56,34 +56,4 @@ export const FavoritesProvider: React.FC<{ children: ReactNode }> = ({ children 
       const newCategoryFavorites = isCurrentlyFavorite
         ? categoryFavorites.filter(id => id !== item.id)
         : [...categoryFavorites, item.id];
-      return { ...prev, [category]: newCategoryFavorites };
-    });
-  }, []);
-
-  const isFavorite = useCallback((id: number, category: FavoriteCategory) => {
-    return favorites[category].includes(id);
-  }, [favorites]);
-
-  const getFavoriteItems = useCallback(() => {
-    return {
-      characters: characters.filter(c => favorites.characters.includes(c.id)),
-      arcs: arcs.filter(a => favorites.arcs.includes(a.id)),
-      eyes: eyes.filter(e => favorites.eyes.includes(e.id)),
-      clans: clans.filter(c => favorites.clans.includes(c.id)),
-    };
-  }, [favorites]);
-
-  return (
-    <FavoritesContext.Provider value={{ favorites, toggleFavorite, isFavorite, getFavoriteItems }}>
-      {children}
-    </FavoritesContext.Provider>
-  );
-};
-
-export const useFavorites = () => {
-  const context = useContext(FavoritesContext);
-  if (context === undefined) {
-    throw new Error('useFavorites must be used within a FavoritesProvider');
-  }
-  return context;
-};
+      return { ...prev, [category]: new
