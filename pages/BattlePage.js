@@ -3,35 +3,35 @@ import * as ReactRouterDOM from 'react-router-dom';
 import { characters } from '../data/characters.js';
 
 const ComparisonStat = ({ label, value1, value2, winner }) => {
-    const p1Class = winner === 'p1' ? 'text-amber-400 font-bold' : '';
-    const p2Class = winner === 'p2' ? 'text-amber-400 font-bold' : '';
+    const p1Class = winner === 'p1' ? 'winner-text font-bold' : '';
+    const p2Class = winner === 'p2' ? 'winner-text font-bold' : '';
     
     return React.createElement(
         'div',
-        { className: "grid grid-cols-3 items-center text-center gap-2 md:gap-4 py-2 border-b border-gray-700 last:border-b-0" },
+        { className: "grid grid-cols-3 items-center text-center gap-2 md:gap-4 py-2 border-b last:border-b-0 comparison-stat-grid" },
         React.createElement('div', { className: `text-sm md:text-lg ${p1Class}` }, value1),
-        React.createElement('div', { className: "text-xs md:text-sm font-semibold text-gray-400" }, label),
+        React.createElement('div', { className: "text-xs md:text-sm font-semibold label" }, label),
         React.createElement('div', { className: `text-sm md:text-lg ${p2Class}` }, value2)
     );
 };
 
-const ComparisonView = ({ challenger, opponent }) => {
+const ComparisonView = ({ challenger, opponent, phase }) => {
     const powerWinner = challenger.powerLevel > opponent.powerLevel ? 'p1' : opponent.powerLevel > challenger.powerLevel ? 'p2' : 'draw';
     
     return React.createElement(
         'div',
-        { className: "w-full max-w-sm md:max-w-md lg:max-w-lg mx-auto animate-[results-fade-in_1s_0.5s_ease-out_backwards]" },
+        { className: "w-full max-w-sm md:max-w-md lg:max-w-lg mx-auto" },
         React.createElement(
             'div',
-            { className: "themed-card p-4 md:p-6 rounded-2xl" },
+            { className: `battle-report-scroll ${phase === 'result' ? 'unfurl' : ''}`},
             React.createElement(
                 'h2',
-                { className: "text-xl md:text-2xl font-cairo font-bold text-center mb-4 border-b-2 border-gray-700 pb-2" },
-                "مقارنة شاملة"
+                { className: "text-xl md:text-2xl font-bold text-center mb-4 border-b-2 pb-2" },
+                "تقرير المواجهة"
             ),
             React.createElement(
                 'div',
-                { className: "space-y-1" },
+                { className: "space-y-1 px-4" },
                 React.createElement(ComparisonStat, { label: "مستوى القوة", value1: challenger.powerLevel, value2: opponent.powerLevel, winner: powerWinner }),
                 React.createElement(ComparisonStat, { label: "الرتبة", value1: challenger.rank, value2: opponent.rank }),
                 React.createElement(ComparisonStat, { label: "القرية", value1: challenger.village, value2: opponent.village }),
@@ -79,7 +79,7 @@ const BattlePage = () => {
                     }
                 }
                 setPhase('result');
-            }, 4000); 
+            }, 3000); 
             return () => clearTimeout(timer);
         }
     }, [phase, challenger, opponent]);
@@ -93,6 +93,7 @@ const BattlePage = () => {
         setOpponent(null);
         setWinner(null);
         setIsDraw(false);
+        setSearchTerm('');
         setPhase('select');
     };
 
@@ -156,7 +157,7 @@ const BattlePage = () => {
     
     const FighterDisplay = ({ character, auraClass, isWinner, isLoser, enterAnimation }) => React.createElement(
         'div',
-        { className: `relative flex flex-col items-center transition-all duration-500 ${isLoser ? 'loser-dim' : ''} ${phase === 'intro' ? enterAnimation : ''}` },
+        { className: `relative flex flex-col items-center transition-all duration-500 ${phase === 'result' && isLoser ? 'loser-dim' : ''} ${phase === 'intro' ? enterAnimation : ''}` },
         React.createElement(
             'div',
             { className: `p-6 rounded-2xl bg-black/50 border-4 ${isWinner ? 'border-amber-400' : 'border-gray-700'} transition-colors duration-500 ${isWinner ? 'animate-winner-glow' : phase !== 'result' ? auraClass : ''}` },
@@ -177,12 +178,12 @@ const BattlePage = () => {
             'div',
             { className: "flex flex-col md:flex-row items-center justify-around w-full gap-8" },
             challenger && React.createElement(FighterDisplay, { character: challenger, auraClass: "kyubi-aura", isWinner: winner?.id === challenger.id, isLoser: !!winner && winner.id !== challenger.id, enterAnimation: "battle-fighter-enter-left" }),
-            phase === 'result' && challenger && opponent ? (
-                React.createElement(ComparisonView, { challenger: challenger, opponent: opponent })
-            ) : (
-                React.createElement(
-                    'div',
-                    { className: "my-8 md:my-0" },
+            React.createElement(
+                'div',
+                { className: "my-8 md:my-0" },
+                 phase === 'result' && challenger && opponent ? (
+                    React.createElement(ComparisonView, { challenger: challenger, opponent: opponent, phase: phase })
+                ) : (
                     React.createElement('span', { className: `font-black text-7xl md:text-9xl text-red-500 transition-opacity duration-500 ${phase === 'result' ? 'opacity-0' : 'opacity-100 animate-[vs-intro_0.8s_1s_cubic-bezier(0.34,1.56,0.64,1)_backwards]'}`, style: { WebkitTextStroke: '2px white' } }, "VS")
                 )
             ),
@@ -190,7 +191,7 @@ const BattlePage = () => {
         ),
         phase === 'result' && React.createElement(
             'div',
-            { className: "text-center mt-12 animate-[results-fade-in_1s_ease-out]" },
+            { className: "text-center mt-12 animate-[cinematic-fade-in_1s_3s_backwards]" },
             isDraw && React.createElement('div', { className: "font-cairo text-6xl font-black text-gray-300" }, "تعادل!"),
             React.createElement(
                 'button',

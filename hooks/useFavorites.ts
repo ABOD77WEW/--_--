@@ -57,7 +57,6 @@ export const FavoritesProvider: React.FC<{ children: ReactNode }> = ({ children 
       const newCategoryFavorites = isCurrentlyFavorite
         ? categoryFavorites.filter(id => id !== item.id)
         : [...categoryFavorites, item.id];
-      // FIX: The file content was cut off here. Completed the return statement.
       return { ...prev, [category]: newCategoryFavorites };
     });
   }, []);

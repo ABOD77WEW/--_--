@@ -296,9 +296,11 @@ const CinematicActivationScene = ({ onComplete }) => {
   const rotationSpeed = Math.max(0.1, 1.5 - clickCount * 0.2);
   const sharinganStyle = { animationDuration: `${rotationSpeed}s` };
 
+  const cinematicBgClass = `fixed inset-0 z-[70] flex items-center justify-center p-4 akatsuki-cinematic-bg transition-opacity duration-500 ${stage === 'exploding' ? 'exploding' : ''}`;
+
   return React.createElement(
     'div',
-    { className: 'fixed inset-0 z-[70] flex items-center justify-center p-4 akatsuki-cinematic-bg transition-opacity duration-500' },
+    { className: cinematicBgClass },
     React.createElement(AkatsukiSymbol, { className: "absolute w-96 h-96 text-red-900/50 -top-20 -left-20 transform-gpu animate-[slow-float_10s_ease-in-out_infinite]" }),
     React.createElement(AkatsukiSymbol, { className: "absolute w-80 h-80 text-red-900/50 -bottom-24 -right-20 transform-gpu animate-[slow-float_12s_ease-in-out_infinite_reverse]" }),
     stage === 'charging' && React.createElement(
@@ -321,9 +323,9 @@ const CinematicActivationScene = ({ onComplete }) => {
     stage === 'exploding' && React.createElement(
         'div',
         { className: "relative w-64 h-64 flex items-center justify-center" },
-        React.createElement('div', { className: "absolute inset-0 bg-white rounded-full animate-[explosion-flash_0.5s_cubic-bezier(0.68,-0.55,0.27,1.55)_forwards]" }),
-        React.createElement('div', { className: "absolute inset-0 rounded-full border-red-500 animate-[explosion-shockwave_1s_ease-out_forwards]" }),
-        React.createElement('div', { className: "absolute inset-0 rounded-full border-purple-500 animate-[explosion-shockwave_1s_ease-out_0.2s_forwards]" }),
+        React.createElement('div', { className: "absolute inset-0 bg-white rounded-full animate-[pro-explosion-flash_0.5s_cubic-bezier(0.68,-0.55,0.27,1.55)_forwards]" }),
+        React.createElement('div', { className: "absolute inset-0 rounded-full border-red-500 animate-[pro-explosion-shockwave_1s_ease-out_forwards]" }),
+        React.createElement('div', { className: "absolute inset-0 rounded-full border-purple-500 animate-[pro-explosion-shockwave_1s_ease-out_0.2s_forwards]" }),
         powerSymbols.map(({ Icon, color }, i) => {
             const angle = (i / powerSymbols.length) * 360;
             const radians = angle * (Math.PI / 180);
@@ -335,7 +337,7 @@ const CinematicActivationScene = ({ onComplete }) => {
                 {
                     key: i,
                     className: "absolute w-12 h-12 opacity-0",
-                    style: { '--tx': `${tx}px`, '--ty': `${ty}px`, animation: `symbol-burst 2s ${i * 0.05}s ease-out forwards` }
+                    style: { '--tx': `${tx}px`, '--ty': `${ty}px`, animation: `pro-symbol-burst 2s ${i * 0.05}s ease-out forwards` }
                 },
                 React.createElement(Icon, { className: `w-full h-full ${color}`, style: { filter: 'drop-shadow(0 0 8px currentColor)' } })
             );
@@ -360,8 +362,28 @@ const ShinobiPro = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const navigate = ReactRouterDOM.useNavigate();
     const location = ReactRouterDOM.useLocation();
+    const [buttonsVisible, setButtonsVisible] = useState(true);
+    const lastScrollY = useRef(0);
 
     const showButtons = location.pathname !== '/timeline';
+
+    const handleScroll = useCallback(() => {
+        const currentScrollY = window.scrollY;
+        if (lastScrollY.current < currentScrollY && currentScrollY > 100) {
+          setButtonsVisible(false); // Scrolling down
+        } else {
+          setButtonsVisible(true); // Scrolling up
+        }
+        lastScrollY.current = currentScrollY;
+    }, []);
+
+    useEffect(() => {
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, [handleScroll]);
+
 
     const handleCompleteQuiz = () => {
         setIsModalOpen(false);
@@ -398,7 +420,7 @@ const ShinobiPro = () => {
             null,
             React.createElement(
                 'div',
-                { className: "fixed top-4 left-4 z-50" },
+                { className: `pro-buttons-wrapper fixed top-4 left-4 z-50 ${!buttonsVisible ? 'hidden' : ''}` },
                 React.createElement(
                     'button',
                     {
@@ -411,7 +433,7 @@ const ShinobiPro = () => {
             ),
             isPro && React.createElement(
                 'div',
-                { className: "fixed bottom-4 left-4 z-50" },
+                { className: `pro-buttons-wrapper-bottom fixed bottom-4 left-4 z-50 ${!buttonsVisible ? 'hidden' : ''}` },
                 React.createElement(
                     'button',
                     {
