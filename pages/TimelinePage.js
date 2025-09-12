@@ -5,11 +5,15 @@ import { arcs } from '../data/arcs.js';
 import FullScreenDetailView from '../components/FullScreenDetailView.js';
 import InkBlotIcon from '../components/icons/InkBlotIcon.js';
 
-const TimelineEvent = ({ arc, onSelect, style, infoPosition }) => {
+const TimelineEvent = ({ arc, onSelect, style, infoPosition, scrollContainerRef }) => {
     const eventRef = useRef(null);
     const [isVisible, setIsVisible] = useState(false);
 
     useEffect(() => {
+        const scrollRoot = scrollContainerRef.current;
+        const currentRef = eventRef.current;
+        if (!currentRef || !scrollRoot) return;
+
         const observer = new IntersectionObserver(
             ([entry]) => {
                 if (entry.isIntersecting) {
@@ -18,22 +22,21 @@ const TimelineEvent = ({ arc, onSelect, style, infoPosition }) => {
                 }
             },
             {
-                root: null,
-                rootMargin: '0px 0px 0px -200px',
-                threshold: 0.5,
+                root: scrollRoot,
+                rootMargin: '0px -100px 0px -100px',
+                threshold: 0.1,
             }
         );
 
-        if (eventRef.current) {
-            observer.observe(eventRef.current);
-        }
+        observer.observe(currentRef);
 
         return () => {
-            if (eventRef.current) {
-                observer.unobserve(eventRef.current);
+             if (currentRef) {
+                observer.unobserve(currentRef);
             }
+            observer.disconnect();
         };
-    }, []);
+    }, [scrollContainerRef]);
 
     return React.createElement(
         'div',
@@ -100,7 +103,7 @@ const TimelinePage = () => {
             d += ` C ${cx1} ${cy1}, ${cx2} ${cy2}, ${x} ${y}`;
         }
         return d;
-    }, [arcs.length]);
+    }, []);
 
     useEffect(() => {
         const slider = scrollContainerRef.current;
@@ -201,7 +204,8 @@ const TimelinePage = () => {
               left: `${index * EVENT_SPACING + (EVENT_SPACING - MARKER_SIZE) / 2}px`,
               top: `${Y_POSITIONS[index % 2]}px`
             },
-            infoPosition: index % 2 === 0 ? 'bottom' : 'top'
+            infoPosition: index % 2 === 0 ? 'bottom' : 'top',
+            scrollContainerRef: scrollContainerRef
           }))
         )
       ),

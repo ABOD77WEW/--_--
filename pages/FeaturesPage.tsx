@@ -1,12 +1,13 @@
 
 
 
+
 import React, { useEffect } from 'react';
 // FIX: Replaced named imports with a namespace import for 'react-router-dom' to resolve module export errors.
 import * as ReactRouterDOM from 'react-router-dom';
 import { useShinobiPro } from '../hooks/useShinobiPro';
 import ForbiddenScrollIcon from '../components/icons/ForbiddenScrollIcon';
-import { ScaleIcon, SwatchIcon, PencilSquareIcon, ClockIcon, SpeakerWaveIcon } from '@heroicons/react/24/solid';
+import { ScaleIcon, SwatchIcon, PencilSquareIcon, SpeakerWaveIcon } from '@heroicons/react/24/solid';
 
 
 const FeaturesPage: React.FC = () => {
@@ -52,15 +53,6 @@ const FeaturesPage: React.FC = () => {
                 </h3>
                 <p className="text-gray-400">اغمر نفسك في ظلام الأكاتسوكي. قم بتفعيل المظهر الحصري الذي يغير شكل الموسوعة بالكامل إلى طابع السحابة الحمراء الأيقوني.</p>
             </div>
-            <ReactRouterDOM.Link to="/timeline" className="block">
-                <div className="bg-[#1A1A1A]/70 border border-[#2D3748] rounded-lg p-6 backdrop-blur-sm text-right transform transition hover:scale-105 hover:border-amber-400/50 hover:shadow-xl hover:shadow-amber-500/20">
-                    <h3 className="font-cairo text-2xl font-bold text-amber-400 mb-2 flex items-center justify-end gap-3">
-                       الخط الزمني التفاعلي
-                       <ClockIcon className="w-7 h-7" />
-                    </h3>
-                    <p className="text-gray-400">سافر عبر تاريخ الشينوبي، من عصر حكيم المسارات الستة إلى حرب النينجا العظمى الرابعة، في مخطوطة زمنية تفاعلية فريدة.</p>
-                </div>
-            </ReactRouterDOM.Link>
              <div className="bg-[#1A1A1A]/70 border border-[#2D3748] rounded-lg p-6 backdrop-blur-sm text-right transform transition hover:scale-105 hover:border-blue-400/50 hover:shadow-xl hover:shadow-blue-500/20 opacity-70">
                 <h3 className="font-cairo text-2xl font-bold text-blue-400 mb-2 flex items-center justify-end gap-3">
                    منشئ الجتسو <span className="text-xs bg-blue-900/80 text-blue-300 px-2 py-0.5 rounded-full">قريباً</span>

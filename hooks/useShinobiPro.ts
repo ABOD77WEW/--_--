@@ -56,10 +56,11 @@ export const ShinobiProProvider: React.FC<{ children: ReactNode }> = ({ children
     }
   };
 
-  return (
-    <ShinobiProContext.Provider value={{ isPro, activatePro, isActivating, setIsActivating, isAkatsukiTheme, toggleAkatsukiTheme }}>
-      {children}
-    </ShinobiProContext.Provider>
+  // FIX: Converted JSX to React.createElement to be valid in a .ts file, resolving parsing errors and fulfilling the component's contract to return a ReactNode.
+  return React.createElement(
+    ShinobiProContext.Provider,
+    { value: { isPro, activatePro, isActivating, setIsActivating, isAkatsukiTheme, toggleAkatsukiTheme } },
+    children
   );
 };
 

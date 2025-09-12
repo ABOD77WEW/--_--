@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import * as ReactRouterDOM from 'react-router-dom';
 import { useShinobiPro } from '../hooks/useShinobiPro.js';
 import ForbiddenScrollIcon from '../components/icons/ForbiddenScrollIcon.js';
-import { ScaleIcon, SwatchIcon, ClockIcon, PencilSquareIcon, SpeakerWaveIcon } from '@heroicons/react/24/solid';
+import { ScaleIcon, SwatchIcon, PencilSquareIcon, SpeakerWaveIcon } from '@heroicons/react/24/solid';
 
 const FeaturesPage = () => {
   const { isPro } = useShinobiPro();
@@ -86,15 +86,6 @@ const FeaturesPage = () => {
         shadowColor: "hover:shadow-xl hover:shadow-red-500/20",
         title: "مظهر الأكاتسوكي",
         description: "اغمر نفسك في ظلام الأكاتسوكي. قم بتفعيل المظهر الحصري الذي يغير شكل الموسوعة بالكامل إلى طابع السحابة الحمراء الأيقوني."
-      }),
-       React.createElement(FeatureCard, {
-        to: "/timeline",
-        icon: ClockIcon,
-        iconColor: "text-amber-400",
-        borderColor: "hover:border-amber-400/50",
-        shadowColor: "hover:shadow-xl hover:shadow-amber-500/20",
-        title: "الخط الزمني التفاعلي",
-        description: "سافر عبر تاريخ الشينوبي، من عصر حكيم المسارات الستة إلى حرب النينجا العظمى الرابعة، في مخطوطة زمنية تفاعلية فريدة."
       }),
       React.createElement(StaticFeatureCard, {
         icon: PencilSquareIcon,

@@ -74,10 +74,11 @@ export const FavoritesProvider: React.FC<{ children: ReactNode }> = ({ children 
         };
     }, [favorites]);
 
-  return (
-    <FavoritesContext.Provider value={{ favorites, toggleFavorite, isFavorite, getFavoriteItems }}>
-      {children}
-    </FavoritesContext.Provider>
+  // FIX: Converted JSX to React.createElement to be valid in a .ts file, resolving parsing errors and fulfilling the component's contract to return a ReactNode.
+  return React.createElement(
+    FavoritesContext.Provider,
+    { value: { favorites, toggleFavorite, isFavorite, getFavoriteItems } },
+    children
   );
 };
 

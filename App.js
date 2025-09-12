@@ -12,6 +12,7 @@ import FeaturesPage from './pages/FeaturesPage.js';
 import BattlePage from './pages/BattlePage.js';
 import TimelinePage from './pages/TimelinePage.js';
 import ShinobiPro from './components/ShinobiPro.js';
+import Footer from './components/Footer.js';
 import { FavoritesProvider } from './hooks/useFavorites.js';
 import { useShinobiPro, ShinobiProProvider } from './hooks/useShinobiPro.js';
 
@@ -20,12 +21,10 @@ const PageWrapper = ({ children }) => {
   const [animationClass, setAnimationClass] = useState('opacity-0 translate-y-5');
 
   useEffect(() => {
-    // On location change, we want to reset the animation state for the new page
     setAnimationClass('opacity-0 translate-y-5');
     const timer = setTimeout(() => {
-      // Then trigger the fade-in and slide-up animation
       setAnimationClass('opacity-100 translate-y-0');
-    }, 50); // A small delay is needed to ensure the browser registers the state change and applies the transition
+    }, 50);
     return () => clearTimeout(timer);
   }, [location.pathname]);
 
@@ -38,6 +37,7 @@ const PageWrapper = ({ children }) => {
 
 const ThemedAppLayout = () => {
   const { isAkatsukiTheme } = useShinobiPro();
+  const location = ReactRouterDOM.useLocation();
 
   useEffect(() => {
     const root = window.document.documentElement;
@@ -54,9 +54,13 @@ const ThemedAppLayout = () => {
       document.body.classList.remove('theme-akatsuki');
     };
   }, [isAkatsukiTheme]);
+  
+  if (location.pathname === '/timeline') {
+    return React.createElement(TimelinePage);
+  }
 
   return React.createElement(
-    ReactRouterDOM.HashRouter,
+    React.Fragment,
     null,
     React.createElement(ShinobiPro),
     React.createElement(
@@ -65,10 +69,10 @@ const ThemedAppLayout = () => {
       React.createElement(Navigation),
       React.createElement(
         'div',
-        { className: 'flex-1 md:mr-64 lg:mr-72' },
+        { className: 'flex-1 md:mr-64 lg:mr-72 flex flex-col' },
         React.createElement(
           'div',
-          { className: 'container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 pb-24 md:pb-12' },
+          { className: 'container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 pb-24 md:pb-12 flex-grow' },
           React.createElement(
             ReactRouterDOM.Routes,
             null,
@@ -80,10 +84,10 @@ const ThemedAppLayout = () => {
             React.createElement(ReactRouterDOM.Route, { path: '/favorites', element: React.createElement(PageWrapper, null, React.createElement(FavoritesPage)) }),
             React.createElement(ReactRouterDOM.Route, { path: '/pro', element: React.createElement(PageWrapper, null, React.createElement(ProPage)) }),
             React.createElement(ReactRouterDOM.Route, { path: '/features', element: React.createElement(PageWrapper, null, React.createElement(FeaturesPage)) }),
-            React.createElement(ReactRouterDOM.Route, { path: '/battle', element: React.createElement(PageWrapper, null, React.createElement(BattlePage)) }),
-            React.createElement(ReactRouterDOM.Route, { path: '/timeline', element: React.createElement(PageWrapper, null, React.createElement(TimelinePage)) })
+            React.createElement(ReactRouterDOM.Route, { path: '/battle', element: React.createElement(PageWrapper, null, React.createElement(BattlePage)) })
           )
-        )
+        ),
+        React.createElement(Footer)
       )
     )
   );
@@ -96,7 +100,11 @@ function App() {
     React.createElement(
       FavoritesProvider,
       null,
-      React.createElement(ThemedAppLayout)
+      React.createElement(
+        ReactRouterDOM.HashRouter,
+        null,
+        React.createElement(ThemedAppLayout)
+      )
     )
   );
 }

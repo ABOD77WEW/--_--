@@ -1,7 +1,7 @@
 import React from 'react';
 import * as ReactRouterDOM from 'react-router-dom';
 import SharinganLogo from './SharinganLogo.js';
-import { HomeIcon, UserGroupIcon, FilmIcon, EyeIcon, FlagIcon, StarIcon, ClockIcon } from '@heroicons/react/24/solid';
+import { HomeIcon, UserGroupIcon, FilmIcon, EyeIcon, FlagIcon, StarIcon } from '@heroicons/react/24/solid';
 import ForbiddenScrollIcon from './icons/ForbiddenScrollIcon.js';
 import { useShinobiPro } from '../hooks/useShinobiPro.js';
 
@@ -15,7 +15,6 @@ const baseNavLinks = [
 ];
 
 const proNavLinks = [
-    { path: '/timeline', name: 'الخط الزمني', icon: (props) => React.createElement(ClockIcon, props) },
     { path: '/features', name: 'الخصائص', icon: (props) => React.createElement(ForbiddenScrollIcon, props) }
 ];
 
@@ -44,8 +43,8 @@ const Sidebar = () => {
         React.createElement(SharinganLogo),
         React.createElement(
           'div',
-          { className: "relative chakra-header" },
-          React.createElement('h1', { className: "font-cairo text-2xl font-black mt-4" }, "موسوعة الشينوبي")
+          { className: "akatsuki-title-frame" },
+          React.createElement('h1', { className: "font-cairo text-2xl font-black" }, "موسوعة الشينوبي")
         )
       ),
       React.createElement(

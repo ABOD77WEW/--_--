@@ -1,33 +1,22 @@
-
-
-
-
-
-
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 // FIX: Replaced named imports with a namespace import for 'react-router-dom' to resolve module export errors.
 import * as ReactRouterDOM from 'react-router-dom';
 import { useShinobiPro } from '../hooks/useShinobiPro';
 import MangekyoProIcon from './icons/MangekyoProIcon';
-import SharinganIcon from './icons/SharinganIcon';
-import MangekyoIcon from './icons/MangekyoIcon';
 import { quizQuestions } from '../data/quiz';
 import { QuizQuestion } from '../types';
-import AkatsukiSymbol from './icons/AkatsukiSymbol';
 import AkatsukiThemeIcon from './icons/AkatsukiThemeIcon';
-import UchihaSymbol from './icons/UchihaSymbol';
-import SenjuSymbol from './icons/SenjuSymbol';
-import HyugaSymbol from './icons/HyugaSymbol';
-import RinneganIcon from './icons/RinneganIcon';
-import ByakuganIcon from './icons/ByakuganIcon';
 import SecretCodeIcon from './icons/SecretCodeIcon';
+import RinneganIcon from './icons/RinneganIcon';
+import RinneSharinganIcon from './icons/RinneSharinganIcon';
+import SharinganIcon from './icons/SharinganIcon';
 
 
 type AnswerStatus = 'idle' | 'correct' | 'incorrect';
 
 const SecretCodeModal: React.FC<{
     onClose: () => void;
-    onSubmit: (code: string) => 'success-hint' | 'success-solve' | 'failure';
+    onSubmit: (code: string) => 'success-hint' | 'success-solve' | 'success-skip' | 'failure';
 }> = ({ onClose, onSubmit }) => {
     const [code, setCode] = useState('');
     const [status, setStatus] = useState<'idle' | 'success' | 'failure'>('idle');
@@ -41,7 +30,8 @@ const SecretCodeModal: React.FC<{
     useEffect(() => {
         if (status !== 'idle') return;
 
-        if (code === '112244' || code === '13579001') {
+        const validCodes = ['112244', '13579001', '1357913579001'];
+        if (validCodes.includes(code)) {
             const result = onSubmit(code);
             if (result.startsWith('success')) {
                 setStatus('success');
@@ -54,8 +44,8 @@ const SecretCodeModal: React.FC<{
         e.preventDefault();
         if (status !== 'idle' || !code) return;
 
-        // Only handles incorrect codes on enter, as correct ones are auto-submitted
-        if (code !== '112244' && code !== '13579001') {
+        const validCodes = ['112244', '13579001', '1357913579001'];
+        if (!validCodes.includes(code)) {
             setStatus('failure');
             setTimeout(() => {
                 setStatus('idle');
@@ -85,6 +75,29 @@ const SecretCodeModal: React.FC<{
                         disabled={status !== 'idle'}
                     />
                 </form>
+            </div>
+        </div>
+    );
+};
+
+const InfiniteTsukuyomiFailureScene: React.FC<{ onAnimationEnd: () => void }> = ({ onAnimationEnd }) => {
+    useEffect(() => {
+        const timer = setTimeout(onAnimationEnd, 6000);
+        return () => clearTimeout(timer);
+    }, [onAnimationEnd]);
+
+    return (
+        <div className="tsukuyomi-failure-scene">
+            <div className="tsukuyomi-moon">
+                <RinneSharinganIcon className="rinne-sharingan-overlay" />
+            </div>
+            <div className="tsukuyomi-text-container">
+                <h2 className="tsukuyomi-text text-4xl sm:text-5xl font-black">
+                    وقعت في الغينجتسو الأبدي...
+                </h2>
+                <p className="tsukuyomi-subtext font-tajawal text-lg mt-2">
+                    استيقظ على الواقع وحاول مجدداً.
+                </p>
             </div>
         </div>
     );
@@ -144,12 +157,11 @@ const QuizModal: React.FC<{ onComplete: () => void; }> = ({ onComplete }) => {
         } else {
             setAnswerStatus('incorrect');
             setTimeout(() => setRevealedCorrectAnswer(currentQ.correctAnswer), 500);
-            setTimeout(() => setShowFailure(true), 2000);
-            setTimeout(resetQuiz, 4000);
+            setTimeout(() => setShowFailure(true), 1500);
         }
     };
     
-     const handleCodeSubmit = (code: string): 'success-hint' | 'success-solve' | 'failure' => {
+     const handleCodeSubmit = (code: string): 'success-hint' | 'success-solve' | 'success-skip' | 'failure' => {
         if (code === '112244') {
             setShowHint(true);
             return 'success-hint';
@@ -161,6 +173,10 @@ const QuizModal: React.FC<{ onComplete: () => void; }> = ({ onComplete }) => {
             }
             return 'success-solve';
         }
+        if (code === '1357913579001') {
+            onComplete();
+            return 'success-skip';
+        }
         return 'failure';
     };
 
@@ -170,12 +186,13 @@ const QuizModal: React.FC<{ onComplete: () => void; }> = ({ onComplete }) => {
     const progress = ((currentIndex) / questions.length) * 100;
 
     return (
-        <div className="fixed inset-0 z-[60] flex flex-col items-center justify-center p-4 sm:p-8 bg-black">
-             <div className="absolute inset-0 z-[-1] overflow-hidden">
+        <div className={`quiz-modal-container fixed inset-0 z-[60] flex flex-col items-center justify-center p-4 sm:p-8 bg-black transition-all duration-500 ${showFailure ? 'is-failing' : ''}`}>
+             
+            <div className="absolute inset-0 z-[-1] overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-t from-red-900/50 via-black to-black opacity-70"></div>
-                <SharinganIcon className="absolute -bottom-1/4 -left-1/4 w-3/4 h-3/4 text-red-900/40 animate-spin [animation-duration:80s]" />
-                <SharinganIcon className="absolute -top-1/4 -right-1/4 w-3/4 h-3/4 text-red-900/40 animate-spin [animation-duration:120s] [animation-direction:reverse]" />
-                <MangekyoProIcon className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1/2 h-1/2 text-white/5 animate-[pulse_10s_ease-in-out_infinite]" />
+                <RinneganIcon className="absolute -bottom-1/4 -left-1/4 w-3/4 h-3/4 text-red-900/40 animate-spin [animation-duration:80s]" />
+                <MangekyoProIcon className="absolute -top-1/4 -right-1/4 w-3/4 h-3/4 text-red-900/40 animate-spin [animation-duration:120s] [animation-direction:reverse]" />
+                <SharinganIcon className="quiz-bg-sharingan" />
             </div>
 
             {isCodeInputOpen && (
@@ -183,13 +200,6 @@ const QuizModal: React.FC<{ onComplete: () => void; }> = ({ onComplete }) => {
                     onClose={() => setIsCodeInputOpen(false)}
                     onSubmit={handleCodeSubmit}
                 />
-            )}
-
-            {showFailure && (
-                <div className="absolute inset-0 bg-red-900/90 flex flex-col items-center justify-center z-20 transition-opacity duration-300">
-                    <h2 className="text-5xl font-black font-cairo text-white">فشلت!</h2>
-                    <p className="text-xl text-red-200 mt-2">المعرفة تتطلب المزيد من التدريب. المحاولة مرة أخرى...</p>
-                </div>
             )}
             
             <div className="w-full max-w-4xl mx-auto flex flex-col flex-grow relative">
@@ -258,144 +268,170 @@ const QuizModal: React.FC<{ onComplete: () => void; }> = ({ onComplete }) => {
                     <p className="text-sm text-gray-500 mt-4">أجب على {questions.length} أسئلة لتثبت جدارتك. ({currentIndex + 1}/{questions.length})</p>
                 </div>
             </div>
+            {showFailure && <InfiniteTsukuyomiFailureScene onAnimationEnd={resetQuiz} />}
         </div>
     );
 };
 
-type ActivationStage = 'charging' | 'exploding' | 'revealing';
+type ActivationStage = 'void' | 'gathering' | 'unveiling' | 'ascension' | 'aftermath';
+const chakraWisps = [
+    { color: '#f87171', angle: 20, delay: 1.5 },
+    { color: '#fb923c', angle: 300, delay: 1.6 },
+    { color: '#facc15', angle: 120, delay: 1.7 },
+    { color: '#a3e635', angle: 70, delay: 1.8 },
+    { color: '#4ade80', angle: 210, delay: 1.9 },
+    { color: '#22d3ee', angle: 180, delay: 2.0 },
+    { color: '#818cf8', angle: 250, delay: 2.1 },
+    { color: '#c084fc', angle: 340, delay: 2.2 },
+];
 
-const CinematicActivationScene: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
-  const { setIsActivating } = useShinobiPro();
-  const [stage, setStage] = useState<ActivationStage>('charging');
-  const [clickCount, setClickCount] = useState(0);
+const SixPathsAwakeningScene: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
+    const { setIsActivating } = useShinobiPro();
+    const [stage, setStage] = useState<ActivationStage>('void');
+    const [capturedWisps, setCapturedWisps] = useState<Set<number>>(new Set());
+    // FIX: Replaced `NodeJS.Timeout` with `ReturnType<typeof setTimeout>` to resolve the `Cannot find namespace 'NodeJS'` error. This makes the type environment-agnostic (works in both Node.js and browser environments).
+    const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   
-  const powerSymbols = useMemo(() => [
-    { Icon: UchihaSymbol, color: 'text-red-500' },
-    { Icon: SenjuSymbol, color: 'text-green-500' },
-    { Icon: HyugaSymbol, color: 'text-purple-400' },
-    { Icon: RinneganIcon, color: 'text-indigo-400' },
-    { Icon: ByakuganIcon, color: 'text-blue-300' },
-    { Icon: SharinganIcon, color: 'text-red-600' },
-    { Icon: MangekyoIcon, color: 'text-red-700' },
-  ], []);
+    useEffect(() => {
+        if (timeoutRef.current) clearTimeout(timeoutRef.current);
 
+        const speedBoost = capturedWisps.size * 400; // 400ms boost per wisp
+        let nextStage: ActivationStage | 'complete' | null = null;
+        let delay = 0;
 
-  const handleClick = () => {
-    if (stage !== 'charging') return;
-    const newClickCount = clickCount + 1;
-    setClickCount(newClickCount);
+        switch (stage) {
+            case 'void':      delay = 1500; nextStage = 'gathering'; break;
+            case 'gathering': delay = 2500 - speedBoost; nextStage = 'unveiling'; break;
+            case 'unveiling': delay = 4000 - speedBoost; nextStage = 'ascension'; break;
+            case 'ascension': delay = 1500 - (speedBoost / 2); nextStage = 'aftermath'; break;
+            case 'aftermath': delay = 3000; nextStage = 'complete'; break;
+        }
 
-    if (newClickCount >= 7) {
-      setTimeout(() => setStage('exploding'), 300);
-    }
-  };
+        if (nextStage) {
+            timeoutRef.current = setTimeout(() => {
+                if (nextStage === 'complete') {
+                    setIsActivating(false);
+                    onComplete();
+                } else {
+                    setStage(nextStage as ActivationStage);
+                }
+            }, Math.max(200, delay));
+        }
 
-  useEffect(() => {
-    if (stage === 'exploding') {
-      setTimeout(() => setStage('revealing'), 2500); // Explosion duration
-    } else if (stage === 'revealing') {
-      const timer = setTimeout(() => {
-        setIsActivating(false);
-        onComplete();
-      }, 7000); // Time to read the message
-      return () => clearTimeout(timer);
-    }
-  }, [stage, onComplete, setIsActivating]);
+        return () => {
+            if (timeoutRef.current) clearTimeout(timeoutRef.current);
+        };
+    }, [stage, onComplete, setIsActivating, capturedWisps.size]);
 
-  const rotationSpeed = Math.max(0.1, 1.5 - clickCount * 0.2);
-  const sharinganStyle = {
-    animationDuration: `${rotationSpeed}s`,
-  };
-
-  return (
-    <div className={`fixed inset-0 z-[70] flex items-center justify-center p-4 akatsuki-cinematic-bg transition-opacity duration-500`}>
-      <AkatsukiSymbol className="absolute w-96 h-96 text-red-900/50 -top-20 -left-20 transform-gpu animate-[slow-float_10s_ease-in-out_infinite]" />
-      <AkatsukiSymbol className="absolute w-80 h-80 text-red-900/50 -bottom-24 -right-20 transform-gpu animate-[slow-float_12s_ease-in-out_infinite_reverse]" />
-      
-      {stage === 'charging' && (
-        <div className="text-center animate-[cinematic-fade-in_1s_ease-out]">
-          <div
-            className="w-48 h-48 md:w-64 md:h-64 cursor-pointer relative group"
-            onClick={handleClick}
-            aria-label="انقر لزيادة السرعة"
-          >
-            <SharinganIcon
-              className="w-full h-full animate-spin"
-              style={sharinganStyle}
-            />
-            <div className="absolute inset-0 rounded-full group-hover:bg-white/10 transition-colors"></div>
-             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <div className="w-full h-full rounded-full border-4 border-red-500/50 animate-ping" style={{animationDuration: '1.5s', transform: `scale(${0.5 + clickCount * 0.1})`, opacity: `${1 - clickCount * 0.1}`}}></div>
-            </div>
-          </div>
-          <p className="mt-8 font-cairo text-2xl font-bold text-white tracking-widest text-shadow shadow-black/50">
-            {clickCount < 3 ? "ركّز التشاكرا" : clickCount < 6 ? "أطلق العنان للقوة!" : "على وشك الانفجار!"}
-          </p>
-          <p className="text-red-300">انقر على الشارينغان ({clickCount}/7)</p>
-        </div>
-      )}
-
-      {stage === 'exploding' && (
-        <div className="relative w-64 h-64 flex items-center justify-center">
-            <div className="absolute inset-0 bg-white rounded-full animate-[explosion-flash_0.5s_cubic-bezier(0.68,-0.55,0.27,1.55)_forwards]"></div>
-            <div className="absolute inset-0 rounded-full border-red-500 animate-[explosion-shockwave_1s_ease-out_forwards]"></div>
-            <div className="absolute inset-0 rounded-full border-purple-500 animate-[explosion-shockwave_1s_ease-out_0.2s_forwards]"></div>
-            
-            {powerSymbols.map(({ Icon, color }, i) => {
-                 const angle = (i / powerSymbols.length) * 360;
-                 const radians = angle * (Math.PI / 180);
-                 const distance = 100 + Math.random() * 50;
-                 const tx = Math.cos(radians) * distance;
-                 const ty = Math.sin(radians) * distance;
-
-                return (
-                    <div key={i}
-                         className="absolute w-12 h-12 opacity-0"
-                         // FIX: Cast the style object to React.CSSProperties to allow for custom CSS properties ('--tx', '--ty').
-                         style={{
-                             '--tx': `${tx}px`,
-                             '--ty': `${ty}px`,
-                             animation: `symbol-burst 2s ${i * 0.05}s ease-out forwards`,
-                         } as React.CSSProperties}
-                    >
-                      <Icon className={`w-full h-full ${color}`} style={{filter: 'drop-shadow(0 0 8px currentColor)'}} />
+    const handleWispClick = (wispAngle: number) => {
+        if (stage !== 'gathering' || capturedWisps.has(wispAngle)) return;
+        setCapturedWisps(prev => new Set(prev).add(wispAngle));
+    };
+  
+    return (
+        <div className="awakening-scene-bg">
+            <div className={`awakening-container`}>
+                {stage === 'void' && <div className="truth-seeking-orb" />}
+                
+                {stage === 'gathering' && (
+                    <>
+                        <div className="truth-seeking-orb" />
+                        {chakraWisps.map(wisp => (
+                            <div 
+                                key={wisp.angle} 
+                                className={`chakra-wisp interactive ${capturedWisps.has(wisp.angle) ? 'captured' : ''}`}
+                                onClick={() => handleWispClick(wisp.angle)}
+                                style={{ '--wisp-color': wisp.color, '--angle': `${wisp.angle}deg`, animationDelay: `${wisp.delay}s` } as React.CSSProperties} 
+                            />
+                        ))}
+                    </>
+                )}
+                
+                {stage === 'unveiling' && (
+                    <div className="awakening-rinnegan-container" style={{ animationDelay: '0s' }}>
+                        <RinneganIcon className="awakening-rinnegan" />
                     </div>
-                )
-            })}
-        </div>
-      )}
+                )}
+                
+                {stage === 'ascension' && (
+                     <>
+                        <div className="awakening-rinnegan-container">
+                            <RinneganIcon className="awakening-rinnegan" />
+                        </div>
+                        <div className="shakujo-staff" />
+                        <div className="truth-seeking-orbs-container">
+                            {[...Array(6)].map((_, i) => {
+                                const angle = i * 60;
+                                const radius = 40; // Percentage
+                                const x = radius * Math.cos(angle * Math.PI / 180);
+                                const y = radius * Math.sin(angle * Math.PI / 180);
+                                return (
+                                    <div 
+                                        key={i} 
+                                        className="awakening-orb"
+                                        style={{'--transform-end': `translate(${x}%, ${y}%)`, animationDelay: `${6 + i*0.1}s`} as React.CSSProperties}
+                                    />
+                                );
+                            })}
+                        </div>
+                     </>
+                )}
+            </div>
 
-      {stage === 'revealing' && (
-          <div className="flex flex-col items-center justify-center text-center p-8 max-w-4xl mx-auto border-2 border-transparent bg-black/30 backdrop-blur-md rounded-2xl shadow-2xl shadow-red-500/30 animate-[frame-fade-in_1.5s_ease-out_forwards]">
-            <h2 className="font-cairo text-4xl sm:text-5xl md:text-6xl font-black tracking-wider bg-gradient-to-r from-yellow-300 via-red-400 to-yellow-300 bg-clip-text text-transparent animate-[text-glow-animation_5s_ease_infinite,text-fade-in_2s_0.5s_ease-out_backwards]" style={{backgroundSize: '200% 200%'}}>
-              أصبحت الآن شينوبي حقيقي
-            </h2>
-            <blockquote className="mt-6 relative">
-              <p className="font-tajawal text-lg md:text-xl text-gray-300 animate-[quote-fade-in_2s_1.5s_ease-out_backwards]">
-                "أولئك الذين لا يفهمون الألم الحقيقي لا يمكنهم فهم السلام الحقيقي."
-              </p>
-              <cite className="block text-right mt-2 text-red-400 not-italic animate-[quote-fade-in_2s_1.8s_ease-out_backwards]">- باين</cite>
-            </blockquote>
+             {stage === 'ascension' && <div className="ascension-flash" style={{animationDelay: '1.5s'}}/>}
+
+            {stage === 'aftermath' && (
+                <div className="awakening-aftermath">
+                    <div className="awakening-text">
+                         <h2 className="font-cairo text-4xl sm:text-5xl font-black">
+                           لقد بلغت حكمة المسارات الستة
+                        </h2>
+                        <p className="font-tajawal text-lg text-amber-600 mt-2">
+                            عالم الشينوبي الحقيقي ينكشف أمامك.
+                        </p>
+                    </div>
+                </div>
+            )}
+
+            {stage === 'gathering' && (
+                 <div className="awakening-prompt">انقر على خيوط التشاكرا لجمعها!</div>
+            )}
         </div>
-      )}
-    </div>
-  );
+    );
 };
-
 
 const ShinobiPro: React.FC = () => {
     const { isPro, activatePro, isActivating, setIsActivating, isAkatsukiTheme, toggleAkatsukiTheme } = useShinobiPro();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const navigate = ReactRouterDOM.useNavigate();
     const location = ReactRouterDOM.useLocation();
+    const [buttonsVisible, setButtonsVisible] = useState(true);
+    const lastScrollY = useRef(0);
 
     const showButtons = location.pathname !== '/timeline';
 
-    const handleCompleteQuiz = () => {
+    const handleScroll = useCallback(() => {
+        const currentScrollY = window.scrollY;
+        if (lastScrollY.current < currentScrollY && currentScrollY > 100) {
+          setButtonsVisible(false); // Scrolling down
+        } else {
+          setButtonsVisible(true); // Scrolling up
+        }
+        lastScrollY.current = currentScrollY;
+    }, []);
+
+    useEffect(() => {
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, [handleScroll]);
+
+    const handleCompleteQuiz = useCallback(() => {
         setIsModalOpen(false);
         activatePro();
         setIsActivating(true);
-    };
+    }, [activatePro, setIsActivating]);
 
     const handleActivationComplete = () => {
         navigate('/pro');
@@ -422,7 +458,7 @@ const ShinobiPro: React.FC = () => {
         <>
             {showButtons && (
                 <>
-                    <div className="fixed top-4 left-4 z-50">
+                    <div className={`pro-buttons-wrapper fixed top-4 left-4 z-50 ${!buttonsVisible ? 'hidden' : ''}`}>
                       <button
                           onClick={() => (isPro ? navigate('/pro') : setIsModalOpen(true))}
                           className={`group flex items-center gap-4 p-2 pr-5 rounded-full border-2 backdrop-blur-sm transition-all duration-300 min-w-[280px] justify-start ${isPro ? 'pro-button-unreal shadow-[0_0_15px_#a855f7]' : 'pro-button-dormant'}`}
@@ -435,7 +471,7 @@ const ShinobiPro: React.FC = () => {
                     </div>
                     
                     {isPro && (
-                         <div className="fixed bottom-4 left-4 z-50">
+                         <div className={`pro-buttons-wrapper-bottom fixed bottom-4 left-4 z-50 ${!buttonsVisible ? 'hidden' : ''}`}>
                             <button 
                                 onClick={toggleAkatsukiTheme} 
                                 title="تفعيل مظهر الأكاتسوكي" 
@@ -450,7 +486,7 @@ const ShinobiPro: React.FC = () => {
             )}
             
             {isModalOpen && <QuizModal onComplete={handleCompleteQuiz} />}
-            {isActivating && <CinematicActivationScene onComplete={handleActivationComplete} />}
+            {isActivating && <SixPathsAwakeningScene onComplete={handleActivationComplete} />}
         </>
     );
 };

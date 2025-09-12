@@ -2,17 +2,13 @@ import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import * as ReactRouterDOM from 'react-router-dom';
 import { useShinobiPro } from '../hooks/useShinobiPro.js';
 import MangekyoProIcon from './icons/MangekyoProIcon.js';
-import SharinganIcon from './icons/SharinganIcon.js';
-import MangekyoIcon from './icons/MangekyoIcon.js';
 import { quizQuestions } from '../data/quiz.js';
-import AkatsukiSymbol from './icons/AkatsukiSymbol.js';
 import AkatsukiThemeIcon from './icons/AkatsukiThemeIcon.js';
-import UchihaSymbol from './icons/UchihaSymbol.js';
-import SenjuSymbol from './icons/SenjuSymbol.js';
-import HyugaSymbol from './icons/HyugaSymbol.js';
-import RinneganIcon from './icons/RinneganIcon.js';
-import ByakuganIcon from './icons/ByakuganIcon.js';
 import SecretCodeIcon from './icons/SecretCodeIcon.js';
+import RinneganIcon from './icons/RinneganIcon.js';
+import RinneSharinganIcon from './icons/RinneSharinganIcon.js';
+import SharinganIcon from './icons/SharinganIcon.js';
+
 
 const SecretCodeModal = ({ onClose, onSubmit }) => {
     const [code, setCode] = useState('');
@@ -26,7 +22,8 @@ const SecretCodeModal = ({ onClose, onSubmit }) => {
     useEffect(() => {
         if (status !== 'idle') return;
 
-        if (code === '112244' || code === '13579001') {
+        const validCodes = ['112244', '13579001', '1357913579001'];
+        if (validCodes.includes(code)) {
             const result = onSubmit(code);
             if (result.startsWith('success')) {
                 setStatus('success');
@@ -38,8 +35,9 @@ const SecretCodeModal = ({ onClose, onSubmit }) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (status !== 'idle' || !code) return;
-
-        if (code !== '112244' && code !== '13579001') {
+        
+        const validCodes = ['112244', '13579001', '1357913579001'];
+        if (!validCodes.includes(code)) {
             setStatus('failure');
             setTimeout(() => {
                 setStatus('idle');
@@ -75,6 +73,37 @@ const SecretCodeModal = ({ onClose, onSubmit }) => {
                     className: "secret-code-input w-full rounded-lg p-3 focus:outline-none transition-all duration-300",
                     disabled: status !== 'idle'
                 })
+            )
+        )
+    );
+};
+
+const InfiniteTsukuyomiFailureScene = ({ onAnimationEnd }) => {
+    useEffect(() => {
+        const timer = setTimeout(onAnimationEnd, 6000);
+        return () => clearTimeout(timer);
+    }, [onAnimationEnd]);
+
+    return React.createElement(
+        'div',
+        { className: "tsukuyomi-failure-scene" },
+        React.createElement(
+            'div',
+            { className: "tsukuyomi-moon" },
+            React.createElement(RinneSharinganIcon, { className: "rinne-sharingan-overlay" })
+        ),
+        React.createElement(
+            'div',
+            { className: "tsukuyomi-text-container" },
+            React.createElement(
+                'h2',
+                { className: "tsukuyomi-text text-4xl sm:text-5xl font-black" },
+                "وقعت في الغينجتسو الأبدي..."
+            ),
+            React.createElement(
+                'p',
+                { className: "tsukuyomi-subtext font-tajawal text-lg mt-2" },
+                "استيقظ على الواقع وحاول مجدداً."
             )
         )
     );
@@ -133,8 +162,7 @@ const QuizModal = ({ onComplete }) => {
         } else {
             setAnswerStatus('incorrect');
             setTimeout(() => setRevealedCorrectAnswer(currentQ.correctAnswer), 500);
-            setTimeout(() => setShowFailure(true), 2000);
-            setTimeout(resetQuiz, 4000);
+            setTimeout(() => setShowFailure(true), 1500);
         }
     };
     
@@ -150,6 +178,10 @@ const QuizModal = ({ onComplete }) => {
             }
             return 'success-solve';
         }
+        if (code === '1357913579001') {
+            onComplete();
+            return 'success-skip';
+        }
         return 'failure';
     };
 
@@ -160,22 +192,16 @@ const QuizModal = ({ onComplete }) => {
 
     return React.createElement(
         'div',
-        { className: "fixed inset-0 z-[60] flex flex-col items-center justify-center p-4 sm:p-8 bg-black" },
+        { className: `quiz-modal-container fixed inset-0 z-[60] flex flex-col items-center justify-center p-4 sm:p-8 bg-black transition-all duration-500 ${showFailure ? 'is-failing' : ''}` },
         React.createElement(
             'div',
             { className: "absolute inset-0 z-[-1] overflow-hidden" },
             React.createElement('div', { className: "absolute inset-0 bg-gradient-to-t from-red-900/50 via-black to-black opacity-70" }),
-            React.createElement(SharinganIcon, { className: "absolute -bottom-1/4 -left-1/4 w-3/4 h-3/4 text-red-900/40 animate-spin [animation-duration:80s]" }),
-            React.createElement(SharinganIcon, { className: "absolute -top-1/4 -right-1/4 w-3/4 h-3/4 text-red-900/40 animate-spin [animation-duration:120s] [animation-direction:reverse]" }),
-            React.createElement(MangekyoProIcon, { className: "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1/2 h-1/2 text-white/5 animate-[pulse_10s_ease-in-out_infinite]" })
+            React.createElement(RinneganIcon, { className: "absolute -bottom-1/4 -left-1/4 w-3/4 h-3/4 text-red-900/40 animate-spin [animation-duration:80s]" }),
+            React.createElement(MangekyoProIcon, { className: "absolute -top-1/4 -right-1/4 w-3/4 h-3/4 text-red-900/40 animate-spin [animation-duration:120s] [animation-direction:reverse]" }),
+            React.createElement(SharinganIcon, { className: "quiz-bg-sharingan" })
         ),
         isCodeInputOpen && React.createElement(SecretCodeModal, { onClose: () => setIsCodeInputOpen(false), onSubmit: handleCodeSubmit }),
-        showFailure && React.createElement(
-            'div',
-            { className: "absolute inset-0 bg-red-900/90 flex flex-col items-center justify-center z-20 transition-opacity duration-300" },
-            React.createElement('h2', { className: "text-5xl font-black font-cairo text-white" }, "فشلت!"),
-            React.createElement('p', { className: "text-xl text-red-200 mt-2" }, "المعرفة تتطلب المزيد من التدريب. المحاولة مرة أخرى...")
-        ),
         React.createElement(
             'div',
             { className: "w-full max-w-4xl mx-auto flex flex-col flex-grow relative" },
@@ -253,108 +279,134 @@ const QuizModal = ({ onComplete }) => {
                 ),
                 React.createElement('p', { className: "text-sm text-gray-500 mt-4" }, `أجب على ${questions.length} أسئلة لتثبت جدارتك. (${currentIndex + 1}/${questions.length})`)
             )
-        )
+        ),
+        showFailure && React.createElement(InfiniteTsukuyomiFailureScene, { onAnimationEnd: resetQuiz })
     );
 };
 
-const CinematicActivationScene = ({ onComplete }) => {
-  const { setIsActivating } = useShinobiPro();
-  const [stage, setStage] = useState('charging');
-  const [clickCount, setClickCount] = useState(0);
+const chakraWisps = [
+    { color: '#f87171', angle: 20, delay: 1.5 },
+    { color: '#fb923c', angle: 300, delay: 1.6 },
+    { color: '#facc15', angle: 120, delay: 1.7 },
+    { color: '#a3e635', angle: 70, delay: 1.8 },
+    { color: '#4ade80', angle: 210, delay: 1.9 },
+    { color: '#22d3ee', angle: 180, delay: 2.0 },
+    { color: '#818cf8', angle: 250, delay: 2.1 },
+    { color: '#c084fc', angle: 340, delay: 2.2 },
+];
+
+const SixPathsAwakeningScene = ({ onComplete }) => {
+    const { setIsActivating } = useShinobiPro();
+    const [stage, setStage] = useState('void');
+    const [capturedWisps, setCapturedWisps] = useState(new Set());
+    const timeoutRef = useRef(null);
   
-  const powerSymbols = useMemo(() => [
-    { Icon: UchihaSymbol, color: 'text-red-500' },
-    { Icon: SenjuSymbol, color: 'text-green-500' },
-    { Icon: HyugaSymbol, color: 'text-purple-400' },
-    { Icon: RinneganIcon, color: 'text-indigo-400' },
-    { Icon: ByakuganIcon, color: 'text-blue-300' },
-    { Icon: SharinganIcon, color: 'text-red-600' },
-    { Icon: MangekyoIcon, color: 'text-red-700' },
-  ], []);
+    useEffect(() => {
+        if (timeoutRef.current) clearTimeout(timeoutRef.current);
 
-  const handleClick = () => {
-    if (stage !== 'charging') return;
-    const newClickCount = clickCount + 1;
-    setClickCount(newClickCount);
-    if (newClickCount >= 7) {
-      setTimeout(() => setStage('exploding'), 300);
-    }
-  };
+        const speedBoost = capturedWisps.size * 400; // 400ms boost per wisp
+        let nextStage = null;
+        let delay = 0;
 
-  useEffect(() => {
-    if (stage === 'exploding') {
-      setTimeout(() => setStage('revealing'), 2500);
-    } else if (stage === 'revealing') {
-      const timer = setTimeout(() => {
-        setIsActivating(false);
-        onComplete();
-      }, 7000);
-      return () => clearTimeout(timer);
-    }
-  }, [stage, onComplete, setIsActivating]);
+        switch (stage) {
+            case 'void':      delay = 1500; nextStage = 'gathering'; break;
+            case 'gathering': delay = 2500 - speedBoost; nextStage = 'unveiling'; break;
+            case 'unveiling': delay = 4000 - speedBoost; nextStage = 'ascension'; break;
+            case 'ascension': delay = 1500 - (speedBoost / 2); nextStage = 'aftermath'; break;
+            case 'aftermath': delay = 3000; nextStage = 'complete'; break;
+        }
 
-  const rotationSpeed = Math.max(0.1, 1.5 - clickCount * 0.2);
-  const sharinganStyle = { animationDuration: `${rotationSpeed}s` };
+        if (nextStage) {
+            timeoutRef.current = setTimeout(() => {
+                if (nextStage === 'complete') {
+                    setIsActivating(false);
+                    onComplete();
+                } else {
+                    setStage(nextStage);
+                }
+            }, Math.max(200, delay));
+        }
 
-  const cinematicBgClass = `fixed inset-0 z-[70] flex items-center justify-center p-4 akatsuki-cinematic-bg transition-opacity duration-500 ${stage === 'exploding' ? 'exploding' : ''}`;
+        return () => {
+            if (timeoutRef.current) clearTimeout(timeoutRef.current);
+        };
+    }, [stage, onComplete, setIsActivating, capturedWisps.size]);
 
-  return React.createElement(
-    'div',
-    { className: cinematicBgClass },
-    React.createElement(AkatsukiSymbol, { className: "absolute w-96 h-96 text-red-900/50 -top-20 -left-20 transform-gpu animate-[slow-float_10s_ease-in-out_infinite]" }),
-    React.createElement(AkatsukiSymbol, { className: "absolute w-80 h-80 text-red-900/50 -bottom-24 -right-20 transform-gpu animate-[slow-float_12s_ease-in-out_infinite_reverse]" }),
-    stage === 'charging' && React.createElement(
+    const handleWispClick = (wispAngle) => {
+        if (stage !== 'gathering' || capturedWisps.has(wispAngle)) return;
+        setCapturedWisps(prev => new Set(prev).add(wispAngle));
+    };
+  
+    return React.createElement(
         'div',
-        { className: "text-center animate-[cinematic-fade-in_1s_ease-out]" },
+        { className: "awakening-scene-bg" },
         React.createElement(
             'div',
-            { className: "w-48 h-48 md:w-64 md:h-64 cursor-pointer relative group", onClick: handleClick, "aria-label": "انقر لزيادة السرعة" },
-            React.createElement(SharinganIcon, { className: "w-full h-full animate-spin", style: sharinganStyle }),
-            React.createElement('div', { className: "absolute inset-0 rounded-full group-hover:bg-white/10 transition-colors" }),
-            React.createElement(
+            { className: `awakening-container` },
+            stage === 'void' && React.createElement('div', { className: "truth-seeking-orb" }),
+            stage === 'gathering' && React.createElement(
+                React.Fragment,
+                null,
+                React.createElement('div', { className: "truth-seeking-orb" }),
+                chakraWisps.map(wisp => React.createElement('div', { 
+                    key: wisp.angle, 
+                    className: `chakra-wisp interactive ${capturedWisps.has(wisp.angle) ? 'captured' : ''}`,
+                    onClick: () => handleWispClick(wisp.angle),
+                    style: { '--wisp-color': wisp.color, '--angle': `${wisp.angle}deg`, animationDelay: `${wisp.delay}s` } 
+                }))
+            ),
+            stage === 'unveiling' && React.createElement(
                 'div',
-                { className: "absolute inset-0 flex items-center justify-center pointer-events-none" },
-                React.createElement('div', { className: "w-full h-full rounded-full border-4 border-red-500/50 animate-ping", style: { animationDuration: '1.5s', transform: `scale(${0.5 + clickCount * 0.1})`, opacity: `${1 - clickCount * 0.1}` } })
+                { className: "awakening-rinnegan-container", style: { animationDelay: '0s' } },
+                React.createElement(RinneganIcon, { className: "awakening-rinnegan" })
+            ),
+            stage === 'ascension' && React.createElement(
+                React.Fragment,
+                null,
+                React.createElement(
+                    'div',
+                    { className: "awakening-rinnegan-container" },
+                    React.createElement(RinneganIcon, { className: "awakening-rinnegan" })
+                ),
+                React.createElement('div', { className: "shakujo-staff" }),
+                React.createElement(
+                    'div',
+                    { className: "truth-seeking-orbs-container" },
+                    [...Array(6)].map((_, i) => {
+                        const angle = i * 60;
+                        const radius = 40;
+                        const x = radius * Math.cos(angle * Math.PI / 180);
+                        const y = radius * Math.sin(angle * Math.PI / 180);
+                        return React.createElement('div', { 
+                            key: i, 
+                            className: "awakening-orb",
+                            style: {'--transform-end': `translate(${x}%, ${y}%)`, animationDelay: `${6 + i*0.1}s`}
+                        });
+                    })
+                )
             )
         ),
-        React.createElement('p', { className: "mt-8 font-cairo text-2xl font-bold text-white tracking-widest text-shadow shadow-black/50" }, clickCount < 3 ? "ركّز التشاكرا" : clickCount < 6 ? "أطلق العنان للقوة!" : "على وشك الانفجار!"),
-        React.createElement('p', { className: "text-red-300" }, `انقر على الشارينغان (${clickCount}/7)`)
-    ),
-    stage === 'exploding' && React.createElement(
-        'div',
-        { className: "relative w-64 h-64 flex items-center justify-center" },
-        React.createElement('div', { className: "absolute inset-0 bg-white rounded-full animate-[pro-explosion-flash_0.5s_cubic-bezier(0.68,-0.55,0.27,1.55)_forwards]" }),
-        React.createElement('div', { className: "absolute inset-0 rounded-full border-red-500 animate-[pro-explosion-shockwave_1s_ease-out_forwards]" }),
-        React.createElement('div', { className: "absolute inset-0 rounded-full border-purple-500 animate-[pro-explosion-shockwave_1s_ease-out_0.2s_forwards]" }),
-        powerSymbols.map(({ Icon, color }, i) => {
-            const angle = (i / powerSymbols.length) * 360;
-            const radians = angle * (Math.PI / 180);
-            const distance = 100 + Math.random() * 50;
-            const tx = Math.cos(radians) * distance;
-            const ty = Math.sin(radians) * distance;
-            return React.createElement(
+        stage === 'ascension' && React.createElement('div', { className: "ascension-flash", style: {animationDelay: '1.5s'} }),
+        stage === 'aftermath' && React.createElement(
+            'div',
+            { className: "awakening-aftermath" },
+            React.createElement(
                 'div',
-                {
-                    key: i,
-                    className: "absolute w-12 h-12 opacity-0",
-                    style: { '--tx': `${tx}px`, '--ty': `${ty}px`, animation: `pro-symbol-burst 2s ${i * 0.05}s ease-out forwards` }
-                },
-                React.createElement(Icon, { className: `w-full h-full ${color}`, style: { filter: 'drop-shadow(0 0 8px currentColor)' } })
-            );
-        })
-    ),
-    stage === 'revealing' && React.createElement(
-        'div',
-        { className: "flex flex-col items-center justify-center text-center p-8 max-w-4xl mx-auto border-2 border-transparent bg-black/30 backdrop-blur-md rounded-2xl shadow-2xl shadow-red-500/30 animate-[frame-fade-in_1.5s_ease-out_forwards]" },
-        React.createElement('h2', { className: "font-cairo text-4xl sm:text-5xl md:text-6xl font-black tracking-wider bg-gradient-to-r from-yellow-300 via-red-400 to-yellow-300 bg-clip-text text-transparent animate-[text-glow-animation_5s_ease_infinite,text-fade-in_2s_0.5s_ease-out_backwards]", style: { backgroundSize: '200% 200%' } }, "أصبحت الآن شينوبي حقيقي"),
-        React.createElement(
-            'blockquote',
-            { className: "mt-6 relative" },
-            React.createElement('p', { className: "font-tajawal text-lg md:text-xl text-gray-300 animate-[quote-fade-in_2s_1.5s_ease-out_backwards]" }, '"أولئك الذين لا يفهمون الألم الحقيقي لا يمكنهم فهم السلام الحقيقي."'),
-            React.createElement('cite', { className: "block text-right mt-2 text-red-400 not-italic animate-[quote-fade-in_2s_1.8s_ease-out_backwards]" }, "- باين")
-        )
-    )
-  );
+                { className: "awakening-text" },
+                React.createElement(
+                    'h2',
+                    { className: "font-cairo text-4xl sm:text-5xl font-black" },
+                    "لقد بلغت حكمة المسارات الستة"
+                ),
+                React.createElement(
+                    'p',
+                    { className: "font-tajawal text-lg text-amber-600 mt-2" },
+                    "عالم الشينوبي الحقيقي ينكشف أمامك."
+                )
+            )
+        ),
+        stage === 'gathering' && React.createElement('div', { className: "awakening-prompt" }, "انقر على خيوط التشاكرا لجمعها!")
+    );
 };
 
 const ShinobiPro = () => {
@@ -384,12 +436,11 @@ const ShinobiPro = () => {
         };
     }, [handleScroll]);
 
-
-    const handleCompleteQuiz = () => {
+    const handleCompleteQuiz = useCallback(() => {
         setIsModalOpen(false);
         activatePro();
         setIsActivating(true);
-    };
+    }, [activatePro, setIsActivating]);
 
     const handleActivationComplete = () => {
         navigate('/pro');
@@ -447,7 +498,7 @@ const ShinobiPro = () => {
             )
         ),
         isModalOpen && React.createElement(QuizModal, { onComplete: handleCompleteQuiz }),
-        isActivating && React.createElement(CinematicActivationScene, { onComplete: handleActivationComplete })
+        isActivating && React.createElement(SixPathsAwakeningScene, { onComplete: handleActivationComplete })
     );
 };
 

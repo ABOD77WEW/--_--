@@ -1,6 +1,3 @@
-
-
-
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import * as ReactRouterDOM from 'react-router-dom';
 import { arcs } from '../data/arcs';
@@ -13,11 +10,16 @@ const TimelineEvent: React.FC<{
   onSelect: () => void;
   style: React.CSSProperties;
   infoPosition: 'top' | 'bottom';
-}> = ({ arc, onSelect, style, infoPosition }) => {
+  scrollContainerRef: React.RefObject<HTMLDivElement>;
+}> = ({ arc, onSelect, style, infoPosition, scrollContainerRef }) => {
     const eventRef = useRef<HTMLDivElement>(null);
     const [isVisible, setIsVisible] = useState(false);
 
     useEffect(() => {
+        const scrollRoot = scrollContainerRef.current;
+        const currentRef = eventRef.current;
+        if (!currentRef || !scrollRoot) return;
+
         const observer = new IntersectionObserver(
             ([entry]) => {
                 if (entry.isIntersecting) {
@@ -26,22 +28,21 @@ const TimelineEvent: React.FC<{
                 }
             },
             {
-                root: null,
-                rootMargin: '0px 0px 0px -200px',
-                threshold: 0.5,
+                root: scrollRoot,
+                rootMargin: '0px -100px 0px -100px',
+                threshold: 0.1,
             }
         );
 
-        if (eventRef.current) {
-            observer.observe(eventRef.current);
-        }
+        observer.observe(currentRef);
 
         return () => {
-            if (eventRef.current) {
-                observer.unobserve(eventRef.current);
+            if (currentRef) {
+                observer.unobserve(currentRef);
             }
+            observer.disconnect();
         };
-    }, []);
+    }, [scrollContainerRef]);
 
     return (
         <div ref={eventRef} className={`timeline-scroll-event ${isVisible ? 'is-visible' : ''}`} style={style}>
@@ -105,7 +106,7 @@ const TimelinePage: React.FC = () => {
             d += ` C ${cx1} ${cy1}, ${cx2} ${cy2}, ${x} ${y}`;
         }
         return d;
-    }, [arcs.length]);
+    }, []);
 
     useEffect(() => {
         const slider = scrollContainerRef.current;
@@ -202,6 +203,7 @@ const TimelinePage: React.FC = () => {
                             top: `${Y_POSITIONS[index % 2]}px`
                         }}
                         infoPosition={index % 2 === 0 ? 'bottom' : 'top'}
+                        scrollContainerRef={scrollContainerRef}
                     />
                 ))}
             </div>
