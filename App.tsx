@@ -16,6 +16,7 @@ import BattlePage from './pages/BattlePage';
 import TimelinePage from './pages/TimelinePage';
 import ShinobiPro from './components/ShinobiPro';
 import Footer from './components/Footer';
+import FullScreenDetailView from './components/FullScreenDetailView';
 
 import { FavoritesProvider } from './hooks/useFavorites';
 import { useShinobiPro, ShinobiProProvider } from './hooks/useShinobiPro';
@@ -68,10 +69,11 @@ const ThemedAppLayout: React.FC = () => {
 
     return (
         <>
+            <FullScreenDetailView />
             <ShinobiPro />
             <div className="flex flex-row-reverse">
                 <Navigation />
-                <div className="flex-1 md:mr-64 lg:mr-72">
+                <div className={`flex-1 transition-all duration-300 md:mr-64 lg:mr-72`}>
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 pb-24 md:pb-12 min-h-screen">
                         <ReactRouterDOM.Routes>
                             <ReactRouterDOM.Route path="/" element={<PageWrapper><HomePage /></PageWrapper>} />

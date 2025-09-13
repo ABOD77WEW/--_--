@@ -7,10 +7,10 @@ import { clans } from '../data/clans.js';
 import { useShinobiPro } from '../hooks/useShinobiPro.js';
 
 const categoryMap = {
-  characters: { name: 'الشخصيات', path: '/characters' },
-  arcs: { name: 'الآركات', path: '/arcs' },
-  eyes: { name: 'العيون', path: '/eyes' },
-  clans: { name: 'العشائر', path: '/clans' },
+  characters: { name: 'الشخصيات', category: 'characters' },
+  arcs: { name: 'الآركات', category: 'arcs' },
+  eyes: { name: 'العيون', category: 'eyes' },
+  clans: { name: 'العشائر', category: 'clans' },
 };
 
 const GlobalSearchBar = () => {
@@ -18,7 +18,7 @@ const GlobalSearchBar = () => {
   const [results, setResults] = useState({ characters: [], arcs: [], eyes: [], clans: [] });
   const [isFocused, setIsFocused] = useState(false);
   const searchRef = useRef(null);
-  const { isAkatsukiTheme } = useShinobiPro();
+  const { isAkatsukiTheme, openDetailView } = useShinobiPro();
 
   const performSearch = useCallback((currentQuery) => {
     if (!currentQuery) {
@@ -56,9 +56,10 @@ const GlobalSearchBar = () => {
   const totalResults = Object.values(results).reduce((acc, val) => acc + val.length, 0);
   const showDropdown = isFocused && query.length > 0;
 
-  const handleLinkClick = () => {
+  const handleResultClick = (item, category) => {
     setQuery('');
     setIsFocused(false);
+    openDetailView(item, category);
   };
 
   const baseClasses = "flex items-center rounded-full shadow-lg overflow-hidden";
@@ -112,12 +113,10 @@ const GlobalSearchBar = () => {
                   'li',
                   { key: `${category}-${item.id}` },
                   React.createElement(
-                    ReactRouterDOM.Link,
+                    'button',
                     {
-                      to: catInfo.path,
-                      state: { selectedId: item.id },
-                      onClick: handleLinkClick,
-                      className: "block w-full text-right px-3 py-2 text-gray-200 rounded-lg transition-colors",
+                      onClick: () => handleResultClick(item, catInfo.category),
+                      className: "block w-full text-right px-3 py-2 text-gray-200 rounded-lg transition-colors hover:bg-white/10",
                     },
                     item.name
                   )

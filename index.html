@@ -122,55 +122,34 @@
         51%, 100% { opacity: 0; }
       }
       
-      /* === NEW CHAKRA FLOW SIDEBAR === */
-      @keyframes chakra-background-flow {
-        0% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
-      }
-      
+      /* === Original Theme Sidebar === */
       .sidebar-chakra {
-        background: linear-gradient(200deg, #1a1a2e, #16213e, #0f3460, #1a1a2e);
-        background-size: 300% 300%;
-        animation: chakra-background-flow 25s ease-in-out infinite;
-        border-left-color: #4a044e;
+        background-color: #1A1A1A; /* --card-bg-dark */
+        border-left: 1px solid var(--border-dark);
       }
 
       .sidebar-chakra .site-title {
-        color: #e0d8ff;
-        text-shadow: 0 0 10px rgba(0, 245, 212, 0.7), 0 0 20px rgba(0, 245, 212, 0.5);
+        color: var(--text-dark);
+        text-shadow: none;
       }
       
       .sidebar-chakra nav a {
-        color: #e0d8ff;
-        position: relative;
-        z-index: 1;
-        overflow: hidden;
-      }
-      
-      .sidebar-chakra nav a::before {
-        content: '';
-        position: absolute;
-        top: 0; right: 0;
-        width: 100%; height: 100%;
-        background-color: rgba(0, 245, 212, 0.15);
+        color: var(--text-dark);
+        transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
         border-radius: 8px;
-        transform: translateX(101%);
-        transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
-        z-index: -1;
+        position: relative;
       }
       
-      .sidebar-chakra nav a:hover::before, .sidebar-chakra nav a.active::before {
-        transform: translateX(0);
+      .sidebar-chakra nav a::before { content: none; }
+      
+      .sidebar-chakra nav a:hover {
+        background-color: rgba(229, 62, 62, 0.1); /* accent color with alpha */
       }
       
       .sidebar-chakra nav a.active {
-        color: #00f5d4;
+        color: var(--accent-dark);
         font-weight: bold;
-      }
-
-      .sidebar-chakra nav a.active::before {
-        background-color: rgba(0, 245, 212, 0.2);
+        background-color: rgba(229, 62, 62, 0.15);
       }
       
       .sidebar-chakra nav a.active::after {
@@ -178,26 +157,21 @@
         position: absolute;
         top: 15%; right: 0;
         width: 4px; height: 70%;
-        background-color: #00f5d4;
+        background-color: var(--accent-dark);
         border-radius: 4px;
-        box-shadow: 0 0 8px #00f5d4;
-      }
-
-      .sidebar-chakra nav a > * {
-        position: relative;
-        z-index: 2;
+        box-shadow: 0 0 8px var(--accent-dark);
       }
 
       .bottom-nav-chakra {
-        background-color: #1a1a2e;
-        border-top-color: #4a044e;
+        background-color: #1A1A1A;
+        border-top: 1px solid var(--border-dark);
       }
       .bottom-nav-chakra a {
-        color: #9a8cbf; /* Muted lavender */
+        color: #9ca3af; /* Muted gray */
         position: relative;
       }
       .bottom-nav-chakra a.active {
-        color: #00f5d4;
+        color: var(--accent-dark);
       }
       .bottom-nav-chakra a.active::after {
         content: '';
@@ -207,9 +181,9 @@
         transform: translateX(-50%);
         width: 6px;
         height: 6px;
-        background-color: #00f5d4;
+        background-color: var(--accent-dark);
         border-radius: 50%;
-        box-shadow: 0 0 6px #00f5d4;
+        box-shadow: 0 0 6px var(--accent-dark);
       }
       
 
@@ -304,10 +278,16 @@
         20%, 40%, 60%, 80% { transform: translateX(5px); }
       }
 
-      /* Quiz Hint Style */
-      @keyframes chakra-flow {
-          0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
-          50% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.9; }
+      /* === NEW: Enhanced Hint Style & Animation === */
+      @keyframes hint-reveal {
+        from {
+          opacity: 0;
+          transform: translateY(10px) scale(0.95);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
       }
       .hint-chakra-aura {
         position: relative;
@@ -316,7 +296,7 @@
         padding: 1rem 1.5rem;
         border-radius: 0.75rem;
         box-shadow: 0 0 20px rgba(251, 191, 36, 0.3);
-        animation: cinematic-fade-in 0.5s;
+        animation: hint-reveal 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
       }
       .hint-chakra-aura::before {
         content: '';
@@ -326,6 +306,48 @@
         background: radial-gradient(circle, rgba(251, 191, 36, 0.4) 0%, transparent 70%);
         animation: chakra-flow 5s ease-in-out infinite;
         z-index: -1;
+      }
+      @keyframes chakra-flow {
+          0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
+          50% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.9; }
+      }
+
+      /* === NEW: Sage Wisdom Hint Button === */
+      .quiz-hint-button {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        background: rgba(251, 191, 36, 0.15);
+        border: 1px solid rgba(251, 191, 36, 0.6);
+        border-radius: 9999px;
+        color: #fef08a;
+        font-weight: bold;
+        backdrop-filter: blur(4px);
+        box-shadow: 0 0 15px rgba(251, 191, 36, 0.3);
+        transition: all 0.3s ease;
+      }
+      .quiz-hint-button:hover:not(:disabled) {
+        background: rgba(251, 191, 36, 0.3);
+        border-color: #facc15;
+        transform: scale(1.05);
+      }
+      .quiz-hint-button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        filter: grayscale(80%);
+      }
+      .hint-counter {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 1.5rem;
+        height: 1.5rem;
+        font-size: 0.9rem;
+        border-radius: 50%;
+        background-color: #facc15;
+        color: #4a2e2e;
+        font-weight: 900;
       }
 
       /* Quiz Progress Bar */
@@ -589,7 +611,11 @@
         100% { filter: blur(8px) grayscale(1); opacity: 0; transform: scale(0.9); }
       }
       
-      /* NEW: QUIZ BACKGROUND SHARINGAN */
+      /* NEW: QUIZ BACKGROUND SHARINGAN & RINNEGAN */
+      @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
       .quiz-bg-sharingan {
         position: absolute;
         top: 50%;
@@ -599,14 +625,30 @@
         transform: translate(-50%, -50%);
         color: #e53e3e;
         opacity: 0;
-        filter: drop-shadow(0 0 20px var(--accent-dark-hover)) blur(2px);
+        filter: drop-shadow(0 0 20px var(--accent-dark-hover));
         animation: quiz-sharingan-awaken 10s ease-in-out infinite;
       }
 
       @keyframes quiz-sharingan-awaken {
         0%, 100% { opacity: 0; transform: translate(-50%, -50%) scale(0.8) rotate(-90deg); }
-        20%, 80% { opacity: 0.1; transform: translate(-50%, -50%) scale(1) rotate(0deg); }
-        50% { opacity: 0.15; transform: translate(-50%, -50%) scale(1.05) rotate(90deg); }
+        20%, 80% { opacity: 0.3; transform: translate(-50%, -50%) scale(1) rotate(0deg); }
+        50% { opacity: 0.4; transform: translate(-50%, -50%) scale(1.05) rotate(90deg); }
+      }
+      
+      .rotating-rinnegan-bg {
+          animation: spin 25s linear infinite;
+      }
+      .rotating-rinnegan-bg circle:nth-of-type(3) {
+          transform-origin: center;
+          animation: spin 8s linear infinite reverse;
+      }
+      .rotating-rinnegan-bg circle:nth-of-type(4) {
+          transform-origin: center;
+          animation: spin 12s linear infinite;
+      }
+      .rotating-rinnegan-bg circle:nth-of-type(5) {
+          transform-origin: center;
+          animation: spin 6s linear infinite reverse;
       }
 
 
@@ -638,14 +680,12 @@
       body.theme-akatsuki nav a {
         color: #e5e7eb !important;
       }
-       body.theme-akatsuki nav a::before {
+       body.theme-akatsuki .sidebar-chakra nav a:hover {
         background-color: rgba(220, 38, 38, 0.2) !important;
-      }
-      body.theme-akatsuki nav a:hover {
-        color: #fca5a5 !important;
       }
       body.theme-akatsuki .sidebar-chakra nav a.active {
         color: #fca5a5 !important;
+        background-color: rgba(220, 38, 38, 0.25) !important;
       }
       body.theme-akatsuki .sidebar-chakra nav a.active::after {
          background-color: #DC2626 !important;
@@ -726,45 +766,66 @@
         box-shadow: 0 0 30px rgba(126, 34, 206, 0.5);
         animation: cinematic-fade-in 0.5s 0.1s ease-out backwards;
       }
-      .secret-code-input {
-        background: #11051b;
-        border: 2px solid #7e22ce;
-        color: #e9d5ff;
+      .secret-code-display {
+        background: #0c0313;
+        border: 2px solid #581c87;
+        border-radius: 0.5rem;
+        padding: 1rem;
         text-align: center;
-        font-size: 2rem;
-        letter-spacing: 0.5em;
+        font-size: 2.5rem;
         font-family: 'Cairo', monospace;
+        letter-spacing: 0.5em;
+        color: #c084fc;
+        height: 70px; /* Fixed height */
+        margin-bottom: 1.5rem;
+        box-shadow: inset 0 0 10px rgba(168, 85, 247, 0.5);
       }
-      .secret-code-input::placeholder {
-        color: #581c87;
-        letter-spacing: normal;
+      .secret-code-keypad {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
       }
-      .secret-code-input:focus {
-        outline: none;
-        box-shadow: 0 0 15px #a855f7;
+      .keypad-button {
+        background: linear-gradient(145deg, #2a0e4a, #1e0a36);
+        border: 1px solid #4a044e;
+        border-radius: 0.5rem;
+        font-size: 1.75rem;
+        font-weight: bold;
+        color: #e9d5ff;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.4);
+      }
+      .keypad-button:hover {
+        background: #4a044e;
+        border-color: #a855f7;
+        transform: translateY(-2px);
+        box-shadow: 0 0 15px rgba(168, 85, 247, 0.6), 0 6px 10px rgba(0,0,0,0.3);
       }
 
       /* Animations for code status */
-      @keyframes secret-code-success {
-        0% { box-shadow: 0 0 15px #a855f7; }
-        50% { box-shadow: 0 0 30px #22c55e, 0 0 10px #22c55e inset; border-color: #4ade80; }
-        100% { box-shadow: 0 0 15px #a855f7; }
+      @keyframes secret-code-success-anim {
+          50% { box-shadow: 0 0 20px #22c55e, 0 0 10px #22c55e inset; border-color: #4ade80; }
       }
-      .secret-code-success .secret-code-input {
-        animation: secret-code-success 1s ease-in-out;
+      .secret-code-success .secret-code-display {
+        animation: secret-code-success-anim 1s ease-in-out;
       }
 
-      @keyframes secret-code-failure {
+      @keyframes secret-code-failure-anim {
         0%, 100% { transform: translateX(0); }
         10%, 30%, 50%, 70%, 90% { transform: translateX(-8px); }
         20%, 40%, 60%, 80% { transform: translateX(8px); }
       }
       .secret-code-failure {
-        animation: secret-code-failure 0.5s ease-in-out;
+        animation: secret-code-failure-anim 0.5s ease-in-out;
       }
-      .secret-code-failure .secret-code-input {
+      .secret-code-failure .secret-code-display {
         border-color: #ef4444;
-        box-shadow: 0 0 15px #ef4444;
+        box-shadow: inset 0 0 10px rgba(239, 68, 68, 0.5);
       }
       
       /* --- BATTLE ARENA STYLES --- */
@@ -877,20 +938,6 @@
       .detail-exit-button:hover {
         transform: scale(1.1) rotate(90deg);
       }
-
-      /* === PRO BUTTONS SCROLL BEHAVIOR === */
-      .pro-buttons-wrapper {
-        transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-      }
-      .pro-buttons-wrapper.hidden {
-        transform: translateY(-150%);
-      }
-       .pro-buttons-wrapper-bottom {
-        transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-      }
-      .pro-buttons-wrapper-bottom.hidden {
-        transform: translateY(150%);
-      }
       
       /* === NEW: LEGENDARY FOOTER === */
       @keyframes footer-separator-glow {
@@ -943,6 +990,83 @@
         letter-spacing: 0.1em;
       }
 
+      .technique-icon-grid {
+        display: flex;
+        justify-content: center;
+        gap: 0.5rem;
+        margin-top: 0.25rem;
+      }
+
+      .technique-icon {
+        width: 1.5rem;
+        height: 1.5rem;
+        padding: 0.25rem;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 50%;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      /* === NEW: FULL SCREEN SCROLL DETAIL VIEW === */
+      @keyframes scroll-unfurl {
+        from {
+          opacity: 0;
+          transform: scale(0.8) translateY(20px);
+          filter: blur(10px);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1) translateY(0);
+          filter: blur(0);
+        }
+      }
+      .scroll-view-container {
+        position: fixed;
+        inset: 0;
+        z-index: 60;
+        background: rgba(10, 5, 15, 0.8);
+        backdrop-filter: blur(8px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+        animation: cinematic-fade-in 0.5s ease-out;
+      }
+      .scroll-view-content {
+        position: relative;
+        width: 100%;
+        max-width: 900px;
+        height: 90vh;
+        max-height: 700px;
+        background: #f3e9d2;
+        color: #4a2e2e;
+        border: 8px solid;
+        border-image: linear-gradient(to bottom, #6b4f4f, #a9876a) 1;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        border-radius: 4px;
+        animation: scroll-unfurl 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        display: flex;
+        overflow: hidden;
+      }
+
+      .scroll-view-content-inner {
+        padding: 2rem 2.5rem;
+        overflow-y: auto;
+        flex-grow: 1;
+      }
+      /* Custom scrollbar for the scroll view */
+      .scroll-view-content-inner::-webkit-scrollbar { width: 12px; }
+      .scroll-view-content-inner::-webkit-scrollbar-track { background: #d1c4a8; }
+      .scroll-view-content-inner::-webkit-scrollbar-thumb { background: #8a6d4e; border-radius: 10px; border: 3px solid #d1c4a8; }
+
+      .scroll-ink-divider {
+        width: 50%;
+        height: 2px;
+        background: linear-gradient(to right, transparent, #4a2e2e, transparent);
+        margin: 1.5rem auto;
+        opacity: 0.6;
+      }
+
+
     </style>
   <script type="importmap">
 {
@@ -959,6 +1083,6 @@
 </head>
   <body>
     <div id="root"></div>
-    <script type="module" src="./index.js"></script>
+    <script type="module" src="./index.tsx"></script>
   </body>
 </html>

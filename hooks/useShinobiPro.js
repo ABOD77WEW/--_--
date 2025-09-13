@@ -24,6 +24,9 @@ export const ShinobiProProvider = ({ children }) => {
   });
 
   const [isActivating, setIsActivating] = useState(false);
+  const [isDetailViewOpen, setIsDetailViewOpen] = useState(false);
+  const [detailViewContent, setDetailViewContent] = useState({ item: null, category: null });
+
 
   useEffect(() => {
     window.localStorage.setItem('shinobi-pro-status', JSON.stringify(isPro));
@@ -45,9 +48,18 @@ export const ShinobiProProvider = ({ children }) => {
     }
   };
 
+  const openDetailView = (item, category) => {
+    setDetailViewContent({ item, category });
+    setIsDetailViewOpen(true);
+  };
+
+  const closeDetailView = () => {
+    setIsDetailViewOpen(false);
+  };
+
   return React.createElement(
     ShinobiProContext.Provider,
-    { value: { isPro, activatePro, isActivating, setIsActivating, isAkatsukiTheme, toggleAkatsukiTheme } },
+    { value: { isPro, activatePro, isActivating, setIsActivating, isAkatsukiTheme, toggleAkatsukiTheme, isDetailViewOpen, detailViewContent, openDetailView, closeDetailView } },
     children
   );
 };

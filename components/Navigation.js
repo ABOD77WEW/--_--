@@ -26,14 +26,14 @@ const Sidebar = () => {
         
     const getLinkClasses = ({ isActive }) => {
         const base = "flex items-center w-full p-3 my-1 rounded-lg transition-all duration-200 text-right";
-        const active = "bg-red-500/20 text-red-500 font-bold active";
-        const inactive = "hover:bg-red-500/10";
+        const active = "active";
+        const inactive = "hover:text-[#00f5d4]";
         return `${base} ${isActive ? active : inactive}`;
     };
 
   return React.createElement(
     'aside',
-    { className: "sidebar fixed top-0 right-0 h-screen w-64 lg:w-72 bg-[#1A1A1A] border-l border-[#2D3748] shadow-2xl p-6 flex-col justify-between hidden md:flex" },
+    { className: "sidebar-chakra fixed top-0 right-0 h-screen w-64 lg:w-72 shadow-2xl p-6 flex-col justify-between hidden md:flex border-l" },
     React.createElement(
       'div',
       null,
@@ -43,8 +43,8 @@ const Sidebar = () => {
         React.createElement(SharinganLogo),
         React.createElement(
           'div',
-          { className: "akatsuki-title-frame" },
-          React.createElement('h1', { className: "font-cairo text-2xl font-black" }, "موسوعة الشينوبي")
+          { className: "site-title-wrapper mt-4" },
+          React.createElement('h1', { className: "font-cairo text-2xl font-black site-title" }, "موسوعة الشينوبي")
         )
       ),
       React.createElement(
@@ -55,8 +55,12 @@ const Sidebar = () => {
             return React.createElement(
                 ReactRouterDOM.NavLink,
                 { key: link.path, to: link.path, className: getLinkClasses },
-                React.createElement('span', { className: "flex-grow" }, link.name),
-                React.createElement(Icon, { className: "w-6 h-6 ml-3" })
+                 React.createElement(
+                    'div',
+                    { className: "flex items-center" },
+                    React.createElement(Icon, { className: "w-6 h-6 ml-4" }),
+                    React.createElement('span', { className: "flex-grow" }, link.name)
+                )
             );
         })
       )
@@ -72,13 +76,13 @@ const BottomNav = () => {
 
     const getLinkClasses = ({ isActive }) => {
         const base = "flex flex-col items-center justify-center w-full pt-2 pb-1 transition-all duration-200";
-        const active = "text-red-500 active";
-        const inactive = "text-gray-400 hover:text-red-400";
+        const active = "active";
+        const inactive = "hover:text-[#00f5d4]";
         return `${base} ${isActive ? active : inactive}`;
     };
     return React.createElement(
         'nav',
-        { className: "bottom-nav md:hidden fixed bottom-0 left-0 right-0 h-16 bg-[#1A1A1A] border-t border-[#2D3748] shadow-t-lg z-50 flex justify-around" },
+        { className: "bottom-nav-chakra md:hidden fixed bottom-0 left-0 right-0 h-16 shadow-t-lg z-50 flex justify-around border-t" },
         navLinks.map(link => {
             const Icon = link.icon;
             return React.createElement(

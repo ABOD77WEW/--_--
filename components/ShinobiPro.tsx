@@ -10,71 +10,76 @@ import SecretCodeIcon from './icons/SecretCodeIcon';
 import RinneganIcon from './icons/RinneganIcon';
 import RinneSharinganIcon from './icons/RinneSharinganIcon';
 import SharinganIcon from './icons/SharinganIcon';
+import SageWisdomIcon from './icons/SageWisdomIcon';
 
 
 type AnswerStatus = 'idle' | 'correct' | 'incorrect';
 
 const SecretCodeModal: React.FC<{
     onClose: () => void;
-    onSubmit: (code: string) => 'success-hint' | 'success-solve' | 'success-skip' | 'failure';
+    onSubmit: (code: string) => 'success-solve' | 'success-skip' | 'failure';
 }> = ({ onClose, onSubmit }) => {
     const [code, setCode] = useState('');
     const [status, setStatus] = useState<'idle' | 'success' | 'failure'>('idle');
-    const inputRef = useRef<HTMLInputElement>(null);
 
-    useEffect(() => {
-        inputRef.current?.focus();
-    }, []);
+    const handleKeyPress = (key: string) => {
+        if (status === 'idle' && code.length < 13) {
+             setCode(prev => prev + key);
+        }
+    };
 
-    // Auto-submit on correct code
+    const handleBackspace = () => {
+        if (status !== 'idle') return;
+        setCode(prev => prev.slice(0, -1));
+    };
+
     useEffect(() => {
         if (status !== 'idle') return;
 
-        const validCodes = ['112244', '13579001', '1357913579001'];
+        const validCodes = ['13579001', '1357913579001'];
         if (validCodes.includes(code)) {
             const result = onSubmit(code);
             if (result.startsWith('success')) {
                 setStatus('success');
                 setTimeout(() => onClose(), 1200);
             }
-        }
-    }, [code, status, onSubmit, onClose]);
-
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        if (status !== 'idle' || !code) return;
-
-        const validCodes = ['112244', '13579001', '1357913579001'];
-        if (!validCodes.includes(code)) {
+        } else if (code.length >= 13) { // Longest valid code is 13
             setStatus('failure');
             setTimeout(() => {
                 setStatus('idle');
                 setCode('');
             }, 800);
         }
-    };
+    }, [code, status, onSubmit, onClose]);
     
     return (
         <div className="secret-code-modal-bg flex items-center justify-center" onClick={onClose}>
             <div
-                className={`secret-code-container w-full max-w-md ${status === 'failure' ? 'secret-code-failure' : ''}`}
+                className={`secret-code-container w-full max-w-sm ${status === 'failure' ? 'secret-code-failure' : ''}`}
                 onClick={(e) => e.stopPropagation()}
             >
                 <div className="text-center">
                     <SecretCodeIcon className="w-12 h-12 mx-auto text-purple-400 mb-4" />
-                    <h3 className="font-cairo text-2xl font-bold mb-4">أدخل الكود السري</h3>
+                    <h3 className="font-cairo text-2xl font-bold mb-2">أدخل الكود السري</h3>
                 </div>
-                <form onSubmit={handleSubmit} className={status === 'success' ? 'secret-code-success' : ''}>
-                    <input
-                        ref={inputRef}
-                        type="text"
-                        value={code}
-                        onChange={(e) => setCode(e.target.value.replace(/\D/g, ''))}
-                        placeholder="...الكود هنا"
-                        className="secret-code-input w-full rounded-lg p-3 focus:outline-none transition-all duration-300"
-                        disabled={status !== 'idle'}
-                    />
-                </form>
+                 <div className={status === 'success' ? 'secret-code-success' : ''}>
+                    <div className="secret-code-display flex items-center justify-center transition-all duration-300">
+                        <span>{code || '...'}</span>
+                    </div>
+                    <div className="secret-code-keypad">
+                        {['1', '2', '3', '4', '5', '6', '7', '8', '9'].map(num => (
+                            <button key={num} onClick={() => handleKeyPress(num)} className="keypad-button" disabled={status !== 'idle'}>
+                                {num}
+                            </button>
+                        ))}
+                         <button onClick={() => handleKeyPress('0')} className="keypad-button col-start-2" disabled={status !== 'idle'}>0</button>
+                         <button onClick={handleBackspace} className="keypad-button" disabled={status !== 'idle'}>
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M12 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2M3 12l6.414 6.414a2 2 0 002.828 0L21 12M3 12l6.414-6.414a2 2 0 012.828 0L21 12" />
+                            </svg>
+                         </button>
+                    </div>
+                </div>
             </div>
         </div>
     );
@@ -112,6 +117,7 @@ const QuizModal: React.FC<{ onComplete: () => void; }> = ({ onComplete }) => {
     const [revealedCorrectAnswer, setRevealedCorrectAnswer] = useState<string | null>(null);
     const [showFailure, setShowFailure] = useState(false);
     const [showHint, setShowHint] = useState(false);
+    const [hintsRemaining, setHintsRemaining] = useState(2);
     const [isCodeInputOpen, setIsCodeInputOpen] = useState(false);
 
     const shuffleQuestions = useCallback(() => {
@@ -131,6 +137,7 @@ const QuizModal: React.FC<{ onComplete: () => void; }> = ({ onComplete }) => {
         setAnswerStatus('idle');
         setRevealedCorrectAnswer(null);
         setShowHint(false);
+        setHintsRemaining(2);
     };
 
     const handleNextQuestion = () => {
@@ -161,11 +168,7 @@ const QuizModal: React.FC<{ onComplete: () => void; }> = ({ onComplete }) => {
         }
     };
     
-     const handleCodeSubmit = (code: string): 'success-hint' | 'success-solve' | 'success-skip' | 'failure' => {
-        if (code === '112244') {
-            setShowHint(true);
-            return 'success-hint';
-        }
+     const handleCodeSubmit = (code: string): 'success-solve' | 'success-skip' | 'failure' => {
         if (code === '13579001') {
             const currentQ = questions[currentIndex];
             if (currentQ) {
@@ -180,6 +183,13 @@ const QuizModal: React.FC<{ onComplete: () => void; }> = ({ onComplete }) => {
         return 'failure';
     };
 
+    const handleUseHint = () => {
+        if (hintsRemaining > 0 && !showHint) {
+            setHintsRemaining(prev => prev - 1);
+            setShowHint(true);
+        }
+    };
+
     if (questions.length === 0) return null;
 
     const currentQuestion = questions[currentIndex];
@@ -190,8 +200,8 @@ const QuizModal: React.FC<{ onComplete: () => void; }> = ({ onComplete }) => {
              
             <div className="absolute inset-0 z-[-1] overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-t from-red-900/50 via-black to-black opacity-70"></div>
-                <RinneganIcon className="absolute -bottom-1/4 -left-1/4 w-3/4 h-3/4 text-red-900/40 animate-spin [animation-duration:80s]" />
-                <MangekyoProIcon className="absolute -top-1/4 -right-1/4 w-3/4 h-3/4 text-red-900/40 animate-spin [animation-duration:120s] [animation-direction:reverse]" />
+                <RinneganIcon className="rotating-rinnegan-bg absolute -bottom-1/4 -left-1/4 w-3/4 h-3/4 text-red-900/40" />
+                <MangekyoProIcon className="absolute -top-1/4 -right-1/4 w-3/4 h-3/4 text-red-900/40 animate-spin [animation-duration:40s] [animation-direction:reverse]" />
                 <SharinganIcon className="quiz-bg-sharingan" />
             </div>
 
@@ -203,9 +213,21 @@ const QuizModal: React.FC<{ onComplete: () => void; }> = ({ onComplete }) => {
             )}
             
             <div className="w-full max-w-4xl mx-auto flex flex-col flex-grow relative">
-                 <div className="w-full max-w-lg mx-auto my-8">
-                    <div className="flex justify-end text-sm font-bold text-gray-300 mb-1 px-2">
-                        <span>السؤال {currentIndex + 1} / {questions.length}</span>
+                <div className="w-full max-w-lg mx-auto my-4">
+                     <div className="flex justify-between items-center mb-2 px-2">
+                        <button
+                            onClick={handleUseHint}
+                            disabled={hintsRemaining === 0 || showHint}
+                            className="quiz-hint-button"
+                            title="استخدام تلميح"
+                        >
+                            <SageWisdomIcon className="w-6 h-6" />
+                            <span className="font-semibold">تلميح</span>
+                            <span className="hint-counter">{hintsRemaining}</span>
+                        </button>
+                        <div className="text-sm font-bold text-gray-300">
+                            <span>السؤال {currentIndex + 1} / {questions.length}</span>
+                        </div>
                     </div>
                     <div className="quiz-progress-bar h-4">
                         <div className="quiz-progress-bar-inner" style={{ width: `${progress}%` }}></div>
@@ -405,27 +427,8 @@ const ShinobiPro: React.FC = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const navigate = ReactRouterDOM.useNavigate();
     const location = ReactRouterDOM.useLocation();
-    const [buttonsVisible, setButtonsVisible] = useState(true);
-    const lastScrollY = useRef(0);
 
     const showButtons = location.pathname !== '/timeline';
-
-    const handleScroll = useCallback(() => {
-        const currentScrollY = window.scrollY;
-        if (lastScrollY.current < currentScrollY && currentScrollY > 100) {
-          setButtonsVisible(false); // Scrolling down
-        } else {
-          setButtonsVisible(true); // Scrolling up
-        }
-        lastScrollY.current = currentScrollY;
-    }, []);
-
-    useEffect(() => {
-        window.addEventListener('scroll', handleScroll, { passive: true });
-        return () => {
-            window.removeEventListener('scroll', handleScroll);
-        };
-    }, [handleScroll]);
 
     const handleCompleteQuiz = useCallback(() => {
         setIsModalOpen(false);
@@ -458,7 +461,7 @@ const ShinobiPro: React.FC = () => {
         <>
             {showButtons && (
                 <>
-                    <div className={`pro-buttons-wrapper fixed top-4 left-4 z-50 ${!buttonsVisible ? 'hidden' : ''}`}>
+                    <div className={`fixed top-4 left-4 z-50`}>
                       <button
                           onClick={() => (isPro ? navigate('/pro') : setIsModalOpen(true))}
                           className={`group flex items-center gap-4 p-2 pr-5 rounded-full border-2 backdrop-blur-sm transition-all duration-300 min-w-[280px] justify-start ${isPro ? 'pro-button-unreal shadow-[0_0_15px_#a855f7]' : 'pro-button-dormant'}`}
@@ -471,7 +474,7 @@ const ShinobiPro: React.FC = () => {
                     </div>
                     
                     {isPro && (
-                         <div className={`pro-buttons-wrapper-bottom fixed bottom-4 left-4 z-50 ${!buttonsVisible ? 'hidden' : ''}`}>
+                         <div className={`fixed bottom-4 left-4 z-50`}>
                             <button 
                                 onClick={toggleAkatsukiTheme} 
                                 title="تفعيل مظهر الأكاتسوكي" 

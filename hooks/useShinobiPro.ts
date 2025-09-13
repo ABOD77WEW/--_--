@@ -1,5 +1,6 @@
 // FIX: Rewrote as a TypeScript module with JSX and strong types for context, resolving module errors.
 import React, { createContext, useContext, useState, useEffect, ReactNode, Dispatch, SetStateAction } from 'react';
+import { FavoriteItem, FavoriteCategory } from '../types';
 
 interface ShinobiProContextType {
     isPro: boolean;
@@ -8,6 +9,10 @@ interface ShinobiProContextType {
     setIsActivating: Dispatch<SetStateAction<boolean>>;
     isAkatsukiTheme: boolean;
     toggleAkatsukiTheme: () => void;
+    isDetailViewOpen: boolean;
+    detailViewContent: { item: FavoriteItem | null; category: FavoriteCategory | null };
+    openDetailView: (item: FavoriteItem, category: FavoriteCategory) => void;
+    closeDetailView: () => void;
 }
 
 const ShinobiProContext = createContext<ShinobiProContextType | undefined>(undefined);
@@ -33,8 +38,10 @@ export const ShinobiProProvider: React.FC<{ children: ReactNode }> = ({ children
       return false;
     }
   });
-
+  
   const [isActivating, setIsActivating] = useState(false);
+  const [isDetailViewOpen, setIsDetailViewOpen] = useState(false);
+  const [detailViewContent, setDetailViewContent] = useState<{ item: FavoriteItem | null; category: FavoriteCategory | null }>({ item: null, category: null });
 
   useEffect(() => {
     window.localStorage.setItem('shinobi-pro-status', JSON.stringify(isPro));
@@ -55,11 +62,20 @@ export const ShinobiProProvider: React.FC<{ children: ReactNode }> = ({ children
       setIsAkatsukiTheme(prev => !prev);
     }
   };
+  
+  const openDetailView = (item: FavoriteItem, category: FavoriteCategory) => {
+    setDetailViewContent({ item, category });
+    setIsDetailViewOpen(true);
+  };
 
+  const closeDetailView = () => {
+    setIsDetailViewOpen(false);
+  };
+  
   // FIX: Converted JSX to React.createElement to be valid in a .ts file, resolving parsing errors and fulfilling the component's contract to return a ReactNode.
   return React.createElement(
     ShinobiProContext.Provider,
-    { value: { isPro, activatePro, isActivating, setIsActivating, isAkatsukiTheme, toggleAkatsukiTheme } },
+    { value: { isPro, activatePro, isActivating, setIsActivating, isAkatsukiTheme, toggleAkatsukiTheme, isDetailViewOpen, detailViewContent, openDetailView, closeDetailView } },
     children
   );
 };

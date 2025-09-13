@@ -1,10 +1,9 @@
-
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import * as ReactRouterDOM from 'react-router-dom';
 import { eyes } from '../data/eyes.js';
 import { useFavorites } from '../hooks/useFavorites.js';
 import GlobalSearchBar from '../components/GlobalSearchBar.js';
-import FullScreenDetailView from '../components/FullScreenDetailView.js';
+import { useShinobiPro } from '../hooks/useShinobiPro.js';
 
 const FavoriteButton = ({ item, category, className }) => {
   const { toggleFavorite, isFavorite } = useFavorites();
@@ -13,8 +12,8 @@ const FavoriteButton = ({ item, category, className }) => {
   return React.createElement(
     'button',
     {
-      onClick: (e) => { e.stopPropagation(); toggleFavorite(item, category); },
-      className: `z-10 p-2 rounded-full bg-black/30 hover:bg-yellow-500/50 transition-colors duration-300 ${className}`,
+      onClick: (e) => { e.preventDefault(); e.stopPropagation(); toggleFavorite(item, category); },
+      className: `z-20 p-2 rounded-full bg-black/30 hover:bg-yellow-500/50 transition-colors duration-300 ${className}`,
       "aria-label": "إضافة للمفضلة"
     },
     React.createElement(
@@ -25,59 +24,39 @@ const FavoriteButton = ({ item, category, className }) => {
   );
 };
 
-const EyeCard = ({ eye, onSelect }) => {
+const EyeCard = ({ eye }) => {
+  const { openDetailView } = useShinobiPro();
   const SvgIcon = eye.svg;
   return React.createElement(
     'div',
     {
-      onClick: onSelect,
-      className: "relative group p-6 rounded-lg themed-card shadow-lg flex flex-col items-center text-center transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/50 hover:-translate-y-1 cursor-pointer"
+      onClick: () => openDetailView(eye, 'eyes'),
+      className: "cursor-pointer relative group p-6 rounded-lg themed-card shadow-lg flex flex-col items-center text-center transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/50"
     },
-    React.createElement(FavoriteButton, { item: eye, category: "eyes", className: "absolute top-4 right-4" }),
+    React.createElement('div', { className: "absolute -inset-2 bg-gradient-to-br from-purple-500 via-fuchsia-500 to-red-500 rounded-lg opacity-0 group-hover:opacity-60 transition-opacity duration-300 blur-lg" }),
     React.createElement(
-      'div',
-      { className: "w-32 h-32 mb-4" },
-      React.createElement(SvgIcon, {
-        className: "w-full h-full transition-all duration-500 ease-in-out group-hover:rotate-[360deg] group-hover:scale-110",
-        style: { filter: 'drop-shadow(0 0 10px rgba(239, 68, 68, 0.5))' }
-      })
-    ),
-    React.createElement('h3', { className: "text-2xl font-bold font-cairo mb-2" }, eye.name),
-    React.createElement('p', { className: "text-gray-400" }, eye.description)
+        'div',
+        { className: "relative z-10 w-full h-full flex flex-col items-center" },
+        React.createElement(FavoriteButton, { item: eye, category: "eyes", className: "absolute top-0 right-0" }),
+        React.createElement(
+          'div',
+          { className: "w-full h-full flex flex-col items-center" },
+            React.createElement(
+              'div',
+              { className: "w-32 h-32 mb-4" },
+              React.createElement(SvgIcon, {
+                className: "w-full h-full",
+                style: { filter: 'drop-shadow(0 0 10px rgba(239, 68, 68, 0.5))' }
+              })
+            ),
+            React.createElement('h3', { className: "text-2xl font-bold font-cairo mb-2" }, eye.name),
+            React.createElement('p', { className: "text-gray-400" }, eye.description)
+        )
+    )
   );
 };
 
-const EyeDetails = ({ eye }) => {
-    const SvgIcon = eye.svg;
-    return React.createElement(
-        'div',
-        { className: "w-full text-center p-4" },
-        React.createElement(
-            'div',
-            { className: "mx-auto w-48 h-48 mb-6" },
-            React.createElement(SvgIcon, { className: "w-full h-full", style: { filter: 'drop-shadow(0 0 15px rgba(168, 85, 247, 0.6))' } })
-        ),
-        React.createElement('h2', { className: "font-cairo text-4xl font-bold mb-4" }, eye.name),
-        React.createElement('p', { className: "text-gray-300 text-lg leading-relaxed max-w-2xl mx-auto" }, eye.summary)
-    );
-};
-
 const EyesPage = () => {
-    const [selectedEye, setSelectedEye] = useState(null);
-    const location = ReactRouterDOM.useLocation();
-    const navigate = ReactRouterDOM.useNavigate();
-
-    useEffect(() => {
-      const selectedId = location.state?.selectedId;
-      if (typeof selectedId === 'number') {
-        const eye = eyes.find(e => e.id === selectedId);
-        if (eye) {
-          setSelectedEye(eye);
-          navigate(location.pathname, { replace: true, state: {} });
-        }
-      }
-    }, [location.state, navigate]);
-
   return React.createElement(
     'div',
     null,
@@ -91,12 +70,7 @@ const EyesPage = () => {
     React.createElement(
       'div',
       { className: "grid grid-cols-1 md:grid-cols-2 gap-8" },
-      eyes.map(eye => React.createElement(EyeCard, { key: eye.id, eye: eye, onSelect: () => setSelectedEye(eye) }))
-    ),
-    React.createElement(
-      FullScreenDetailView,
-      { show: !!selectedEye, onClose: () => setSelectedEye(null) },
-      selectedEye && React.createElement(EyeDetails, { eye: selectedEye })
+      eyes.map(eye => React.createElement(EyeCard, { key: eye.id, eye: eye }))
     )
   );
 };

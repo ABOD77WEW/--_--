@@ -1,10 +1,9 @@
-
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import * as ReactRouterDOM from 'react-router-dom';
 import { clans } from '../data/clans.js';
 import { useFavorites } from '../hooks/useFavorites.js';
 import GlobalSearchBar from '../components/GlobalSearchBar.js';
-import FullScreenDetailView from '../components/FullScreenDetailView.js';
+import { useShinobiPro } from '../hooks/useShinobiPro.js';
 
 const FavoriteButton = ({ item, category, className }) => {
   const { toggleFavorite, isFavorite } = useFavorites();
@@ -13,7 +12,7 @@ const FavoriteButton = ({ item, category, className }) => {
   return React.createElement(
     'button',
     {
-      onClick: (e) => { e.stopPropagation(); toggleFavorite(item, category); },
+      onClick: (e) => { e.preventDefault(); e.stopPropagation(); toggleFavorite(item, category); },
       className: `z-20 p-2 rounded-full bg-black/30 hover:bg-yellow-500/50 transition-colors duration-300 ${className}`,
       "aria-label": "إضافة للمفضلة"
     },
@@ -25,88 +24,40 @@ const FavoriteButton = ({ item, category, className }) => {
   );
 };
 
-const ClanCard = ({ clan, onSelect }) => {
+const ClanCard = ({ clan }) => {
+  const { openDetailView } = useShinobiPro();
   const Symbol = clan.symbol;
   return React.createElement(
     'div',
     {
-      onClick: onSelect,
-      className: "relative group p-6 rounded-lg themed-card shadow-lg flex flex-col items-center text-center transition-all duration-300 hover:shadow-2xl hover:shadow-white/20 hover:-translate-y-1 cursor-pointer"
+      onClick: () => openDetailView(clan, 'clans'),
+      className: "cursor-pointer relative group p-6 rounded-lg themed-card shadow-lg flex flex-col items-center text-center transition-all duration-300 hover:shadow-2xl hover:shadow-white/20"
     },
-    React.createElement(FavoriteButton, { item: clan, category: "clans", className: "absolute top-4 right-4" }),
+    React.createElement('div', { className: "absolute -inset-2 bg-gradient-to-br from-gray-400 via-red-500 to-gray-200 rounded-lg opacity-0 group-hover:opacity-60 transition-opacity duration-300 blur-lg" }),
     React.createElement(
-      'div',
-      { className: "w-24 h-24 mb-4 flex-shrink-0" },
-      React.createElement(Symbol, { className: "w-full h-full text-gray-300 transition-colors duration-300 group-hover:text-red-500" })
-    ),
-    React.createElement(
-      'div',
-      { className: "flex-grow" },
-      React.createElement('h3', { className: "text-2xl font-bold font-cairo mb-2" }, clan.name),
-      React.createElement('p', { className: "text-sm text-gray-400 font-tajawal line-clamp-3" }, clan.history)
-    )
-  );
-};
-
-const ClanDetails = ({ clan }) => {
-  const Symbol = clan.symbol;
-  return React.createElement(
-    'div',
-    { className: "w-full text-right p-4" },
-    React.createElement(
-      'div',
-      { className: "flex flex-col md:flex-row items-center md:items-start md:text-right gap-6 mb-6" },
-      React.createElement(
         'div',
-        { className: "w-32 h-32 flex-shrink-0 bg-gray-900/50 rounded-lg p-4 border-2 border-gray-700" },
-        React.createElement(Symbol, { className: "w-full h-full text-red-400", style: { filter: 'drop-shadow(0 0 8px currentColor)' } })
-      ),
-      React.createElement(
-        'div',
-        { className: "flex-grow text-center md:text-right" },
-        React.createElement('h2', { className: "font-cairo text-4xl font-bold mb-2" }, clan.name),
-        React.createElement('p', { className: "text-gray-400" }, clan.history)
-      )
-    ),
-    React.createElement(
-      'div',
-      { className: "space-y-4" },
-      React.createElement(
-        'div',
-        null,
-        React.createElement('h4', { className: "font-bold text-xl mb-2 border-b-2 border-gray-700 pb-1" }, "ملخص:"),
-        React.createElement('p', { className: "text-gray-300" }, clan.summary)
-      ),
-      React.createElement(
-        'div',
-        null,
-        React.createElement('h4', { className: "font-bold text-xl mb-2 border-b-2 border-gray-700 pb-1" }, "أبرز الأعضاء:"),
+        { className: "relative z-10 w-full h-full flex flex-col items-center" },
+        React.createElement(FavoriteButton, { item: clan, category: "clans", className: "absolute top-0 right-0" }),
         React.createElement(
-          'div',
-          { className: "flex flex-wrap gap-2 justify-center md:justify-start" },
-          clan.members.map(member => React.createElement('span', { key: member, className: "px-3 py-1 bg-red-900/50 text-red-300 text-sm font-semibold rounded-full" }, member))
+            'div',
+            { className: "w-full h-full flex flex-col items-center" },
+            React.createElement(
+              'div',
+              { className: "w-24 h-24 mb-4 flex-shrink-0" },
+              React.createElement(Symbol, { className: "w-full h-full text-gray-300" })
+            ),
+            React.createElement(
+              'div',
+              { className: "flex-grow" },
+              React.createElement('h3', { className: "text-2xl font-bold font-cairo mb-2" }, clan.name),
+              React.createElement('p', { className: "text-sm text-gray-400 font-tajawal line-clamp-3" }, clan.history)
+            )
         )
-      )
     )
   );
 };
 
 const ClansPage = () => {
-    const [selectedClan, setSelectedClan] = useState(null);
-    const location = ReactRouterDOM.useLocation();
-    const navigate = ReactRouterDOM.useNavigate();
-
-    useEffect(() => {
-      const selectedId = location.state?.selectedId;
-      if (typeof selectedId === 'number') {
-        const clan = clans.find(c => c.id === selectedId);
-        if (clan) {
-          setSelectedClan(clan);
-          navigate(location.pathname, { replace: true, state: {} });
-        }
-      }
-    }, [location.state, navigate]);
-
   return React.createElement(
     'div',
     null,
@@ -120,12 +71,7 @@ const ClansPage = () => {
     React.createElement(
       'div',
       { className: "grid grid-cols-1 md:grid-cols-2 gap-6" },
-      clans.map(clan => React.createElement(ClanCard, { key: clan.id, clan: clan, onSelect: () => setSelectedClan(clan) }))
-    ),
-    React.createElement(
-      FullScreenDetailView,
-      { show: !!selectedClan, onClose: () => setSelectedClan(null) },
-      selectedClan && React.createElement(ClanDetails, { clan: selectedClan })
+      clans.map(clan => React.createElement(ClanCard, { key: clan.id, clan: clan }))
     )
   );
 };

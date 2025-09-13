@@ -1,11 +1,11 @@
 
+
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import * as ReactRouterDOM from 'react-router-dom';
 import { arcs } from '../data/arcs.js';
-import FullScreenDetailView from '../components/FullScreenDetailView.js';
 import InkBlotIcon from '../components/icons/InkBlotIcon.js';
 
-const TimelineEvent = ({ arc, onSelect, style, infoPosition, scrollContainerRef }) => {
+const TimelineEvent = ({ arc, style, infoPosition, scrollContainerRef }) => {
     const eventRef = useRef(null);
     const [isVisible, setIsVisible] = useState(false);
 
@@ -45,10 +45,6 @@ const TimelineEvent = ({ arc, onSelect, style, infoPosition, scrollContainerRef 
             'div',
             {
                 className: "timeline-event-marker",
-                onClick: onSelect,
-                role: "button",
-                tabIndex: 0,
-                "aria-label": `عرض تفاصيل ${arc.name}`
             },
             React.createElement(InkBlotIcon, { className: "ink-blot" }),
             React.createElement('div', { className: "emoji" }, arc.emoji)
@@ -62,23 +58,7 @@ const TimelineEvent = ({ arc, onSelect, style, infoPosition, scrollContainerRef 
     );
 };
 
-const TimelineDetails = ({ arc }) => {
-    return React.createElement(
-        'div',
-        { className: "w-full text-center p-4" },
-        React.createElement(
-            'div',
-            { className: "mx-auto w-40 h-40 flex items-center justify-center rounded-lg bg-gray-700/50 mb-6 border-4 border-gray-600" },
-            React.createElement('span', { className: "text-9xl" }, arc.emoji)
-        ),
-        React.createElement('h2', { className: "font-cairo text-4xl font-bold mb-2" }, arc.name),
-        React.createElement('p', { className: "font-mono text-lg text-gray-400 mb-6" }, arc.episodeRange),
-        React.createElement('p', { className: "text-gray-300 text-lg leading-relaxed max-w-2xl mx-auto" }, arc.summary)
-    );
-};
-
 const TimelinePage = () => {
-    const [selectedArc, setSelectedArc] = useState(null);
     const scrollContainerRef = useRef(null);
     const navigate = ReactRouterDOM.useNavigate();
 
@@ -199,7 +179,6 @@ const TimelinePage = () => {
           arcs.map((arc, index) => React.createElement(TimelineEvent, {
             key: arc.id,
             arc: arc,
-            onSelect: () => setSelectedArc(arc),
             style: {
               left: `${index * EVENT_SPACING + (EVENT_SPACING - MARKER_SIZE) / 2}px`,
               top: `${Y_POSITIONS[index % 2]}px`
@@ -208,11 +187,6 @@ const TimelinePage = () => {
             scrollContainerRef: scrollContainerRef
           }))
         )
-      ),
-      React.createElement(
-        FullScreenDetailView,
-        { show: !!selectedArc, onClose: () => setSelectedArc(null) },
-        selectedArc && React.createElement(TimelineDetails, { arc: selectedArc })
       )
     );
 };

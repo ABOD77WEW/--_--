@@ -23,7 +23,7 @@ const FeaturesPage = () => {
       { to: to, state: state, className: "block" },
       React.createElement(
           'div',
-          { className: `bg-[#1A1A1A]/70 border border-[#2D3748] rounded-lg p-6 backdrop-blur-sm text-right transform transition hover:scale-105 ${borderColor} ${shadowColor}` },
+          { className: `bg-[#1A1A1A]/70 border border-[#2D3748] rounded-lg p-6 backdrop-blur-sm text-right transform transition ${borderColor} ${shadowColor}` },
           React.createElement(
               'h3',
               { className: `font-cairo text-2xl font-bold ${iconColor} mb-2 flex items-center justify-end gap-3` },
@@ -37,7 +37,7 @@ const FeaturesPage = () => {
 
   const StaticFeatureCard = ({ icon: Icon, iconColor, borderColor, shadowColor, title, description, badge }) => React.createElement(
       'div',
-      { className: `bg-[#1A1A1A]/70 border border-[#2D3748] rounded-lg p-6 backdrop-blur-sm text-right transform transition hover:scale-105 ${borderColor} ${shadowColor} ${badge ? 'opacity-70' : ''}` },
+      { className: `bg-[#1A1A1A]/70 border border-[#2D3748] rounded-lg p-6 backdrop-blur-sm text-right transform transition ${borderColor} ${shadowColor} ${badge ? 'opacity-70' : ''}` },
       React.createElement(
           'h3',
           { className: `font-cairo text-2xl font-bold ${iconColor} mb-2 flex items-center justify-end gap-3` },

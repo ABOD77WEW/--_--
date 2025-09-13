@@ -2,6 +2,8 @@
 
 
 
+
+
 import React, { useEffect } from 'react';
 // FIX: Replaced named imports with a namespace import for 'react-router-dom' to resolve module export errors.
 import * as ReactRouterDOM from 'react-router-dom';
@@ -38,7 +40,7 @@ const FeaturesPage: React.FC = () => {
         </p>
         <div className="w-full max-w-4xl space-y-6">
             <ReactRouterDOM.Link to="/battle" state={{ from: "features" }} className="block">
-                <div className="bg-[#1A1A1A]/70 border border-[#2D3748] rounded-lg p-6 backdrop-blur-sm text-right transform transition hover:scale-105 hover:border-green-400/50 hover:shadow-xl hover:shadow-green-500/20">
+                <div className="bg-[#1A1A1A]/70 border border-[#2D3748] rounded-lg p-6 backdrop-blur-sm text-right transform transition hover:border-green-400/50 hover:shadow-xl hover:shadow-green-500/20">
                     <h3 className="font-cairo text-2xl font-bold text-green-400 mb-2 flex items-center justify-end gap-3">
                         مقارنة الشخصيات
                         <ScaleIcon className="w-7 h-7" />
@@ -46,21 +48,21 @@ const FeaturesPage: React.FC = () => {
                     <p className="text-gray-400">خاصية حصرية تتيح لك وضع أي شينوبي ضد آخر في مواجهة ملحمية. حلل إحصائياتهم، قدراتهم، واحسم الجدل حول من هو الأقوى.</p>
                 </div>
             </ReactRouterDOM.Link>
-             <div className="bg-[#1A1A1A]/70 border border-[#2D3748] rounded-lg p-6 backdrop-blur-sm text-right transform transition hover:scale-105 hover:border-red-400/50 hover:shadow-xl hover:shadow-red-500/20">
+             <div className="bg-[#1A1A1A]/70 border border-[#2D3748] rounded-lg p-6 backdrop-blur-sm text-right transform transition hover:border-red-400/50 hover:shadow-xl hover:shadow-red-500/20">
                 <h3 className="font-cairo text-2xl font-bold text-red-400 mb-2 flex items-center justify-end gap-3">
                    مظهر الأكاتسوكي
                    <SwatchIcon className="w-7 h-7" />
                 </h3>
                 <p className="text-gray-400">اغمر نفسك في ظلام الأكاتسوكي. قم بتفعيل المظهر الحصري الذي يغير شكل الموسوعة بالكامل إلى طابع السحابة الحمراء الأيقوني.</p>
             </div>
-             <div className="bg-[#1A1A1A]/70 border border-[#2D3748] rounded-lg p-6 backdrop-blur-sm text-right transform transition hover:scale-105 hover:border-blue-400/50 hover:shadow-xl hover:shadow-blue-500/20 opacity-70">
+             <div className="bg-[#1A1A1A]/70 border border-[#2D3748] rounded-lg p-6 backdrop-blur-sm text-right transform transition hover:border-blue-400/50 hover:shadow-xl hover:shadow-blue-500/20 opacity-70">
                 <h3 className="font-cairo text-2xl font-bold text-blue-400 mb-2 flex items-center justify-end gap-3">
                    منشئ الجتسو <span className="text-xs bg-blue-900/80 text-blue-300 px-2 py-0.5 rounded-full">قريباً</span>
                    <PencilSquareIcon className="w-7 h-7" />
                 </h3>
                 <p className="text-gray-400">أطلق العنان لإبداعك. صمم تقنيات النينجا الخاصة بك، حدد طبيعة التشاكرا، الرتبة، والتأثيرات.</p>
             </div>
-             <div className="bg-[#1A1A1A]/70 border border-[#2D3748] rounded-lg p-6 backdrop-blur-sm text-right transform transition hover:scale-105 hover:border-indigo-400/50 hover:shadow-xl hover:shadow-indigo-500/20 opacity-70">
+             <div className="bg-[#1A1A1A]/70 border border-[#2D3748] rounded-lg p-6 backdrop-blur-sm text-right transform transition hover:border-indigo-400/50 hover:shadow-xl hover:shadow-indigo-500/20 opacity-70">
                 <h3 className="font-cairo text-2xl font-bold text-indigo-400 mb-2 flex items-center justify-end gap-3">
                    لوحة أصوات الشينوبي <span className="text-xs bg-indigo-900/80 text-indigo-300 px-2 py-0.5 rounded-full">قريباً</span>
                    <SpeakerWaveIcon className="w-7 h-7" />

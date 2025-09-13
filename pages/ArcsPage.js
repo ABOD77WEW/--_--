@@ -1,10 +1,9 @@
-
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import * as ReactRouterDOM from 'react-router-dom';
 import { arcs } from '../data/arcs.js';
 import { useFavorites } from '../hooks/useFavorites.js';
 import GlobalSearchBar from '../components/GlobalSearchBar.js';
-import FullScreenDetailView from '../components/FullScreenDetailView.js';
+import { useShinobiPro } from '../hooks/useShinobiPro.js';
 
 const FavoriteButton = ({ item, category, className }) => {
   const { toggleFavorite, isFavorite } = useFavorites();
@@ -13,8 +12,8 @@ const FavoriteButton = ({ item, category, className }) => {
   return React.createElement(
     'button',
     {
-      onClick: (e) => { e.stopPropagation(); toggleFavorite(item, category); },
-      className: `z-10 p-2 rounded-full bg-black/30 hover:bg-yellow-500/50 transition-colors duration-300 backdrop-blur-sm ${className}`,
+      onClick: (e) => { e.preventDefault(); e.stopPropagation(); toggleFavorite(item, category); },
+      className: `z-20 p-2 rounded-full bg-black/30 hover:bg-yellow-500/50 transition-colors duration-300 backdrop-blur-sm ${className}`,
       "aria-label": "إضافة للمفضلة"
     },
     React.createElement(
@@ -25,59 +24,39 @@ const FavoriteButton = ({ item, category, className }) => {
   );
 };
 
-const ArcCard = ({ arc, onSelect }) => {
+const ArcCard = ({ arc }) => {
+  const { openDetailView } = useShinobiPro();
   return React.createElement(
     'div',
     {
-      onClick: onSelect,
-      className: "relative group overflow-hidden rounded-lg themed-card shadow-lg transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/50 hover:-translate-y-1 flex flex-col text-center p-4 cursor-pointer"
+      onClick: () => openDetailView(arc, 'arcs'),
+      className: "cursor-pointer relative group overflow-hidden rounded-lg themed-card shadow-lg transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/50 flex flex-col text-center p-4"
     },
-    React.createElement(FavoriteButton, { item: arc, category: "arcs", className: "absolute top-3 right-3" }),
+    React.createElement('div', { className: "absolute -inset-2 bg-gradient-to-br from-cyan-500 via-blue-500 to-purple-500 rounded-lg opacity-0 group-hover:opacity-60 transition-opacity duration-300 blur-lg" }),
     React.createElement(
-      'div',
-      { className: "flex-grow flex items-center justify-center py-6" },
-      React.createElement('span', { className: "text-8xl transition-transform duration-300 group-hover:scale-125", role: "img", "aria-label": arc.name }, arc.emoji)
-    ),
-    React.createElement(
-      'div',
-      { className: "mt-auto" },
-      React.createElement('h3', { className: "text-lg font-bold font-cairo truncate" }, arc.name),
-      React.createElement('p', { className: "text-sm text-gray-400 font-mono tracking-wider" }, arc.episodeRange)
+        'div',
+        { className: "relative z-10 w-full h-full flex flex-col" },
+        React.createElement(FavoriteButton, { item: arc, category: "arcs", className: "absolute top-0 right-0" }),
+        React.createElement(
+          'div',
+          { className: "w-full h-full flex flex-col" },
+            React.createElement(
+              'div',
+              { className: "flex-grow flex items-center justify-center py-6" },
+              React.createElement('span', { className: "text-8xl", role: "img", "aria-label": arc.name }, arc.emoji)
+            ),
+            React.createElement(
+              'div',
+              { className: "mt-auto" },
+              React.createElement('h3', { className: "text-lg font-bold font-cairo truncate" }, arc.name),
+              React.createElement('p', { className: "text-sm text-gray-400 font-mono tracking-wider" }, arc.episodeRange)
+            )
+        )
     )
   );
 };
 
-const ArcDetails = ({ arc }) => {
-    return React.createElement(
-        'div',
-        { className: "w-full text-center p-4" },
-        React.createElement(
-            'div',
-            { className: "mx-auto w-40 h-40 flex items-center justify-center rounded-lg bg-gray-700/50 mb-6 border-4 border-gray-600" },
-            React.createElement('span', { className: "text-9xl" }, arc.emoji)
-        ),
-        React.createElement('h2', { className: "font-cairo text-4xl font-bold mb-2" }, arc.name),
-        React.createElement('p', { className: "font-mono text-lg text-gray-400 mb-6" }, arc.episodeRange),
-        React.createElement('p', { className: "text-gray-300 text-lg leading-relaxed max-w-2xl mx-auto" }, arc.summary)
-    );
-};
-
 const ArcsPage = () => {
-    const [selectedArc, setSelectedArc] = useState(null);
-    const location = ReactRouterDOM.useLocation();
-    const navigate = ReactRouterDOM.useNavigate();
-
-    useEffect(() => {
-      const selectedId = location.state?.selectedId;
-      if (typeof selectedId === 'number') {
-        const arc = arcs.find(a => a.id === selectedId);
-        if (arc) {
-          setSelectedArc(arc);
-          navigate(location.pathname, { replace: true, state: {} });
-        }
-      }
-    }, [location.state, navigate]);
-    
   return React.createElement(
     'div',
     null,
@@ -91,12 +70,7 @@ const ArcsPage = () => {
     React.createElement(
       'div',
       { className: "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" },
-      arcs.map(arc => React.createElement(ArcCard, { key: arc.id, arc: arc, onSelect: () => setSelectedArc(arc) }))
-    ),
-    React.createElement(
-      FullScreenDetailView,
-      { show: !!selectedArc, onClose: () => setSelectedArc(null) },
-      selectedArc && React.createElement(ArcDetails, { arc: selectedArc })
+      arcs.map(arc => React.createElement(ArcCard, { key: arc.id, arc: arc }))
     )
   );
 };

@@ -5,7 +5,7 @@ import { characters } from '../data/characters';
 import { arcs } from '../data/arcs';
 import { eyes } from '../data/eyes';
 import { clans } from '../data/clans';
-import { FavoriteItem } from '../types';
+import { FavoriteItem, FavoriteCategory } from '../types';
 import { useShinobiPro } from '../hooks/useShinobiPro';
 
 interface SearchResult {
@@ -15,11 +15,11 @@ interface SearchResult {
   clans: FavoriteItem[];
 }
 
-const categoryMap: { [key in keyof SearchResult]: { name: string, path: string } } = {
-  characters: { name: 'الشخصيات', path: '/characters' },
-  arcs: { name: 'الآركات', path: '/arcs' },
-  eyes: { name: 'العيون', path: '/eyes' },
-  clans: { name: 'العشائر', path: '/clans' },
+const categoryMap: { [key in keyof SearchResult]: { name: string, category: FavoriteCategory } } = {
+  characters: { name: 'الشخصيات', category: 'characters' },
+  arcs: { name: 'الآركات', category: 'arcs' },
+  eyes: { name: 'العيون', category: 'eyes' },
+  clans: { name: 'العشائر', category: 'clans' },
 };
 
 const GlobalSearchBar: React.FC = () => {
@@ -27,7 +27,7 @@ const GlobalSearchBar: React.FC = () => {
   const [results, setResults] = useState<SearchResult>({ characters: [], arcs: [], eyes: [], clans: [] });
   const [isFocused, setIsFocused] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
-  const { isAkatsukiTheme } = useShinobiPro();
+  const { isAkatsukiTheme, openDetailView } = useShinobiPro();
 
   const performSearch = useCallback((currentQuery: string) => {
     if (!currentQuery) {
@@ -66,9 +66,10 @@ const GlobalSearchBar: React.FC = () => {
   const totalResults = results.characters.length + results.arcs.length + results.eyes.length + results.clans.length;
   const showDropdown = isFocused && query.length > 0;
 
-  const handleLinkClick = () => {
+  const handleResultClick = (item: FavoriteItem, category: FavoriteCategory) => {
     setQuery('');
     setIsFocused(false);
+    openDetailView(item, category);
   }
   
   const baseClasses = "flex items-center rounded-full shadow-lg overflow-hidden";
@@ -110,14 +111,12 @@ const GlobalSearchBar: React.FC = () => {
                     <ul>
                       {items.map(item => (
                         <li key={`${category}-${item.id}`}>
-                          <ReactRouterDOM.Link
-                            to={catInfo.path}
-                            state={{ selectedId: item.id }}
-                            onClick={handleLinkClick}
-                            className="block w-full text-right px-3 py-2 text-gray-200 rounded-lg transition-colors"
+                          <button
+                            onClick={() => handleResultClick(item, catInfo.category)}
+                            className="block w-full text-right px-3 py-2 text-gray-200 rounded-lg transition-colors hover:bg-white/10"
                           >
                             {item.name}
-                          </ReactRouterDOM.Link>
+                          </button>
                         </li>
                       ))}
                     </ul>

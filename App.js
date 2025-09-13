@@ -13,6 +13,7 @@ import BattlePage from './pages/BattlePage.js';
 import TimelinePage from './pages/TimelinePage.js';
 import ShinobiPro from './components/ShinobiPro.js';
 import Footer from './components/Footer.js';
+import FullScreenDetailView from './components/FullScreenDetailView.js';
 import { FavoritesProvider } from './hooks/useFavorites.js';
 import { useShinobiPro, ShinobiProProvider } from './hooks/useShinobiPro.js';
 
@@ -62,6 +63,7 @@ const ThemedAppLayout = () => {
   return React.createElement(
     React.Fragment,
     null,
+    React.createElement(FullScreenDetailView),
     React.createElement(ShinobiPro),
     React.createElement(
       'div',
@@ -69,7 +71,7 @@ const ThemedAppLayout = () => {
       React.createElement(Navigation),
       React.createElement(
         'div',
-        { className: 'flex-1 md:mr-64 lg:mr-72 flex flex-col' },
+        { className: `flex-1 transition-all duration-300 md:mr-64 lg:mr-72 flex flex-col` },
         React.createElement(
           'div',
           { className: 'container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 pb-24 md:pb-12 flex-grow' },

@@ -2,16 +2,14 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
 import * as ReactRouterDOM from 'react-router-dom';
 import { arcs } from '../data/arcs';
 import { Arc } from '../types';
-import FullScreenDetailView from '../components/FullScreenDetailView';
 import InkBlotIcon from '../components/icons/InkBlotIcon';
 
 const TimelineEvent: React.FC<{
   arc: Arc;
-  onSelect: () => void;
   style: React.CSSProperties;
   infoPosition: 'top' | 'bottom';
   scrollContainerRef: React.RefObject<HTMLDivElement>;
-}> = ({ arc, onSelect, style, infoPosition, scrollContainerRef }) => {
+}> = ({ arc, style, infoPosition, scrollContainerRef }) => {
     const eventRef = useRef<HTMLDivElement>(null);
     const [isVisible, setIsVisible] = useState(false);
 
@@ -48,10 +46,6 @@ const TimelineEvent: React.FC<{
         <div ref={eventRef} className={`timeline-scroll-event ${isVisible ? 'is-visible' : ''}`} style={style}>
             <div
                 className="timeline-event-marker"
-                onClick={onSelect}
-                role="button"
-                tabIndex={0}
-                aria-label={`عرض تفاصيل ${arc.name}`}
             >
                 <InkBlotIcon className="ink-blot" />
                 <div className="emoji">{arc.emoji}</div>
@@ -64,24 +58,7 @@ const TimelineEvent: React.FC<{
     );
 };
 
-
-const TimelineDetails: React.FC<{ arc: Arc }> = ({ arc }) => {
-    return (
-        <div className="w-full text-center p-4">
-            <div className="mx-auto w-40 h-40 flex items-center justify-center rounded-lg bg-gray-700/50 mb-6 border-4 border-gray-600">
-                <span className="text-9xl">{arc.emoji}</span>
-            </div>
-            <h2 className="font-cairo text-4xl font-bold mb-2">{arc.name}</h2>
-            <p className="font-mono text-lg text-gray-400 mb-6">{arc.episodeRange}</p>
-            <p className="text-gray-300 text-lg leading-relaxed max-w-2xl mx-auto">
-                {arc.summary}
-            </p>
-        </div>
-    );
-};
-
 const TimelinePage: React.FC = () => {
-    const [selectedArc, setSelectedArc] = useState<Arc | null>(null);
     const scrollContainerRef = useRef<HTMLDivElement>(null);
     const navigate = ReactRouterDOM.useNavigate();
 
@@ -197,7 +174,6 @@ const TimelinePage: React.FC = () => {
                     <TimelineEvent
                         key={arc.id}
                         arc={arc}
-                        onSelect={() => setSelectedArc(arc)}
                         style={{
                             left: `${index * EVENT_SPACING + (EVENT_SPACING - MARKER_SIZE) / 2}px`,
                             top: `${Y_POSITIONS[index % 2]}px`
@@ -208,10 +184,6 @@ const TimelinePage: React.FC = () => {
                 ))}
             </div>
         </div>
-
-        <FullScreenDetailView show={!!selectedArc} onClose={() => setSelectedArc(null)}>
-            {selectedArc && <TimelineDetails arc={selectedArc} />}
-        </FullScreenDetailView>
       </div>
     );
 };
