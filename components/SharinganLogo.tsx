@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const SharinganLogo: React.FC = () => {
+const SharinganLogo = () => {
   const [isAnimating, setIsAnimating] = useState(false);
  
   const handleClick = () => {

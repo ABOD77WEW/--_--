@@ -1,7 +1,8 @@
 
+
 import React from 'react';
 
-const SenjuSymbol: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+const SenjuSymbol = (props) => (
   <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" {...props}>
     <g fill="none" stroke="currentColor" strokeWidth="7" strokeLinecap="round">
         <path d="M50 10 L 50 90" />

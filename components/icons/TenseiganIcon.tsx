@@ -1,7 +1,8 @@
 
+
 import React from 'react';
 
-const TenseiganIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+const TenseiganIcon = (props) => (
   <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" {...props}>
     <circle cx="50" cy="50" r="48" fill="#60a5fa" />
     <circle cx="50" cy="50" r="45" fill="#93c5fd" stroke="#bfdbfe" strokeWidth="2" />

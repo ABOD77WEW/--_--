@@ -1,6 +1,6 @@
 import React from 'react';
 
-const SageWisdomIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+const SageWisdomIcon = (props) => (
   <svg 
     viewBox="0 0 24 24" 
     fill="none" 

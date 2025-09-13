@@ -1,24 +1,10 @@
 // FIX: Rewrote as a TypeScript module with JSX and strong types for context, resolving module errors.
-import React, { createContext, useContext, useState, useEffect, ReactNode, Dispatch, SetStateAction } from 'react';
-import { FavoriteItem, FavoriteCategory } from '../types';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
-interface ShinobiProContextType {
-    isPro: boolean;
-    activatePro: () => void;
-    isActivating: boolean;
-    setIsActivating: Dispatch<SetStateAction<boolean>>;
-    isAkatsukiTheme: boolean;
-    toggleAkatsukiTheme: () => void;
-    isDetailViewOpen: boolean;
-    detailViewContent: { item: FavoriteItem | null; category: FavoriteCategory | null };
-    openDetailView: (item: FavoriteItem, category: FavoriteCategory) => void;
-    closeDetailView: () => void;
-}
-
-const ShinobiProContext = createContext<ShinobiProContextType | undefined>(undefined);
+const ShinobiProContext = createContext(undefined);
 
 // FIX: Corrected the component to return a ReactNode, as required by React.FC. The original implementation had an empty function body.
-export const ShinobiProProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const ShinobiProProvider = ({ children }) => {
   const [isPro, setIsPro] = useState(() => {
     try {
       const item = window.localStorage.getItem('shinobi-pro-status');
@@ -41,7 +27,7 @@ export const ShinobiProProvider: React.FC<{ children: ReactNode }> = ({ children
   
   const [isActivating, setIsActivating] = useState(false);
   const [isDetailViewOpen, setIsDetailViewOpen] = useState(false);
-  const [detailViewContent, setDetailViewContent] = useState<{ item: FavoriteItem | null; category: FavoriteCategory | null }>({ item: null, category: null });
+  const [detailViewContent, setDetailViewContent] = useState({ item: null, category: null });
 
   useEffect(() => {
     window.localStorage.setItem('shinobi-pro-status', JSON.stringify(isPro));
@@ -63,7 +49,7 @@ export const ShinobiProProvider: React.FC<{ children: ReactNode }> = ({ children
     }
   };
   
-  const openDetailView = (item: FavoriteItem, category: FavoriteCategory) => {
+  const openDetailView = (item, category) => {
     setDetailViewContent({ item, category });
     setIsDetailViewOpen(true);
   };

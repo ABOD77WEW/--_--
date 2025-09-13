@@ -1,7 +1,5 @@
 // FIX: Converted to a TypeScript module and added type annotations.
-import { QuizQuestion } from '../types';
-
-export const quizQuestions: QuizQuestion[] = [
+export const quizQuestions = [
   {
     id: 1,
     question: "من هو المبتكر الأصلي لتقنية إعادة الإحياء (إيدو تنسي)؟",

@@ -1,13 +1,12 @@
 import React from 'react';
 // FIX: Replaced named imports with a namespace import for 'react-router-dom' to resolve module export errors.
 import * as ReactRouterDOM from 'react-router-dom';
-import { clans } from '../data/clans';
-import { Clan, FavoriteCategory } from '../types';
-import { useFavorites } from '../hooks/useFavorites';
-import GlobalSearchBar from '../components/GlobalSearchBar';
-import { useShinobiPro } from '../hooks/useShinobiPro';
+import { clans } from '../data/clans.ts';
+import { useFavorites } from '../hooks/useFavorites.ts';
+import GlobalSearchBar from '../components/GlobalSearchBar.tsx';
+import { useShinobiPro } from '../hooks/useShinobiPro.ts';
 
-const FavoriteButton: React.FC<{ item: Clan; category: FavoriteCategory; className?: string }> = ({ item, category, className }) => {
+const FavoriteButton = ({ item, category, className }) => {
   const { toggleFavorite, isFavorite } = useFavorites();
   const favorite = isFavorite(item.id, category);
   
@@ -20,7 +19,7 @@ const FavoriteButton: React.FC<{ item: Clan; category: FavoriteCategory; classNa
   );
 };
 
-const ClanCard: React.FC<{ clan: Clan; }> = ({ clan }) => {
+const ClanCard = ({ clan }) => {
   const { openDetailView } = useShinobiPro();
   const Symbol = clan.symbol;
   return (
@@ -46,7 +45,7 @@ const ClanCard: React.FC<{ clan: Clan; }> = ({ clan }) => {
   );
 };
 
-const ClansPage: React.FC = () => {
+const ClansPage = () => {
   return (
     <div>
       <h1 className="font-cairo text-4xl font-black text-center mb-2">العشائر والمنظمات</h1>

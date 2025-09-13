@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ForbiddenScrollIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+const ForbiddenScrollIcon = (props) => (
   <svg
     viewBox="0 0 24 24"
     fill="none"

@@ -1,13 +1,10 @@
-
-
-
 import React, { useEffect } from 'react';
 // FIX: Replaced named imports with a namespace import for 'react-router-dom' to resolve module export errors.
 import * as ReactRouterDOM from 'react-router-dom';
-import { useShinobiPro } from '../hooks/useShinobiPro';
-import MangekyoProIcon from '../components/icons/MangekyoProIcon';
+import { useShinobiPro } from '../hooks/useShinobiPro.ts';
+import MangekyoProIcon from '../components/icons/MangekyoProIcon.tsx';
 
-const ProPage: React.FC = () => {
+const ProPage = () => {
   const { isPro } = useShinobiPro();
   const navigate = ReactRouterDOM.useNavigate();
 

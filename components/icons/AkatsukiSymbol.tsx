@@ -1,6 +1,6 @@
 import React from 'react';
 
-const AkatsukiSymbol: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+const AkatsukiSymbol = (props) => (
   <svg viewBox="0 0 90 60" xmlns="http://www.w3.org/2000/svg" {...props} aria-label="Akatsuki Symbol">
     {/* 
       This SVG is a hand-drawn vector representation of the Akatsuki cloud symbol.

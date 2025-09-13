@@ -1,13 +1,12 @@
 import React from 'react';
 // FIX: Replaced named imports with a namespace import for 'react-router-dom' to resolve module export errors.
 import * as ReactRouterDOM from 'react-router-dom';
-import { eyes } from '../data/eyes';
-import { useFavorites } from '../hooks/useFavorites';
-import { Eye, FavoriteCategory } from '../types';
-import GlobalSearchBar from '../components/GlobalSearchBar';
-import { useShinobiPro } from '../hooks/useShinobiPro';
+import { eyes } from '../data/eyes.ts';
+import { useFavorites } from '../hooks/useFavorites.ts';
+import GlobalSearchBar from '../components/GlobalSearchBar.tsx';
+import { useShinobiPro } from '../hooks/useShinobiPro.ts';
 
-const FavoriteButton: React.FC<{ item: Eye; category: FavoriteCategory; className?: string }> = ({ item, category, className }) => {
+const FavoriteButton = ({ item, category, className }) => {
   const { toggleFavorite, isFavorite } = useFavorites();
   const favorite = isFavorite(item.id, category);
 
@@ -20,7 +19,7 @@ const FavoriteButton: React.FC<{ item: Eye; category: FavoriteCategory; classNam
   );
 };
 
-const EyeCard: React.FC<{ eye: Eye; }> = ({ eye }) => {
+const EyeCard = ({ eye }) => {
   const { openDetailView } = useShinobiPro();
   const SvgIcon = eye.svg;
   return (
@@ -42,7 +41,7 @@ const EyeCard: React.FC<{ eye: Eye; }> = ({ eye }) => {
   );
 };
 
-const EyesPage: React.FC = () => {
+const EyesPage = () => {
   return (
     <div>
       <h1 className="font-cairo text-4xl font-black text-center mb-2">عيون الشينوبي (الدوجتسو)</h1>

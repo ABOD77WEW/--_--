@@ -1,13 +1,12 @@
 import React from 'react';
 // FIX: Replaced named imports with a namespace import for 'react-router-dom' to resolve module export errors.
 import * as ReactRouterDOM from 'react-router-dom';
-import { arcs } from '../data/arcs';
-import { useFavorites } from '../hooks/useFavorites';
-import { Arc, FavoriteCategory } from '../types';
-import GlobalSearchBar from '../components/GlobalSearchBar';
-import { useShinobiPro } from '../hooks/useShinobiPro';
+import { arcs } from '../data/arcs.ts';
+import { useFavorites } from '../hooks/useFavorites.ts';
+import GlobalSearchBar from '../components/GlobalSearchBar.tsx';
+import { useShinobiPro } from '../hooks/useShinobiPro.ts';
 
-const FavoriteButton: React.FC<{ item: Arc; category: FavoriteCategory; className?: string }> = ({ item, category, className }) => {
+const FavoriteButton = ({ item, category, className }) => {
   const { toggleFavorite, isFavorite } = useFavorites();
   const favorite = isFavorite(item.id, category);
 
@@ -20,7 +19,7 @@ const FavoriteButton: React.FC<{ item: Arc; category: FavoriteCategory; classNam
   );
 };
 
-const ArcCard: React.FC<{ arc: Arc; }> = ({ arc }) => {
+const ArcCard = ({ arc }) => {
   const { openDetailView } = useShinobiPro();
   return (
     <div 
@@ -43,7 +42,7 @@ const ArcCard: React.FC<{ arc: Arc; }> = ({ arc }) => {
   );
 };
 
-const ArcsPage: React.FC = () => {
+const ArcsPage = () => {
   return (
     <div>
       <h1 className="font-cairo text-4xl font-black text-center mb-2">آركات قصة ناروتو</h1>

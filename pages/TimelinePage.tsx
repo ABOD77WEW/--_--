@@ -1,16 +1,15 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import * as ReactRouterDOM from 'react-router-dom';
-import { arcs } from '../data/arcs';
-import { Arc } from '../types';
-import InkBlotIcon from '../components/icons/InkBlotIcon';
+import { arcs } from '../data/arcs.ts';
+import InkBlotIcon from '../components/icons/InkBlotIcon.tsx';
 
-const TimelineEvent: React.FC<{
-  arc: Arc;
-  style: React.CSSProperties;
-  infoPosition: 'top' | 'bottom';
-  scrollContainerRef: React.RefObject<HTMLDivElement>;
-}> = ({ arc, style, infoPosition, scrollContainerRef }) => {
-    const eventRef = useRef<HTMLDivElement>(null);
+const TimelineEvent = ({
+  arc,
+  style,
+  infoPosition,
+  scrollContainerRef,
+}) => {
+    const eventRef = useRef(null);
     const [isVisible, setIsVisible] = useState(false);
 
     useEffect(() => {
@@ -58,8 +57,8 @@ const TimelineEvent: React.FC<{
     );
 };
 
-const TimelinePage: React.FC = () => {
-    const scrollContainerRef = useRef<HTMLDivElement>(null);
+const TimelinePage = () => {
+    const scrollContainerRef = useRef(null);
     const navigate = ReactRouterDOM.useNavigate();
 
     const EVENT_SPACING = 300;
@@ -92,10 +91,10 @@ const TimelinePage: React.FC = () => {
         slider.scrollLeft = 0;
 
         let isDown = false;
-        let startX: number;
-        let scrollLeft: number;
+        let startX;
+        let scrollLeft;
 
-        const handleMouseDown = (e: MouseEvent) => {
+        const handleMouseDown = (e) => {
           isDown = true;
           slider.classList.add('active');
           startX = e.pageX - slider.offsetLeft;
@@ -112,7 +111,7 @@ const TimelinePage: React.FC = () => {
           slider.classList.remove('active');
         };
 
-        const handleMouseMove = (e: MouseEvent) => {
+        const handleMouseMove = (e) => {
           if (!isDown) return;
           e.preventDefault();
           const x = e.pageX - slider.offsetLeft;
@@ -120,7 +119,7 @@ const TimelinePage: React.FC = () => {
           slider.scrollLeft = scrollLeft - walk;
         };
         
-        const handleWheel = (e: WheelEvent) => {
+        const handleWheel = (e) => {
             if (e.deltaY === 0) return;
             e.preventDefault();
             slider.scrollLeft += e.deltaY;

@@ -1,27 +1,27 @@
 // FIX: Rewrote as a TypeScript module with JSX and strong types, and added ShinobiProProvider.
-import React, { useState, useEffect, ReactNode } from 'react';
+import React, { useState, useEffect } from 'react';
 // FIX: Replaced named imports with a namespace import for 'react-router-dom' to resolve module export errors.
 import * as ReactRouterDOM from 'react-router-dom';
 
-import Navigation from './components/Navigation';
-import HomePage from './pages/HomePage';
-import CharactersPage from './pages/CharactersPage';
-import ArcsPage from './pages/ArcsPage';
-import EyesPage from './pages/EyesPage';
-import ClansPage from './pages/ClansPage';
-import FavoritesPage from './pages/FavoritesPage';
-import ProPage from './pages/ProPage';
-import FeaturesPage from './pages/FeaturesPage';
-import BattlePage from './pages/BattlePage';
-import TimelinePage from './pages/TimelinePage';
-import ShinobiPro from './components/ShinobiPro';
-import Footer from './components/Footer';
-import FullScreenDetailView from './components/FullScreenDetailView';
+import Navigation from './components/Navigation.tsx';
+import HomePage from './pages/HomePage.tsx';
+import CharactersPage from './pages/CharactersPage.tsx';
+import ArcsPage from './pages/ArcsPage.tsx';
+import EyesPage from './pages/EyesPage.tsx';
+import ClansPage from './pages/ClansPage.tsx';
+import FavoritesPage from './pages/FavoritesPage.tsx';
+import ProPage from './pages/ProPage.tsx';
+import FeaturesPage from './pages/FeaturesPage.tsx';
+import BattlePage from './pages/BattlePage.tsx';
+import TimelinePage from './pages/TimelinePage.tsx';
+import ShinobiPro from './components/ShinobiPro.tsx';
+import Footer from './components/Footer.tsx';
+import FullScreenDetailView from './components/FullScreenDetailView.tsx';
 
-import { FavoritesProvider } from './hooks/useFavorites';
-import { useShinobiPro, ShinobiProProvider } from './hooks/useShinobiPro';
+import { FavoritesProvider } from './hooks/useFavorites.ts';
+import { useShinobiPro, ShinobiProProvider } from './hooks/useShinobiPro.ts';
 
-const PageWrapper: React.FC<{ children: ReactNode }> = ({ children }) => {
+const PageWrapper = ({ children }) => {
   const location = ReactRouterDOM.useLocation();
   const [animationClass, setAnimationClass] = useState('opacity-0 translate-y-5');
 
@@ -43,7 +43,7 @@ const PageWrapper: React.FC<{ children: ReactNode }> = ({ children }) => {
 };
 
 
-const ThemedAppLayout: React.FC = () => {
+const ThemedAppLayout = () => {
     const { isAkatsukiTheme } = useShinobiPro();
     const location = ReactRouterDOM.useLocation();
     
@@ -94,7 +94,7 @@ const ThemedAppLayout: React.FC = () => {
     );
 }
 
-const App: React.FC = () => {
+const App = () => {
   return (
     <ShinobiProProvider>
         <FavoritesProvider>

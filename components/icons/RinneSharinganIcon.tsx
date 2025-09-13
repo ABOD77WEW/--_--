@@ -1,6 +1,6 @@
 import React from 'react';
 
-const RinneSharinganIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+const RinneSharinganIcon = (props) => (
   <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" {...props}>
     {/* Rinnegan Circles */}
     {[...Array(8)].map((_, i) => (

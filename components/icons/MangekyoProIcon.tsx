@@ -1,6 +1,6 @@
 import React from 'react';
 
-const MangekyoProIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+const MangekyoProIcon = (props) => (
   <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" {...props}>
     <defs>
       <radialGradient id="godTierIris" cx="50%" cy="50%" r="50%">

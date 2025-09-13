@@ -1,17 +1,16 @@
 
+
 import React, { useState, useEffect, useMemo } from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
-import { characters } from '../data/characters';
-import { Character } from '../types';
+import { characters } from '../data/characters.ts';
 
-type BattlePhase = 'select' | 'intro' | 'result';
-
-const ComparisonStat: React.FC<{
-    label: string;
-    value1: React.ReactNode;
-    value2: React.ReactNode;
-    winner?: 'p1' | 'p2' | 'draw';
-}> = ({ label, value1, value2, winner }) => {
+// FIX: Added a default value to the 'winner' prop to make it optional at call sites.
+const ComparisonStat = ({
+    label,
+    value1,
+    value2,
+    winner = 'draw',
+}) => {
     const p1Class = winner === 'p1' ? 'text-amber-400 font-bold' : '';
     const p2Class = winner === 'p2' ? 'text-amber-400 font-bold' : '';
     
@@ -24,7 +23,7 @@ const ComparisonStat: React.FC<{
     );
 };
 
-const ComparisonView: React.FC<{ challenger: Character, opponent: Character }> = ({ challenger, opponent }) => {
+const ComparisonView = ({ challenger, opponent }) => {
     const powerWinner = challenger.powerLevel > opponent.powerLevel ? 'p1' : opponent.powerLevel > challenger.powerLevel ? 'p2' : 'draw';
     
     return (
@@ -44,19 +43,19 @@ const ComparisonView: React.FC<{ challenger: Character, opponent: Character }> =
     );
 };
 
-const BattlePage: React.FC = () => {
+const BattlePage = () => {
     const location = useLocation();
     const navigate = useNavigate();
 
-    const [challenger, setChallenger] = useState<Character | null>(null);
-    const [opponent, setOpponent] = useState<Character | null>(null);
-    const [phase, setPhase] = useState<BattlePhase>('select');
-    const [winner, setWinner] = useState<Character | null>(null);
+    const [challenger, setChallenger] = useState(null);
+    const [opponent, setOpponent] = useState(null);
+    const [phase, setPhase] = useState('select');
+    const [winner, setWinner] = useState(null);
     const [isDraw, setIsDraw] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
 
     useEffect(() => {
-        const challengerId = (location.state as { challengerId?: number })?.challengerId;
+        const challengerId = (location.state)?.challengerId;
         if (!challengerId) {
             navigate('/characters');
             return;
@@ -87,7 +86,7 @@ const BattlePage: React.FC = () => {
         }
     }, [phase, challenger, opponent]);
 
-    const handleSelectOpponent = (selectedOpponent: Character) => {
+    const handleSelectOpponent = (selectedOpponent) => {
         setOpponent(selectedOpponent);
         setPhase('intro');
     };
@@ -149,7 +148,7 @@ const BattlePage: React.FC = () => {
         );
     }
     
-    const FighterDisplay: React.FC<{ character: Character, auraClass: string, isWinner: boolean, isLoser: boolean, enterAnimation: string }> = ({ character, auraClass, isWinner, isLoser, enterAnimation }) => (
+    const FighterDisplay = ({ character, auraClass, isWinner, isLoser, enterAnimation }) => (
         <div className={`relative flex flex-col items-center transition-all duration-500 ${isLoser ? 'loser-dim' : ''} ${phase === 'intro' ? enterAnimation : ''}`}>
              <div className={`p-6 rounded-2xl bg-black/50 border-4 ${isWinner ? 'border-amber-400' : 'border-gray-700'} transition-colors duration-500 ${isWinner ? 'animate-winner-glow' : phase !== 'result' ? auraClass : ''}`}>
                 <div className="w-40 h-40 flex items-center justify-center">

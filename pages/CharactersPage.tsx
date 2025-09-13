@@ -1,13 +1,13 @@
 import React from 'react';
 // FIX: Replaced named imports with a namespace import for 'react-router-dom' to resolve module export errors.
 import * as ReactRouterDOM from 'react-router-dom';
-import { characters } from '../data/characters';
-import { Character, FavoriteCategory } from '../types';
-import { useFavorites } from '../hooks/useFavorites';
-import GlobalSearchBar from '../components/GlobalSearchBar';
-import { useShinobiPro } from '../hooks/useShinobiPro';
+import { characters } from '../data/characters.ts';
+import { useFavorites } from '../hooks/useFavorites.ts';
+import GlobalSearchBar from '../components/GlobalSearchBar.tsx';
+import { useShinobiPro } from '../hooks/useShinobiPro.ts';
 
-const FavoriteButton: React.FC<{ item: Character; category: FavoriteCategory; className?: string }> = ({ item, category, className }) => {
+// FIX: Made className prop optional with a default value to fix missing prop error.
+const FavoriteButton = ({ item, category, className = '' }) => {
   const { toggleFavorite, isFavorite } = useFavorites();
   const favorite = isFavorite(item.id, category);
 
@@ -24,7 +24,7 @@ const FavoriteButton: React.FC<{ item: Character; category: FavoriteCategory; cl
   );
 };
 
-const ComparisonButton: React.FC<{ onClick: () => void }> = ({ onClick }) => {
+const ComparisonButton = ({ onClick }) => {
     return (
         <button 
             onClick={(e) => { e.preventDefault(); e.stopPropagation(); onClick(); }}
@@ -37,7 +37,7 @@ const ComparisonButton: React.FC<{ onClick: () => void }> = ({ onClick }) => {
     );
 }
 
-const CharacterCard: React.FC<{ character: Character; onCompare: () => void; isPro: boolean; }> = ({ character, onCompare, isPro }) => {
+const CharacterCard = ({ character, onCompare, isPro }) => {
   const { openDetailView } = useShinobiPro();
 
   return (
@@ -77,11 +77,11 @@ const CharacterCard: React.FC<{ character: Character; onCompare: () => void; isP
   );
 };
 
-const CharactersPage: React.FC = () => {
+const CharactersPage = () => {
   const { isPro } = useShinobiPro();
   const navigate = ReactRouterDOM.useNavigate();
 
-  const handleStartComparison = (character: Character) => {
+  const handleStartComparison = (character) => {
     navigate('/battle', { state: { challengerId: character.id } });
   };
 

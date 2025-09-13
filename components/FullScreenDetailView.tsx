@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react';
-import { useShinobiPro } from '../hooks/useShinobiPro';
-import { Character, Arc, Eye, Clan } from '../types';
+import { useShinobiPro } from '../hooks/useShinobiPro.ts';
 
-const DetailViewExitButton: React.FC<{ onClick: () => void }> = ({ onClick }) => (
+const DetailViewExitButton = ({ onClick }) => (
     <button
         onClick={onClick}
         className="detail-exit-button"
@@ -15,7 +14,7 @@ const DetailViewExitButton: React.FC<{ onClick: () => void }> = ({ onClick }) =>
     </button>
 );
 
-const CharacterDetail: React.FC<{ item: Character }> = ({ item }) => (
+const CharacterDetail = ({ item }) => (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center text-center md:text-right">
         <div className="flex flex-col items-center md:col-span-1">
             <div className="w-48 h-48 flex items-center justify-center rounded-full bg-gray-700/10 mb-6 border-4 border-red-900/50 shadow-lg">
@@ -61,7 +60,7 @@ const CharacterDetail: React.FC<{ item: Character }> = ({ item }) => (
     </div>
 );
 
-const ArcDetail: React.FC<{ item: Arc }> = ({ item }) => (
+const ArcDetail = ({ item }) => (
     <div className="text-center">
         <div className="w-48 h-48 flex items-center justify-center rounded-full bg-gray-700/10 mb-6 border-4 border-blue-900/50 shadow-lg mx-auto">
            <span className="text-9xl">{item.emoji}</span>
@@ -75,7 +74,7 @@ const ArcDetail: React.FC<{ item: Arc }> = ({ item }) => (
     </div>
 );
 
-const EyeDetail: React.FC<{ item: Eye }> = ({ item }) => {
+const EyeDetail = ({ item }) => {
     const SvgIcon = item.svg;
     return (
         <div className="text-center">
@@ -92,7 +91,7 @@ const EyeDetail: React.FC<{ item: Eye }> = ({ item }) => {
     );
 };
 
-const ClanDetail: React.FC<{ item: Clan }> = ({ item }) => {
+const ClanDetail = ({ item }) => {
     const Symbol = item.symbol;
     return (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center text-center md:text-right">
@@ -121,11 +120,11 @@ const ClanDetail: React.FC<{ item: Clan }> = ({ item }) => {
 };
 
 
-const FullScreenDetailView: React.FC = () => {
+const FullScreenDetailView = () => {
     const { isDetailViewOpen, detailViewContent, closeDetailView } = useShinobiPro();
     
     useEffect(() => {
-        const handleKeyDown = (event: KeyboardEvent) => {
+        const handleKeyDown = (event) => {
             if (event.key === 'Escape') {
                 closeDetailView();
             }
@@ -148,10 +147,10 @@ const FullScreenDetailView: React.FC = () => {
     
     const renderContent = () => {
         switch (category) {
-            case 'characters': return <CharacterDetail item={item as Character} />;
-            case 'arcs': return <ArcDetail item={item as Arc} />;
-            case 'eyes': return <EyeDetail item={item as Eye} />;
-            case 'clans': return <ClanDetail item={item as Clan} />;
+            case 'characters': return <CharacterDetail item={item} />;
+            case 'arcs': return <ArcDetail item={item} />;
+            case 'eyes': return <EyeDetail item={item} />;
+            case 'clans': return <ClanDetail item={item} />;
             default: return <div>تفاصيل غير معروفة</div>;
         }
     }

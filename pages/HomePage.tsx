@@ -1,6 +1,6 @@
 import React from 'react';
 
-const HomePage: React.FC = () => {
+const HomePage = () => {
   return (
     <div className="text-center flex flex-col items-center justify-center min-h-[calc(100vh-10rem)] -mt-16">
         <div className="relative">

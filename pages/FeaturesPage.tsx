@@ -1,18 +1,12 @@
-
-
-
-
-
-
 import React, { useEffect } from 'react';
 // FIX: Replaced named imports with a namespace import for 'react-router-dom' to resolve module export errors.
 import * as ReactRouterDOM from 'react-router-dom';
-import { useShinobiPro } from '../hooks/useShinobiPro';
-import ForbiddenScrollIcon from '../components/icons/ForbiddenScrollIcon';
+import { useShinobiPro } from '../hooks/useShinobiPro.ts';
+import ForbiddenScrollIcon from '../components/icons/ForbiddenScrollIcon.tsx';
 import { ScaleIcon, SwatchIcon, PencilSquareIcon, SpeakerWaveIcon } from '@heroicons/react/24/solid';
 
 
-const FeaturesPage: React.FC = () => {
+const FeaturesPage = () => {
   const { isPro } = useShinobiPro();
   const navigate = ReactRouterDOM.useNavigate();
 

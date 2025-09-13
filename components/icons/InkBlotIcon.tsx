@@ -1,6 +1,6 @@
 import React from 'react';
 
-const InkBlotIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+const InkBlotIcon = (props) => (
   <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" {...props}>
     <path 
       fill="currentColor" 

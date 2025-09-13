@@ -1,12 +1,11 @@
 // FIX: Converted to a TypeScript module, added type annotations, and removed .js extensions from imports.
-import { Eye } from '../types';
-import SharinganIcon from '../components/icons/SharinganIcon';
-import MangekyoIcon from '../components/icons/MangekyoIcon';
-import RinneganIcon from '../components/icons/RinneganIcon';
-import ByakuganIcon from '../components/icons/ByakuganIcon';
-import TenseiganIcon from '../components/icons/TenseiganIcon';
+import SharinganIcon from '../components/icons/SharinganIcon.tsx';
+import MangekyoIcon from '../components/icons/MangekyoIcon.tsx';
+import RinneganIcon from '../components/icons/RinneganIcon.tsx';
+import ByakuganIcon from '../components/icons/ByakuganIcon.tsx';
+import TenseiganIcon from '../components/icons/TenseiganIcon.tsx';
 
-export const eyes: Eye[] = [
+export const eyes = [
   { 
     id: 1, 
     name: "شارينغان", 

@@ -1,38 +1,32 @@
-
-
-
-
-
-
 import React from 'react';
 // FIX: Replaced named imports with a namespace import for 'react-router-dom' to resolve module export errors.
 import * as ReactRouterDOM from 'react-router-dom';
-import SharinganLogo from './SharinganLogo';
+import SharinganLogo from './SharinganLogo.tsx';
 import { HomeIcon, UserGroupIcon, FilmIcon, EyeIcon, FlagIcon, StarIcon } from '@heroicons/react/24/solid';
-import ForbiddenScrollIcon from './icons/ForbiddenScrollIcon';
-import { useShinobiPro } from '../hooks/useShinobiPro';
+import ForbiddenScrollIcon from './icons/ForbiddenScrollIcon.tsx';
+import { useShinobiPro } from '../hooks/useShinobiPro.ts';
 
 // --- Navigation Components ---
 const baseNavLinks = [
-  { path: '/', name: 'الرئيسية', icon: (props: any) => <HomeIcon {...props} /> },
-  { path: '/characters', name: 'الشخصيات', icon: (props: any) => <UserGroupIcon {...props} /> },
-  { path: '/arcs', name: 'الآركات', icon: (props: any) => <FilmIcon {...props} /> },
-  { path: '/eyes', name: 'العيون', icon: (props: any) => <EyeIcon {...props} /> },
-  { path: '/clans', name: 'العشائر', icon: (props: any) => <FlagIcon {...props} /> },
-  { path: '/favorites', name: 'المفضلة', icon: (props: any) => <StarIcon {...props} /> },
+  { path: '/', name: 'الرئيسية', icon: (props) => <HomeIcon {...props} /> },
+  { path: '/characters', name: 'الشخصيات', icon: (props) => <UserGroupIcon {...props} /> },
+  { path: '/arcs', name: 'الآركات', icon: (props) => <FilmIcon {...props} /> },
+  { path: '/eyes', name: 'العيون', icon: (props) => <EyeIcon {...props} /> },
+  { path: '/clans', name: 'العشائر', icon: (props) => <FlagIcon {...props} /> },
+  { path: '/favorites', name: 'المفضلة', icon: (props) => <StarIcon {...props} /> },
 ];
 
 const proNavLinks = [
-    { path: '/features', name: 'الخصائص', icon: (props: any) => <ForbiddenScrollIcon {...props} /> }
+    { path: '/features', name: 'الخصائص', icon: (props) => <ForbiddenScrollIcon {...props} /> }
 ];
 
-const Sidebar: React.FC = () => {
+const Sidebar = () => {
     const { isPro } = useShinobiPro();
     const navLinks = isPro 
         ? [...baseNavLinks, ...proNavLinks]
         : baseNavLinks;
         
-    const getLinkClasses = ({ isActive }: { isActive: boolean }) => {
+    const getLinkClasses = ({ isActive }) => {
         const base = "flex items-center w-full p-3 my-1 rounded-lg transition-all duration-200 text-right";
         const active = "active";
         const inactive = "hover:text-[#00f5d4]";
@@ -66,13 +60,13 @@ const Sidebar: React.FC = () => {
   );
 };
 
-const BottomNav: React.FC = () => {
+const BottomNav = () => {
     const { isPro } = useShinobiPro();
     const navLinks = isPro 
         ? [...baseNavLinks, ...proNavLinks]
         : baseNavLinks;
 
-    const getLinkClasses = ({ isActive }: { isActive: boolean }) => {
+    const getLinkClasses = ({ isActive }) => {
         const base = "flex flex-col items-center justify-center w-full pt-2 pb-1 transition-all duration-200";
         const active = "active";
         const inactive = "hover:text-[#00f5d4]";
@@ -93,7 +87,7 @@ const BottomNav: React.FC = () => {
     )
 };
 
-const Navigation: React.FC = () => {
+const Navigation = () => {
   return (
     <>
       <Sidebar />

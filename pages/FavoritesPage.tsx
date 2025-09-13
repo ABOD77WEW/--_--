@@ -1,32 +1,25 @@
-
-
-
-
-
-
 import React, { useMemo } from 'react';
-import { useFavorites } from '../hooks/useFavorites';
-import { FavoriteItem, FavoriteCategory, Character, Arc, Eye, Clan } from '../types';
+import { useFavorites } from '../hooks/useFavorites.ts';
 // FIX: Replaced named imports with a namespace import for 'react-router-dom' to resolve module export errors.
 import * as ReactRouterDOM from 'react-router-dom';
 
-const FavoriteItemCard: React.FC<{ item: FavoriteItem, category: FavoriteCategory }> = ({ item, category }) => {
+const FavoriteItemCard = ({ item, category }) => {
   const { toggleFavorite } = useFavorites();
 
   const getDetails = () => {
     switch (category) {
       case 'characters':
-        const char = item as Character;
+        const char = item;
         return { display: <span className="text-5xl" role="img">{char.emoji}</span>, subtitle: char.village };
       case 'arcs':
-        const arc = item as Arc;
+        const arc = item;
         return { display: <span className="text-5xl" role="img">{arc.emoji}</span>, subtitle: arc.episodeRange };
       case 'eyes':
-        const eye = item as Eye;
+        const eye = item;
         const SvgIcon = eye.svg;
         return { display: <SvgIcon className="w-full h-full p-4" />, subtitle: 'دوجتسو' };
       case 'clans':
-        const clan = item as Clan;
+        const clan = item;
         const Symbol = clan.symbol;
         return { display: <Symbol className="w-full h-full p-6 text-gray-700 dark:text-gray-300" />, subtitle: 'عشيرة / منظمة' };
       default:
@@ -58,7 +51,7 @@ const FavoriteItemCard: React.FC<{ item: FavoriteItem, category: FavoriteCategor
   );
 };
 
-const FavoritesSection: React.FC<{ title: string; items: FavoriteItem[]; category: FavoriteCategory }> = ({ title, items, category }) => {
+const FavoritesSection = ({ title, items, category }) => {
   if (items.length === 0) return null;
 
   return (
@@ -73,12 +66,12 @@ const FavoritesSection: React.FC<{ title: string; items: FavoriteItem[]; categor
   );
 };
 
-const FavoritesPage: React.FC = () => {
+const FavoritesPage = () => {
   const { getFavoriteItems } = useFavorites();
   const favoriteItems = useMemo(() => getFavoriteItems(), [getFavoriteItems]);
   
   // FIX: Added explicit types for the reduce function's parameters to resolve 'unknown' type error on `items.length`.
-  const totalFavorites = Object.values(favoriteItems).reduce((sum: number, items: FavoriteItem[]) => sum + items.length, 0);
+  const totalFavorites = Object.values(favoriteItems).reduce((sum: number, items: any[]) => sum + items.length, 0);
 
   return (
     <div>

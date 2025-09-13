@@ -1,6 +1,6 @@
 import React from 'react';
 
-const UchihaSymbol: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+const UchihaSymbol = (props) => (
   <svg viewBox="0 0 100 106" xmlns="http://www.w3.org/2000/svg" {...props}>
     {/* Using a group for consistent stroke styling */}
     <g stroke="black" strokeWidth="2.5" strokeLinejoin="round" strokeMiterlimit="10">

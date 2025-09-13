@@ -1,6 +1,6 @@
 import React from 'react';
 
-const SecretCodeIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+const SecretCodeIcon = (props) => (
   <svg 
     viewBox="0 0 24 24" 
     fill="none" 

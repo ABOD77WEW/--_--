@@ -1,6 +1,6 @@
 import React from 'react';
 
-const SharinganIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+const SharinganIcon = (props) => (
   <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" {...props}>
     <defs>
       <radialGradient id="sharinganIconIris" cx="50%" cy="50%" r="50%">

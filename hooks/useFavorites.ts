@@ -1,33 +1,13 @@
 // FIX: Rewrote as a TypeScript module with JSX and strong types for context, resolving module and typing errors.
-import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
-import { characters } from '../data/characters';
-import { arcs } from '../data/arcs';
-import { eyes } from '../data/eyes';
-import { clans } from '../data/clans';
-import { FavoriteCategory, FavoriteItem, Character, Arc, Eye, Clan } from '../types';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { characters } from '../data/characters.ts';
+import { arcs } from '../data/arcs.ts';
+import { eyes } from '../data/eyes.ts';
+import { clans } from '../data/clans.ts';
 
-interface Favorites {
-    characters: number[];
-    arcs: number[];
-    eyes: number[];
-    clans: number[];
-}
+const FavoritesContext = createContext(undefined);
 
-interface FavoritesContextType {
-    favorites: Favorites;
-    toggleFavorite: (item: FavoriteItem, category: FavoriteCategory) => void;
-    isFavorite: (id: number, category: FavoriteCategory) => boolean;
-    getFavoriteItems: () => {
-        characters: Character[];
-        arcs: Arc[];
-        eyes: Eye[];
-        clans: Clan[];
-    };
-}
-
-const FavoritesContext = createContext<FavoritesContextType | undefined>(undefined);
-
-const initialFavorites: Favorites = {
+const initialFavorites = {
   characters: [],
   arcs: [],
   eyes: [],
@@ -35,8 +15,8 @@ const initialFavorites: Favorites = {
 };
 
 // FIX: Corrected the component to return a ReactNode, as required by React.FC. The original implementation had an empty or void-returning function body.
-export const FavoritesProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [favorites, setFavorites] = useState<Favorites>(() => {
+export const FavoritesProvider = ({ children }) => {
+  const [favorites, setFavorites] = useState(() => {
     try {
       const item = window.localStorage.getItem('naruto-favorites');
       return item ? JSON.parse(item) : initialFavorites;
@@ -50,7 +30,7 @@ export const FavoritesProvider: React.FC<{ children: ReactNode }> = ({ children 
     window.localStorage.setItem('naruto-favorites', JSON.stringify(favorites));
   }, [favorites]);
 
-  const toggleFavorite = useCallback((item: FavoriteItem, category: FavoriteCategory) => {
+  const toggleFavorite = useCallback((item, category) => {
     setFavorites(prev => {
       const categoryFavorites = prev[category];
       const isCurrentlyFavorite = categoryFavorites.includes(item.id);
@@ -61,7 +41,7 @@ export const FavoritesProvider: React.FC<{ children: ReactNode }> = ({ children 
     });
   }, []);
 
-    const isFavorite = useCallback((id: number, category: FavoriteCategory) => {
+    const isFavorite = useCallback((id, category) => {
         return favorites[category].includes(id);
     }, [favorites]);
 

@@ -1,7 +1,8 @@
 
+
 import React from 'react';
 
-const ByakuganIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+const ByakuganIcon = (props) => (
   <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" {...props}>
     <circle cx="50" cy="50" r="48" fill="#e5e7eb" />
     <circle cx="50" cy="50" r="45" fill="#f3f4f6" stroke="#d1d5db" strokeWidth="2" />

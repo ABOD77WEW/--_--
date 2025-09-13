@@ -1,7 +1,8 @@
 
+
 import React from 'react';
 
-const RinneganIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+const RinneganIcon = (props) => (
   <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" {...props}>
     <circle cx="50" cy="50" r="48" fill="#a8a29e" />
     <circle cx="50" cy="50" r="45" fill="#d1d5db" stroke="#a3a3a3" strokeWidth="2" />

@@ -1,28 +1,25 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 // FIX: Replaced named imports with a namespace import for 'react-router-dom' to resolve module export errors.
 import * as ReactRouterDOM from 'react-router-dom';
-import { useShinobiPro } from '../hooks/useShinobiPro';
-import MangekyoProIcon from './icons/MangekyoProIcon';
-import { quizQuestions } from '../data/quiz';
-import { QuizQuestion } from '../types';
-import AkatsukiThemeIcon from './icons/AkatsukiThemeIcon';
-import SecretCodeIcon from './icons/SecretCodeIcon';
-import RinneganIcon from './icons/RinneganIcon';
-import RinneSharinganIcon from './icons/RinneSharinganIcon';
-import SharinganIcon from './icons/SharinganIcon';
-import SageWisdomIcon from './icons/SageWisdomIcon';
+import { useShinobiPro } from '../hooks/useShinobiPro.ts';
+import MangekyoProIcon from './icons/MangekyoProIcon.tsx';
+import { quizQuestions } from '../data/quiz.ts';
+import AkatsukiThemeIcon from './icons/AkatsukiThemeIcon.tsx';
+import SecretCodeIcon from './icons/SecretCodeIcon.tsx';
+import RinneganIcon from './icons/RinneganIcon.tsx';
+import RinneSharinganIcon from './icons/RinneSharinganIcon.tsx';
+import SharinganIcon from './icons/SharinganIcon.tsx';
+import SageWisdomIcon from './icons/SageWisdomIcon.tsx';
 
 
-type AnswerStatus = 'idle' | 'correct' | 'incorrect';
-
-const SecretCodeModal: React.FC<{
-    onClose: () => void;
-    onSubmit: (code: string) => 'success-solve' | 'success-skip' | 'failure';
-}> = ({ onClose, onSubmit }) => {
+const SecretCodeModal = ({
+    onClose,
+    onSubmit,
+}) => {
     const [code, setCode] = useState('');
-    const [status, setStatus] = useState<'idle' | 'success' | 'failure'>('idle');
+    const [status, setStatus] = useState('idle');
 
-    const handleKeyPress = (key: string) => {
+    const handleKeyPress = (key) => {
         if (status === 'idle' && code.length < 13) {
              setCode(prev => prev + key);
         }
@@ -85,7 +82,7 @@ const SecretCodeModal: React.FC<{
     );
 };
 
-const InfiniteTsukuyomiFailureScene: React.FC<{ onAnimationEnd: () => void }> = ({ onAnimationEnd }) => {
+const InfiniteTsukuyomiFailureScene = ({ onAnimationEnd }) => {
     useEffect(() => {
         const timer = setTimeout(onAnimationEnd, 6000);
         return () => clearTimeout(timer);
@@ -109,12 +106,12 @@ const InfiniteTsukuyomiFailureScene: React.FC<{ onAnimationEnd: () => void }> = 
 };
 
 
-const QuizModal: React.FC<{ onComplete: () => void; }> = ({ onComplete }) => {
-    const [questions, setQuestions] = useState<QuizQuestion[]>([]);
+const QuizModal = ({ onComplete }) => {
+    const [questions, setQuestions] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
-    const [answerStatus, setAnswerStatus] = useState<AnswerStatus>('idle');
-    const [revealedCorrectAnswer, setRevealedCorrectAnswer] = useState<string | null>(null);
+    const [selectedAnswer, setSelectedAnswer] = useState(null);
+    const [answerStatus, setAnswerStatus] = useState('idle');
+    const [revealedCorrectAnswer, setRevealedCorrectAnswer] = useState(null);
     const [showFailure, setShowFailure] = useState(false);
     const [showHint, setShowHint] = useState(false);
     const [hintsRemaining, setHintsRemaining] = useState(2);
@@ -151,7 +148,7 @@ const QuizModal: React.FC<{ onComplete: () => void; }> = ({ onComplete }) => {
         }
     }
 
-    const handleAnswer = (option: string) => {
+    const handleAnswer = (option) => {
         if (answerStatus !== 'idle') return;
 
         setSelectedAnswer(option);
@@ -168,7 +165,7 @@ const QuizModal: React.FC<{ onComplete: () => void; }> = ({ onComplete }) => {
         }
     };
     
-     const handleCodeSubmit = (code: string): 'success-solve' | 'success-skip' | 'failure' => {
+     const handleCodeSubmit = (code) => {
         if (code === '13579001') {
             const currentQ = questions[currentIndex];
             if (currentQ) {
@@ -295,7 +292,6 @@ const QuizModal: React.FC<{ onComplete: () => void; }> = ({ onComplete }) => {
     );
 };
 
-type ActivationStage = 'void' | 'gathering' | 'unveiling' | 'ascension' | 'aftermath';
 const chakraWisps = [
     { color: '#f87171', angle: 20, delay: 1.5 },
     { color: '#fb923c', angle: 300, delay: 1.6 },
@@ -307,10 +303,10 @@ const chakraWisps = [
     { color: '#c084fc', angle: 340, delay: 2.2 },
 ];
 
-const SixPathsAwakeningScene: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
+const SixPathsAwakeningScene = ({ onComplete }) => {
     const { setIsActivating } = useShinobiPro();
-    const [stage, setStage] = useState<ActivationStage>('void');
-    const [capturedWisps, setCapturedWisps] = useState<Set<number>>(new Set());
+    const [stage, setStage] = useState('void');
+    const [capturedWisps, setCapturedWisps] = useState(new Set());
     // FIX: Replaced `NodeJS.Timeout` with `ReturnType<typeof setTimeout>` to resolve the `Cannot find namespace 'NodeJS'` error. This makes the type environment-agnostic (works in both Node.js and browser environments).
     const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   
@@ -318,7 +314,7 @@ const SixPathsAwakeningScene: React.FC<{ onComplete: () => void }> = ({ onComple
         if (timeoutRef.current) clearTimeout(timeoutRef.current);
 
         const speedBoost = capturedWisps.size * 400; // 400ms boost per wisp
-        let nextStage: ActivationStage | 'complete' | null = null;
+        let nextStage = null;
         let delay = 0;
 
         switch (stage) {
@@ -335,7 +331,7 @@ const SixPathsAwakeningScene: React.FC<{ onComplete: () => void }> = ({ onComple
                     setIsActivating(false);
                     onComplete();
                 } else {
-                    setStage(nextStage as ActivationStage);
+                    setStage(nextStage);
                 }
             }, Math.max(200, delay));
         }
@@ -345,7 +341,7 @@ const SixPathsAwakeningScene: React.FC<{ onComplete: () => void }> = ({ onComple
         };
     }, [stage, onComplete, setIsActivating, capturedWisps.size]);
 
-    const handleWispClick = (wispAngle: number) => {
+    const handleWispClick = (wispAngle) => {
         if (stage !== 'gathering' || capturedWisps.has(wispAngle)) return;
         setCapturedWisps(prev => new Set(prev).add(wispAngle));
     };
@@ -363,6 +359,7 @@ const SixPathsAwakeningScene: React.FC<{ onComplete: () => void }> = ({ onComple
                                 key={wisp.angle} 
                                 className={`chakra-wisp interactive ${capturedWisps.has(wisp.angle) ? 'captured' : ''}`}
                                 onClick={() => handleWispClick(wisp.angle)}
+                                // FIX: Cast style object to React.CSSProperties to allow for CSS custom properties.
                                 style={{ '--wisp-color': wisp.color, '--angle': `${wisp.angle}deg`, animationDelay: `${wisp.delay}s` } as React.CSSProperties} 
                             />
                         ))}
@@ -391,6 +388,7 @@ const SixPathsAwakeningScene: React.FC<{ onComplete: () => void }> = ({ onComple
                                     <div 
                                         key={i} 
                                         className="awakening-orb"
+                                        // FIX: Cast style object to React.CSSProperties to allow for CSS custom properties.
                                         style={{'--transform-end': `translate(${x}%, ${y}%)`, animationDelay: `${6 + i*0.1}s`} as React.CSSProperties}
                                     />
                                 );
@@ -422,7 +420,7 @@ const SixPathsAwakeningScene: React.FC<{ onComplete: () => void }> = ({ onComple
     );
 };
 
-const ShinobiPro: React.FC = () => {
+const ShinobiPro = () => {
     const { isPro, activatePro, isActivating, setIsActivating, isAkatsukiTheme, toggleAkatsukiTheme } = useShinobiPro();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const navigate = ReactRouterDOM.useNavigate();

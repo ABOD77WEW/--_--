@@ -1,41 +1,33 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 // FIX: Replaced named imports with a namespace import for 'react-router-dom' to resolve module export errors.
 import * as ReactRouterDOM from 'react-router-dom';
-import { characters } from '../data/characters';
-import { arcs } from '../data/arcs';
-import { eyes } from '../data/eyes';
-import { clans } from '../data/clans';
-import { FavoriteItem, FavoriteCategory } from '../types';
-import { useShinobiPro } from '../hooks/useShinobiPro';
+import { characters } from '../data/characters.ts';
+import { arcs } from '../data/arcs.ts';
+import { eyes } from '../data/eyes.ts';
+import { clans } from '../data/clans.ts';
+import { useShinobiPro } from '../hooks/useShinobiPro.ts';
 
-interface SearchResult {
-  characters: FavoriteItem[];
-  arcs: FavoriteItem[];
-  eyes: FavoriteItem[];
-  clans: FavoriteItem[];
-}
-
-const categoryMap: { [key in keyof SearchResult]: { name: string, category: FavoriteCategory } } = {
+const categoryMap = {
   characters: { name: 'الشخصيات', category: 'characters' },
   arcs: { name: 'الآركات', category: 'arcs' },
   eyes: { name: 'العيون', category: 'eyes' },
   clans: { name: 'العشائر', category: 'clans' },
 };
 
-const GlobalSearchBar: React.FC = () => {
+const GlobalSearchBar = () => {
   const [query, setQuery] = useState('');
-  const [results, setResults] = useState<SearchResult>({ characters: [], arcs: [], eyes: [], clans: [] });
+  const [results, setResults] = useState({ characters: [], arcs: [], eyes: [], clans: [] });
   const [isFocused, setIsFocused] = useState(false);
-  const searchRef = useRef<HTMLDivElement>(null);
+  const searchRef = useRef(null);
   const { isAkatsukiTheme, openDetailView } = useShinobiPro();
 
-  const performSearch = useCallback((currentQuery: string) => {
+  const performSearch = useCallback((currentQuery) => {
     if (!currentQuery) {
       setResults({ characters: [], arcs: [], eyes: [], clans: [] });
       return;
     }
     const lowerCaseQuery = currentQuery.toLowerCase();
-    const newResults: SearchResult = {
+    const newResults = {
       characters: characters.filter(c => c.name.toLowerCase().includes(lowerCaseQuery)).slice(0, 3),
       arcs: arcs.filter(a => a.name.toLowerCase().includes(lowerCaseQuery)).slice(0, 3),
       eyes: eyes.filter(e => e.name.toLowerCase().includes(lowerCaseQuery)).slice(0, 3),
@@ -53,8 +45,8 @@ const GlobalSearchBar: React.FC = () => {
   }, [query, performSearch]);
 
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+    const handleClickOutside = (event) => {
+      if (searchRef.current && !searchRef.current.contains(event.target)) {
         setIsFocused(false);
       }
     };
@@ -66,7 +58,7 @@ const GlobalSearchBar: React.FC = () => {
   const totalResults = results.characters.length + results.arcs.length + results.eyes.length + results.clans.length;
   const showDropdown = isFocused && query.length > 0;
 
-  const handleResultClick = (item: FavoriteItem, category: FavoriteCategory) => {
+  const handleResultClick = (item, category) => {
     setQuery('');
     setIsFocused(false);
     openDetailView(item, category);
@@ -102,9 +94,9 @@ const GlobalSearchBar: React.FC = () => {
           {totalResults > 0 ? (
             <div className="p-2">
               {/* FIX: Added explicit types for map parameters to resolve 'unknown' type error on `items`. */}
-              {Object.entries(results).map(([category, items]: [string, FavoriteItem[]]) => {
+              {Object.entries(results).map(([category, items]) => {
                 if (items.length === 0) return null;
-                const catInfo = categoryMap[category as keyof SearchResult];
+                const catInfo = categoryMap[category];
                 return (
                   <div key={category} className="mb-2 last:mb-0">
                     <h4 className="text-sm font-bold px-3 pt-2 pb-1">{catInfo.name}</h4>

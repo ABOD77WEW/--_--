@@ -1,7 +1,7 @@
 // FIX: Converted to a TypeScript module, added type annotations, and removed .js extension from import.
-import { Village, Rank, Character } from '../types';
+import { Village, Rank } from '../types.ts';
 
-export const characters: Character[] = [
+export const characters = [
   { id: 1, name: "ناروتو أوزوماكي", emoji: "🦊", village: Village.Konoha, rank: Rank.Kage, abilities: ["راسينغان", "طور الناسك", "قوة الكيوبي", "قوة المسارات الستة"], powerLevel: 10, quote: "أنا لا أعود في كلمتي أبداً، هذا هو طريقي في النينجا!", techniques: ["💨", "🐸", "☀️", "🌀"], age: "32-33 (بوروتو)", fatherName: "ميناتو ناميكازي", team: ["الفريق السابع", "فريق كاكاشي"] },
   { id: 2, name: "ساسكي أوتشيها", emoji: "⚡️", village: Village.Konoha, rank: Rank.MissingNin, abilities: ["تشيدوري", "شارينغان", "رينيغان الأبدية"], powerLevel: 10, quote: "لقد أغلقت عيني منذ زمن طويل... أهدافي تكمن في الظلام.", techniques: ["⚡️", "🔥", "👁️", "🐍"], age: "32-33 (بوروتو)", fatherName: "فوغاكو أوتشيها", team: ["الفريق السابع", "فريق تاكا"] },
   { id: 3, name: "ساكورا هارونو", emoji: "🌸", village: Village.Konoha, rank: Rank.Jonin, abilities: ["قوة جسدية خارقة", "طب نينجا", "بياكوغو"], powerLevel: 8, quote: "هذه المرة، سأنظر أنا إلى ظهريكما!", techniques: ["💪", "🌿", "🐌"], age: "32-33 (بوروتو)", fatherName: "كيزاشي هارونو", team: ["الفريق السابع"] },
