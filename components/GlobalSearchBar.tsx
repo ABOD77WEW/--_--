@@ -1,9 +1,3 @@
-
-
-
-
-
-
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 // FIX: Replaced named imports with a namespace import for 'react-router-dom' to resolve module export errors.
 import * as ReactRouterDOM from 'react-router-dom';
@@ -68,8 +62,8 @@ const GlobalSearchBar: React.FC = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // FIX: Added explicit types for the reduce function's parameters to resolve 'unknown' type error on `val.length`. This also resolves a downstream comparison error.
-  const totalResults = Object.values(results).reduce((acc: number, val: FavoriteItem[]) => acc + val.length, 0);
+  // FIX: Replaced Object.values().reduce() with direct property access to fix type inference issue, which caused a comparison error.
+  const totalResults = results.characters.length + results.arcs.length + results.eyes.length + results.clans.length;
   const showDropdown = isFocused && query.length > 0;
 
   const handleLinkClick = () => {
