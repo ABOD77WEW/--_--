@@ -1,6 +1,9 @@
 
 
 
+
+
+
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 // FIX: Replaced named imports with a namespace import for 'react-router-dom' to resolve module export errors.
 import * as ReactRouterDOM from 'react-router-dom';
@@ -65,7 +68,8 @@ const GlobalSearchBar: React.FC = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const totalResults = Object.values(results).reduce((acc, val) => acc + val.length, 0);
+  // FIX: Added explicit types for the reduce function's parameters to resolve 'unknown' type error on `val.length`. This also resolves a downstream comparison error.
+  const totalResults = Object.values(results).reduce((acc: number, val: FavoriteItem[]) => acc + val.length, 0);
   const showDropdown = isFocused && query.length > 0;
 
   const handleLinkClick = () => {
@@ -102,7 +106,8 @@ const GlobalSearchBar: React.FC = () => {
         <div className={`absolute top-full mt-2 w-full rounded-2xl shadow-2xl z-50 overflow-hidden max-h-[60vh] overflow-y-auto ${dropdownClasses}`}>
           {totalResults > 0 ? (
             <div className="p-2">
-              {Object.entries(results).map(([category, items]) => {
+              {/* FIX: Added explicit types for map parameters to resolve 'unknown' type error on `items`. */}
+              {Object.entries(results).map(([category, items]: [string, FavoriteItem[]]) => {
                 if (items.length === 0) return null;
                 const catInfo = categoryMap[category as keyof SearchResult];
                 return (

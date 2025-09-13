@@ -2,6 +2,8 @@
 
 
 
+
+
 import React, { useMemo } from 'react';
 import { useFavorites } from '../hooks/useFavorites';
 import { FavoriteItem, FavoriteCategory, Character, Arc, Eye, Clan } from '../types';
@@ -75,7 +77,8 @@ const FavoritesPage: React.FC = () => {
   const { getFavoriteItems } = useFavorites();
   const favoriteItems = useMemo(() => getFavoriteItems(), [getFavoriteItems]);
   
-  const totalFavorites = Object.values(favoriteItems).reduce((sum, items) => sum + items.length, 0);
+  // FIX: Added explicit types for the reduce function's parameters to resolve 'unknown' type error on `items.length`.
+  const totalFavorites = Object.values(favoriteItems).reduce((sum: number, items: FavoriteItem[]) => sum + items.length, 0);
 
   return (
     <div>
