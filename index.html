@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>موسوعة الشينوبي</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><radialGradient id='a' cx='50%25' cy='50%25' r='50%25'><stop offset='0%25' stop-color='%23c084fc'/><stop offset='60%25' stop-color='%23a855f7'/><stop offset='100%25' stop-color='%234c1d95'/></radialGradient><filter id='b'><feGaussianBlur stdDeviation='2.5'/></filter><filter id='c'><feDropShadow dx='0.5' dy='0.5' stdDeviation='0.5' flood-color='%23000' flood-opacity='0.7'/></filter></defs><circle cx='50' cy='50' r='50' fill='%231e1b4b'/><circle cx='50' cy='50' r='46' fill='url(%23a)' filter='url(%23b)'/><circle cx='50' cy='50' r='38' fill='none' stroke='%231e1b4b' stroke-width='1.5' stroke-opacity='0.7'/><circle cx='50' cy='50' r='30' fill='none' stroke='%231e1b4b' stroke-width='1.5' stroke-opacity='0.7'/><circle cx='50' cy='50' r='22' fill='none' stroke='%231e1b4b' stroke-width='1.5' stroke-opacity='0.7'/><g fill='%23111827' filter='url(%23c)'><path id='d' d='M50,12.5C57,17 57,28 50,32A7,7 0 1 1 50,12.5Z'/><use href='%23d' transform='rotate(40 50 50)'/><use href='%23d' transform='rotate(80 50 50)'/><use href='%23d' transform='rotate(120 50 50)'/><use href='%23d' transform='rotate(160 50 50)'/><use href='%23d' transform='rotate(200 50 50)'/><use href='%23d' transform='rotate(240 50 50)'/><use href='%23d' transform='rotate(280 50 50)'/><use href='%23d' transform='rotate(320 50 50)'/></g></svg>">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 106'><g stroke='%23000' stroke-width='2.5' stroke-linejoin='round'><path fill='%23ef4444' d='M 2.5,50 A 47.5,47.5 0 1 1 97.5,50 C 75,65 25,65 2.5,50 Z' /><path fill='%23ffffff' d='M 2.5,50 C 2.5,80 25,95 43,95 V 103.5 H 57 V 95 C 75,95 97.5,80 97.5,50 C 75,65 25,65 2.5,50 Z' /></g></svg>">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -806,7 +806,69 @@
         box-shadow: inset 0 0 10px rgba(239, 68, 68, 0.5);
       }
       
-      /* === NEW: BATTLE ARENA STYLES (LEGENDARY SHOWDOWN) === */
+      /* === BATTLE ARENA: SUMMONING SCROLL === */
+      .challenger-display {
+        animation: cinematic-fade-in 1s ease-out;
+      }
+      .opponent-selection-scroll {
+        background-color: #f3e9d2; /* Scroll paper color */
+        color: #4a2e2e; /* Ink color */
+        border: 8px solid;
+        border-image: linear-gradient(to bottom, #6b4f4f, #a9876a) 1; /* Wood-like border */
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        border-radius: 4px;
+        animation: cinematic-fade-in 1s 0.2s ease-out backwards;
+      }
+      .opponent-search-input {
+        background-color: transparent;
+        border: none;
+        border-bottom: 2px solid rgba(74, 46, 46, 0.5); /* Ink line */
+        border-radius: 0;
+        text-align: center;
+        font-size: 1.25rem;
+        font-family: 'Cairo', sans-serif;
+        font-weight: bold;
+        color: #4a2e2e;
+        transition: border-color 0.3s ease;
+      }
+      .opponent-search-input::placeholder { color: rgba(74, 46, 46, 0.6); }
+      .opponent-search-input:focus { outline: none; border-bottom-color: #4a2e2e; }
+      
+      .opponent-card {
+        border-radius: 50%;
+        position: relative;
+        cursor: pointer;
+      }
+      .opponent-card::before { /* The seal itself */
+        content: '';
+        position: absolute;
+        inset: 0;
+        border: 3px solid rgba(74, 46, 46, 0.3);
+        border-radius: 50%;
+        background: rgba(74, 46, 46, 0.05);
+        transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+      .opponent-card:hover::before {
+        border-color: #ef4444;
+        background: rgba(239, 68, 68, 0.1);
+        transform: scale(1.05);
+        box-shadow: 0 0 20px rgba(239, 68, 68, 0.7);
+      }
+      .opponent-card .text-5xl { /* Emoji */
+          transition: transform 0.3s ease;
+          position: relative;
+          z-index: 1;
+      }
+      .opponent-card:hover .text-5xl { transform: scale(1.1); }
+      .opponent-card-name {
+        color: #4a2e2e;
+        opacity: 0.9;
+        font-weight: bold;
+        position: relative;
+        z-index: 1;
+      }
+
+      /* === BATTLE ARENA STYLES (LEGENDARY SHOWDOWN) === */
       @keyframes kyubi-chakra-glow {
         0%, 100% { filter: drop-shadow(0 0 15px #f97316); }
         50% { filter: drop-shadow(0 0 25px #fb923c); }

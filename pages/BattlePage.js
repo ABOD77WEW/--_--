@@ -82,14 +82,14 @@ const BattlePage = () => {
                 React.createElement('p', { className: "text-lg text-gray-400" }, challenger.rank)
             ),
             React.createElement(
-                'div', { className: "opponent-selection-scroll flex flex-col p-8 rounded-2xl" },
+                'div', { className: "opponent-selection-scroll flex flex-col p-8" },
                 React.createElement('h2', { className: "font-cairo text-3xl font-bold mb-4 text-center" }, "مخطوطة الاستدعاء: اختر خصمك"),
                 React.createElement('input', {
                     type: "text",
-                    placeholder: "ابحث عن شينوبي...",
+                    placeholder: "ابحث عن شينوبي بالحبر...",
                     value: searchTerm,
                     onChange: (e) => setSearchTerm(e.target.value),
-                    className: "w-full px-4 py-2 mb-4 bg-[#d1c4a8] border-2 border-[#8a6d4e] rounded-lg focus:outline-none focus:border-[#4a2e2e] text-[#4a2e2e] placeholder:text-[#6b4f4f]"
+                    className: "w-full px-4 py-2 mb-4 opponent-search-input"
                 }),
                 React.createElement(
                     'div', { className: "flex-grow overflow-y-auto pr-2 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4" },
@@ -97,10 +97,10 @@ const BattlePage = () => {
                         'button', {
                             key: opp.id,
                             onClick: () => handleSelectOpponent(opp),
-                            className: "opponent-card flex flex-col items-center p-3 bg-black/5 rounded-lg border border-transparent hover:border-[#4a2e2e] hover:bg-black/10 transition-all duration-200"
+                            className: "opponent-card flex flex-col items-center justify-center p-2 transition-all duration-200 aspect-square"
                         },
-                        React.createElement('span', { className: "text-5xl mb-2" }, opp.emoji),
-                        React.createElement('span', { className: "text-sm font-bold text-center" }, opp.name)
+                        React.createElement('span', { className: "text-5xl mb-1" }, opp.emoji),
+                        React.createElement('span', { className: "opponent-card-name text-xs text-center" }, opp.name)
                     ))
                 )
             )
