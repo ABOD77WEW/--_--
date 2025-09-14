@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 // FIX: Replaced named imports with a namespace import for 'react-router-dom' to resolve module export errors.
-import * as ReactRouterDOM from 'react-router-dom';
+// FIX: Switched from require to a standard ES module import for react-router-dom to fix module resolution error.
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useShinobiPro } from '../hooks/useShinobiPro.ts';
 import MangekyoProIcon from './icons/MangekyoProIcon.tsx';
 import { quizQuestions } from '../data/quiz.ts';
@@ -18,20 +19,22 @@ const SecretCodeModal = ({
 }) => {
     const [code, setCode] = useState('');
     const [status, setStatus] = useState('idle');
-
-    const handleKeyPress = (key) => {
-        if (status === 'idle' && code.length < 13) {
-             setCode(prev => prev + key);
-        }
-    };
-
-    const handleBackspace = () => {
-        if (status !== 'idle') return;
-        setCode(prev => prev.slice(0, -1));
-    };
+    const inputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
-        if (status !== 'idle') return;
+        // Auto-focus the input when the modal opens
+        inputRef.current?.focus();
+    }, []);
+
+    const handleCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (status === 'idle') {
+            const newCode = e.target.value.replace(/[^0-9]/g, ''); // Only allow numbers
+            setCode(newCode);
+        }
+    };
+    
+    useEffect(() => {
+        if (status !== 'idle' || code === '') return;
 
         const validCodes = ['13579001', '1357913579001'];
         if (validCodes.includes(code)) {
@@ -60,22 +63,17 @@ const SecretCodeModal = ({
                     <h3 className="font-cairo text-2xl font-bold mb-2">أدخل الكود السري</h3>
                 </div>
                  <div className={status === 'success' ? 'secret-code-success' : ''}>
-                    <div className="secret-code-display flex items-center justify-center transition-all duration-300">
-                        <span>{code || '...'}</span>
-                    </div>
-                    <div className="secret-code-keypad">
-                        {['1', '2', '3', '4', '5', '6', '7', '8', '9'].map(num => (
-                            <button key={num} onClick={() => handleKeyPress(num)} className="keypad-button" disabled={status !== 'idle'}>
-                                {num}
-                            </button>
-                        ))}
-                         <button onClick={() => handleKeyPress('0')} className="keypad-button col-start-2" disabled={status !== 'idle'}>0</button>
-                         <button onClick={handleBackspace} className="keypad-button" disabled={status !== 'idle'}>
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M12 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2M3 12l6.414 6.414a2 2 0 002.828 0L21 12M3 12l6.414-6.414a2 2 0 012.828 0L21 12" />
-                            </svg>
-                         </button>
-                    </div>
+                    <input
+                      ref={inputRef}
+                      type="text"
+                      value={code}
+                      onChange={handleCodeChange}
+                      maxLength={13}
+                      className="secret-code-input"
+                      placeholder="..."
+                      disabled={status !== 'idle'}
+                      aria-label="حقل إدخال الكود السري"
+                    />
                 </div>
             </div>
         </div>
@@ -210,18 +208,14 @@ const QuizModal = ({ onComplete }) => {
             )}
             
             <div className="w-full max-w-4xl mx-auto flex flex-col flex-grow relative">
-                <div className="w-full max-w-lg mx-auto my-4">
-                     <div className="flex justify-between items-center mb-2 px-2">
-                        <button
-                            onClick={handleUseHint}
-                            disabled={hintsRemaining === 0 || showHint}
-                            className="quiz-hint-button"
-                            title="استخدام تلميح"
-                        >
-                            <SageWisdomIcon className="w-6 h-6" />
-                            <span className="font-semibold">تلميح</span>
-                            <span className="hint-counter">{hintsRemaining}</span>
-                        </button>
+                 <div className="quiz-hint-container">
+                    <button onClick={handleUseHint} disabled={hintsRemaining === 0 || showHint} className="quiz-hint-button-bold" title="استخدام تلميح">
+                        <SageWisdomIcon className="w-10 h-10" />
+                        <span className="hint-counter">{hintsRemaining}</span>
+                    </button>
+                </div>
+                <div className="w-full max-w-lg mx-auto">
+                     <div className="flex justify-between items-center mb-2 px-2 pt-2">
                         <div className="text-sm font-bold text-gray-300">
                             <span>السؤال {currentIndex + 1} / {questions.length}</span>
                         </div>
@@ -313,15 +307,18 @@ const SixPathsAwakeningScene = ({ onComplete }) => {
     useEffect(() => {
         if (timeoutRef.current) clearTimeout(timeoutRef.current);
 
-        const speedBoost = capturedWisps.size * 400; // 400ms boost per wisp
         let nextStage = null;
         let delay = 0;
 
         switch (stage) {
             case 'void':      delay = 1500; nextStage = 'gathering'; break;
-            case 'gathering': delay = 2500 - speedBoost; nextStage = 'unveiling'; break;
-            case 'unveiling': delay = 4000 - speedBoost; nextStage = 'ascension'; break;
-            case 'ascension': delay = 1500 - (speedBoost / 2); nextStage = 'aftermath'; break;
+            case 'gathering': 
+                if (capturedWisps.size === chakraWisps.length) {
+                    delay = 500; nextStage = 'unveiling';
+                }
+                break;
+            case 'unveiling': delay = 4000; nextStage = 'ascension'; break;
+            case 'ascension': delay = 2500; nextStage = 'aftermath'; break;
             case 'aftermath': delay = 3000; nextStage = 'complete'; break;
         }
 
@@ -333,7 +330,7 @@ const SixPathsAwakeningScene = ({ onComplete }) => {
                 } else {
                     setStage(nextStage);
                 }
-            }, Math.max(200, delay));
+            }, delay);
         }
 
         return () => {
@@ -423,8 +420,9 @@ const SixPathsAwakeningScene = ({ onComplete }) => {
 const ShinobiPro = () => {
     const { isPro, activatePro, isActivating, setIsActivating, isAkatsukiTheme, toggleAkatsukiTheme } = useShinobiPro();
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const navigate = ReactRouterDOM.useNavigate();
-    const location = ReactRouterDOM.useLocation();
+    // FIX: Property 'useNavigate' and 'useLocation' do not exist on type 'typeof import...'.
+    const navigate = useNavigate();
+    const location = useLocation();
 
     const showButtons = location.pathname !== '/timeline';
 
@@ -442,14 +440,14 @@ const ShinobiPro = () => {
         if (isPro) {
             return (
                 <>
-                    <MangekyoProIcon className="w-12 h-12 text-yellow-400 pro-icon-active" />
+                    <MangekyoProIcon className="w-10 h-10 text-yellow-400 pro-icon-active" />
                     <span className="font-cairo font-black text-white">شينوبي برو مفعل</span>
                 </>
             );
         }
         return (
             <>
-                <MangekyoProIcon className="w-12 h-12 group-hover:rotate-90 transition-transform duration-500" />
+                <MangekyoProIcon className="w-10 h-10 group-hover:rotate-90 transition-transform duration-500" />
                 <span className="font-cairo font-black text-transparent bg-clip-text bg-gradient-to-br from-purple-300 to-red-400 group-hover:from-purple-200 group-hover:to-red-300">شينوبي برو</span>
             </>
         );
@@ -462,7 +460,7 @@ const ShinobiPro = () => {
                     <div className={`fixed top-4 left-4 z-50`}>
                       <button
                           onClick={() => (isPro ? navigate('/pro') : setIsModalOpen(true))}
-                          className={`group flex items-center gap-4 p-2 pr-5 rounded-full border-2 backdrop-blur-sm transition-all duration-300 min-w-[280px] justify-start ${isPro ? 'pro-button-unreal shadow-[0_0_15px_#a855f7]' : 'pro-button-dormant'}`}
+                          className={`group flex items-center gap-4 p-2 pr-5 rounded-full border-2 backdrop-blur-sm transition-all duration-300 min-w-[260px] justify-start ${isPro ? 'pro-button-unreal shadow-[0_0_15px_#a855f7]' : 'pro-button-dormant'}`}
                           title={isPro ? "عرض مزايا برو" : "فعّل شينوبي برو"}
                       >
                           <div className="pro-button-content flex items-center gap-3">
@@ -479,7 +477,7 @@ const ShinobiPro = () => {
                                 className={`group w-16 h-16 flex items-center justify-center rounded-full border-2 backdrop-blur-sm transition-all duration-300 pro-button-akatsuki shadow-[0_0_15px_#ef4444]`}
                                 aria-pressed={isAkatsukiTheme}
                             >
-                                <AkatsukiThemeIcon className={`w-10 h-10 transition-transform duration-1000 ${isAkatsukiTheme ? 'animate-continuous-rotate' : ''}`} style={{animationDuration: '3s'}} />
+                                <AkatsukiThemeIcon className={`w-12 h-12 pro-button-akatsuki-icon ${isAkatsukiTheme ? 'active' : ''}`} />
                             </button>
                          </div>
                       )}

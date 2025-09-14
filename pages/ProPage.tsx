@@ -1,12 +1,14 @@
 import React, { useEffect } from 'react';
 // FIX: Replaced named imports with a namespace import for 'react-router-dom' to resolve module export errors.
-import * as ReactRouterDOM from 'react-router-dom';
+// FIX: Switched from require to a standard ES module import for react-router-dom to fix module resolution error.
+import { useNavigate, Link } from 'react-router-dom';
 import { useShinobiPro } from '../hooks/useShinobiPro.ts';
 import MangekyoProIcon from '../components/icons/MangekyoProIcon.tsx';
 
 const ProPage = () => {
   const { isPro } = useShinobiPro();
-  const navigate = ReactRouterDOM.useNavigate();
+  // FIX: Property 'useNavigate' does not exist on type 'typeof import...'.
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!isPro) {
@@ -30,12 +32,13 @@ const ProPage = () => {
         <p className="font-tajawal text-lg md:text-xl text-gray-300 max-w-2xl mx-auto mt-2 mb-8">
             لقد أثبتّ جدارتك. تم فتح المخطوطات السرية لك. استكشف القوة التي حصلت عليها.
         </p>
-        <ReactRouterDOM.Link 
+        {/* FIX: Property 'Link' does not exist on type 'typeof import...'. */}
+        <Link 
           to="/features"
           className="inline-block bg-gradient-to-r from-purple-600 to-red-600 hover:from-purple-700 hover:to-red-700 text-white font-bold text-lg py-4 px-10 rounded-lg transition-all duration-300 shadow-lg shadow-purple-500/30 hover:shadow-xl hover:shadow-purple-500/50 transform hover:-translate-y-1"
         >
             اكتشف الخصائص الحصرية
-        </ReactRouterDOM.Link>
+        </Link>
     </div>
   );
 };

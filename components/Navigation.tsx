@@ -1,6 +1,7 @@
 import React from 'react';
 // FIX: Replaced named imports with a namespace import for 'react-router-dom' to resolve module export errors.
-import * as ReactRouterDOM from 'react-router-dom';
+// FIX: Switched from require to a standard ES module import for react-router-dom to fix module resolution error.
+import { NavLink } from 'react-router-dom';
 import SharinganLogo from './SharinganLogo.tsx';
 import { HomeIcon, UserGroupIcon, FilmIcon, EyeIcon, FlagIcon, StarIcon } from '@heroicons/react/24/solid';
 import ForbiddenScrollIcon from './icons/ForbiddenScrollIcon.tsx';
@@ -46,12 +47,13 @@ const Sidebar = () => {
             {navLinks.map(link => {
                 const Icon = link.icon;
                 return(
-                    <ReactRouterDOM.NavLink key={link.path} to={link.path} className={getLinkClasses}>
+                    // FIX: Property 'NavLink' does not exist on type 'typeof import...'.
+                    <NavLink key={link.path} to={link.path} className={getLinkClasses}>
                         <div className="flex items-center">
                             <Icon className="w-6 h-6 ml-4" />
                             <span className="flex-grow">{link.name}</span>
                         </div>
-                    </ReactRouterDOM.NavLink>
+                    </NavLink>
                 )}
             )}
         </nav>
@@ -77,10 +79,11 @@ const BottomNav = () => {
             {navLinks.map(link => {
                 const Icon = link.icon;
                  return(
-                    <ReactRouterDOM.NavLink key={link.path} to={link.path} className={getLinkClasses}>
+                    // FIX: Property 'NavLink' does not exist on type 'typeof import...'.
+                    <NavLink key={link.path} to={link.path} className={getLinkClasses}>
                         <Icon className="w-6 h-6 mb-1" />
                         <span className="text-xs font-medium">{link.name}</span>
-                    </ReactRouterDOM.NavLink>
+                    </NavLink>
                 )
             })}
         </nav>

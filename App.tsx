@@ -1,7 +1,8 @@
 // FIX: Rewrote as a TypeScript module with JSX and strong types, and added ShinobiProProvider.
 import React, { useState, useEffect } from 'react';
 // FIX: Replaced named imports with a namespace import for 'react-router-dom' to resolve module export errors.
-import * as ReactRouterDOM from 'react-router-dom';
+// FIX: Switched from require to ES module import for react-router-dom.
+import { useLocation, Routes, Route, HashRouter } from 'react-router-dom';
 
 import Navigation from './components/Navigation.tsx';
 import HomePage from './pages/HomePage.tsx';
@@ -22,7 +23,8 @@ import { FavoritesProvider } from './hooks/useFavorites.ts';
 import { useShinobiPro, ShinobiProProvider } from './hooks/useShinobiPro.ts';
 
 const PageWrapper = ({ children }) => {
-  const location = ReactRouterDOM.useLocation();
+  // FIX: Property 'useLocation' does not exist on type 'typeof import...'.
+  const location = useLocation();
   const [animationClass, setAnimationClass] = useState('opacity-0 translate-y-5');
 
   useEffect(() => {
@@ -45,7 +47,8 @@ const PageWrapper = ({ children }) => {
 
 const ThemedAppLayout = () => {
     const { isAkatsukiTheme } = useShinobiPro();
-    const location = ReactRouterDOM.useLocation();
+    // FIX: Property 'useLocation' does not exist on type 'typeof import...'.
+    const location = useLocation();
     
     useEffect(() => {
         const root = window.document.documentElement;
@@ -75,17 +78,18 @@ const ThemedAppLayout = () => {
                 <Navigation />
                 <div className={`flex-1 transition-all duration-300 md:mr-64 lg:mr-72`}>
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 pb-24 md:pb-12 min-h-screen">
-                        <ReactRouterDOM.Routes>
-                            <ReactRouterDOM.Route path="/" element={<PageWrapper><HomePage /></PageWrapper>} />
-                            <ReactRouterDOM.Route path="/characters" element={<PageWrapper><CharactersPage /></PageWrapper>} />
-                            <ReactRouterDOM.Route path="/arcs" element={<PageWrapper><ArcsPage /></PageWrapper>} />
-                            <ReactRouterDOM.Route path="/eyes" element={<PageWrapper><EyesPage /></PageWrapper>} />
-                            <ReactRouterDOM.Route path="/clans" element={<PageWrapper><ClansPage /></PageWrapper>} />
-                            <ReactRouterDOM.Route path="/favorites" element={<PageWrapper><FavoritesPage /></PageWrapper>} />
-                            <ReactRouterDOM.Route path="/pro" element={<PageWrapper><ProPage /></PageWrapper>} />
-                            <ReactRouterDOM.Route path="/features" element={<PageWrapper><FeaturesPage /></PageWrapper>} />
-                            <ReactRouterDOM.Route path="/battle" element={<PageWrapper><BattlePage /></PageWrapper>} />
-                        </ReactRouterDOM.Routes>
+                        {/* FIX: Property 'Routes' and 'Route' do not exist on type 'typeof import...'. */}
+                        <Routes>
+                            <Route path="/" element={<PageWrapper><HomePage /></PageWrapper>} />
+                            <Route path="/characters" element={<PageWrapper><CharactersPage /></PageWrapper>} />
+                            <Route path="/arcs" element={<PageWrapper><ArcsPage /></PageWrapper>} />
+                            <Route path="/eyes" element={<PageWrapper><EyesPage /></PageWrapper>} />
+                            <Route path="/clans" element={<PageWrapper><ClansPage /></PageWrapper>} />
+                            <Route path="/favorites" element={<PageWrapper><FavoritesPage /></PageWrapper>} />
+                            <Route path="/pro" element={<PageWrapper><ProPage /></PageWrapper>} />
+                            <Route path="/features" element={<PageWrapper><FeaturesPage /></PageWrapper>} />
+                            <Route path="/battle" element={<PageWrapper><BattlePage /></PageWrapper>} />
+                        </Routes>
                     </div>
                      <Footer />
                 </div>
@@ -98,9 +102,10 @@ const App = () => {
   return (
     <ShinobiProProvider>
         <FavoritesProvider>
-            <ReactRouterDOM.HashRouter>
+            {/* FIX: Property 'HashRouter' does not exist on type 'typeof import...'. */}
+            <HashRouter>
               <ThemedAppLayout />
-            </ReactRouterDOM.HashRouter>
+            </HashRouter>
         </FavoritesProvider>
     </ShinobiProProvider>
   );

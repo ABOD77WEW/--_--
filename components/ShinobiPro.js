@@ -17,20 +17,21 @@ const SecretCodeModal = ({
 }) => {
     const [code, setCode] = useState('');
     const [status, setStatus] = useState('idle');
-
-    const handleKeyPress = (key) => {
-        if (status === 'idle' && code.length < 13) {
-             setCode(prev => prev + key);
-        }
-    };
-
-    const handleBackspace = () => {
-        if (status !== 'idle') return;
-        setCode(prev => prev.slice(0, -1));
-    };
+    const inputRef = useRef(null);
 
     useEffect(() => {
-        if (status !== 'idle') return;
+        inputRef.current?.focus();
+    }, []);
+
+    const handleCodeChange = (e) => {
+        if (status === 'idle') {
+            const newCode = e.target.value.replace(/[^0-9]/g, '');
+            setCode(newCode);
+        }
+    };
+    
+    useEffect(() => {
+        if (status !== 'idle' || code === '') return;
 
         const validCodes = ['13579001', '1357913579001'];
         if (validCodes.includes(code)) {
@@ -39,7 +40,7 @@ const SecretCodeModal = ({
                 setStatus('success');
                 setTimeout(() => onClose(), 1200);
             }
-        } else if (code.length >= 13) { // Longest valid code is 13
+        } else if (code.length >= 13) {
             setStatus('failure');
             setTimeout(() => {
                 setStatus('idle');
@@ -67,20 +68,17 @@ const SecretCodeModal = ({
                 'div',
                 { className: status === 'success' ? 'secret-code-success' : '' },
                 React.createElement(
-                    'div', { className: "secret-code-display flex items-center justify-center transition-all duration-300" },
-                    React.createElement('span', null, code || '...')
-                ),
-                React.createElement(
-                    'div', { className: "secret-code-keypad" },
-                    ['1', '2', '3', '4', '5', '6', '7', '8', '9'].map(num => (
-                        React.createElement('button', { key: num, onClick: () => handleKeyPress(num), className: "keypad-button", disabled: status !== 'idle' }, num)
-                    )),
-                     React.createElement('button', { onClick: () => handleKeyPress('0'), className: "keypad-button col-start-2", disabled: status !== 'idle' }, '0'),
-                     React.createElement('button', { onClick: handleBackspace, className: "keypad-button", disabled: status !== 'idle' },
-                        React.createElement('svg', { xmlns: "http://www.w3.org/2000/svg", className: "h-8 w-8", fill: "none", viewBox: "0 0 24 24", stroke: "currentColor", strokeWidth: 2 },
-                          React.createElement('path', { strokeLinecap: "round", strokeLinejoin: "round", d: "M12 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2M3 12l6.414 6.414a2 2 0 002.828 0L21 12M3 12l6.414-6.414a2 2 0 012.828 0L21 12" })
-                        )
-                     )
+                    'input', {
+                      ref: inputRef,
+                      type: "text",
+                      value: code,
+                      onChange: handleCodeChange,
+                      maxLength: 13,
+                      className: "secret-code-input",
+                      placeholder: "...",
+                      disabled: status !== 'idle',
+                      "aria-label": "حقل إدخال الكود السري"
+                    }
                 )
             )
         )
@@ -397,13 +395,13 @@ const ShinobiPro = () => {
         if (isPro) {
             return React.createElement(
                 React.Fragment, null,
-                React.createElement(MangekyoProIcon, { className: "w-12 h-12 text-yellow-400 pro-icon-active" }),
+                React.createElement(MangekyoProIcon, { className: "w-10 h-10 text-yellow-400 pro-icon-active" }),
                 React.createElement('span', { className: "font-cairo font-black text-white" }, "شينوبي برو مفعل")
             );
         }
         return React.createElement(
             React.Fragment, null,
-            React.createElement(MangekyoProIcon, { className: "w-12 h-12 group-hover:rotate-90 transition-transform duration-500" }),
+            React.createElement(MangekyoProIcon, { className: "w-10 h-10 group-hover:rotate-90 transition-transform duration-500" }),
             React.createElement('span', { className: "font-cairo font-black text-transparent bg-clip-text bg-gradient-to-br from-purple-300 to-red-400 group-hover:from-purple-200 group-hover:to-red-300" }, "شينوبي برو")
         );
     }, [isPro]);
@@ -415,7 +413,7 @@ const ShinobiPro = () => {
             React.createElement('div', { className: `fixed top-4 left-4 z-50` },
                 React.createElement('button', {
                     onClick: () => (isPro ? navigate('/pro') : setIsModalOpen(true)),
-                    className: `group flex items-center gap-4 p-2 pr-5 rounded-full border-2 backdrop-blur-sm transition-all duration-300 min-w-[280px] justify-start ${isPro ? 'pro-button-unreal shadow-[0_0_15px_#a855f7]' : 'pro-button-dormant'}`,
+                    className: `group flex items-center gap-4 p-2 pr-5 rounded-full border-2 backdrop-blur-sm transition-all duration-300 min-w-[260px] justify-start ${isPro ? 'pro-button-unreal shadow-[0_0_15px_#a855f7]' : 'pro-button-dormant'}`,
                     title: isPro ? "عرض مزايا برو" : "فعّل شينوبي برو"
                 },
                 React.createElement('div', { className: "pro-button-content flex items-center gap-3" }, ProButtonContent)
@@ -428,7 +426,7 @@ const ShinobiPro = () => {
                     className: `group w-16 h-16 flex items-center justify-center rounded-full border-2 backdrop-blur-sm transition-all duration-300 pro-button-akatsuki shadow-[0_0_15px_#ef4444]`,
                     "aria-pressed": isAkatsukiTheme
                 },
-                React.createElement(AkatsukiThemeIcon, { className: `w-10 h-10 transition-transform duration-1000 ${isAkatsukiTheme ? 'animate-continuous-rotate' : ''}`, style:{animationDuration: '3s'} })
+                React.createElement(AkatsukiThemeIcon, { className: `w-12 h-12 pro-button-akatsuki-icon ${isAkatsukiTheme ? 'active' : ''}` })
                 )
             )
         ),

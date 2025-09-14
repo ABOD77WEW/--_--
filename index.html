@@ -242,7 +242,7 @@
       }
 
       .pro-icon-active {
-        animation: pro-icon-pulse 5s ease-in-out infinite, spin 15s linear infinite;
+        animation: pro-icon-pulse 5s ease-in-out infinite;
       }
 
       @keyframes unreal-gradient {
@@ -252,7 +252,7 @@
       }
 
       /* --- AKATSUKI PRO BUTTON --- */
-      .pro-button-akatsuki {
+       .pro-button-akatsuki {
         background: linear-gradient(120deg, #DC2626, #111827, #DC2626);
         background-size: 200% 200%;
         animation: akatsuki-gradient 4s ease-in-out infinite;
@@ -262,6 +262,21 @@
         0% { background-position: 0% 50%; }
         50% { background-position: 100% 50%; }
         100% { background-position: 0% 50%; }
+      }
+      
+      /* NEW AKATSUKI ICON GLOW */
+      @keyframes akatsuki-lightning-pulse {
+        0%, 10%, 100% {
+          filter: drop-shadow(0 0 4px rgba(239, 68, 68, 0.5));
+          transform: scale(1);
+        }
+        5% {
+          filter: drop-shadow(0 0 12px rgba(239, 68, 68, 1)) drop-shadow(0 0 20px rgba(185, 28, 28, 0.8));
+          transform: scale(1.05);
+        }
+      }
+       .pro-button-akatsuki-icon.active {
+        animation: akatsuki-lightning-pulse 5s ease-in-out infinite;
       }
 
 
@@ -614,20 +629,7 @@
       .rotating-rinnegan-bg {
           animation: spin 25s linear infinite;
       }
-      .rotating-rinnegan-bg circle:nth-of-type(3) {
-          transform-origin: center;
-          animation: spin 8s linear infinite reverse;
-      }
-      .rotating-rinnegan-bg circle:nth-of-type(4) {
-          transform-origin: center;
-          animation: spin 12s linear infinite;
-      }
-      .rotating-rinnegan-bg circle:nth-of-type(5) {
-          transform-origin: center;
-          animation: spin 6s linear infinite reverse;
-      }
-
-
+      
       /* ===== AKATSUKI THEME (Revamped) ===== */
       @keyframes sky-flow {
         0% { background-position: 0% 50%; }
@@ -668,7 +670,6 @@
          content: "";
          background-color: #DC2626 !important;
          box-shadow: 0 0 8px #DC2626 !important;
-         /* Resetting inherited properties that created the tomoe */
          width: 4px;
          height: 70%;
          background-image: none;
@@ -714,7 +715,7 @@
       body.theme-akatsuki .akatsuki-search-dropdown a:hover { background-color: rgba(220, 38, 38, 0.3) !important; }
       body.theme-akatsuki .akatsuki-search-dropdown h4 { color: #fca5a5; }
       
-      /* === SECRET CODE INPUT (Ancient Scroll Theme) === */
+      /* === SECRET CODE INPUT (Keyboard Version) === */
       .secret-code-modal-bg {
         position: fixed; inset: 0;
         background: rgba(0, 0, 0, 0.85);
@@ -731,7 +732,7 @@
         box-shadow: 0 0 40px rgba(220, 38, 38, 0.4);
         animation: cinematic-fade-in 0.5s 0.1s ease-out backwards;
       }
-      .secret-code-display {
+      .secret-code-input {
         background: #000;
         border: 2px solid #7f1d1d;
         border-radius: 0.5rem;
@@ -746,37 +747,12 @@
         box-shadow: inset 0 0 10px rgba(239, 68, 68, 0.5);
         text-shadow: 0 0 5px rgba(239, 68, 68, 0.7);
         transition: all 0.3s ease;
+        width: 100%;
       }
-      .secret-code-keypad {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 0.75rem;
-      }
-      .keypad-button {
-        background: linear-gradient(145deg, #27272a, #18181b);
-        border: 1px solid #3f3f46;
-        border-radius: 0.5rem;
-        font-size: 1.75rem;
-        font-weight: bold;
-        color: #d4d4d8;
-        height: 60px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.4);
-      }
-      .keypad-button:hover:not(:disabled) {
-        background: #450a0a;
+      .secret-code-input:focus {
+        outline: none;
         border-color: #ef4444;
-        transform: translateY(-2px);
-        box-shadow: 0 0 15px rgba(239, 68, 68, 0.6), 0 6px 10px rgba(0,0,0,0.3);
-        color: #fecaca;
-      }
-       .keypad-button:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
+        box-shadow: 0 0 20px #ef4444, inset 0 0 10px rgba(239, 68, 68, 0.5);
       }
 
       /* Animations for code status */
@@ -787,7 +763,7 @@
             text-shadow: 0 0 8px #4ade80;
          }
       }
-      .secret-code-success .secret-code-display {
+      .secret-code-success .secret-code-input {
         animation: secret-code-success-anim 1s ease-in-out;
         color: #bbf7d0;
         border-color: #22c55e;
@@ -801,7 +777,7 @@
       .secret-code-failure {
         animation: secret-code-failure-anim 0.5s ease-in-out;
       }
-      .secret-code-failure .secret-code-display {
+      .secret-code-failure .secret-code-input {
         border-color: #ef4444;
         box-shadow: inset 0 0 10px rgba(239, 68, 68, 0.5);
       }
@@ -1115,7 +1091,7 @@
         transform: scale(1.1) rotate(90deg);
       }
       
-      /* === NEW: LEGENDARY FOOTER (SCROLL THEME) === */
+      /* === LEGENDARY FOOTER === */
       .legendary-footer {
         position: relative;
         padding: 2rem 1rem;
@@ -1125,49 +1101,16 @@
         border-bottom: 6px solid #4a2e2e;
         box-shadow: 0 -5px 15px rgba(0,0,0,0.4), 0 5px 15px rgba(0,0,0,0.4), inset 0 0 10px rgba(0,0,0,0.5);
       }
-      .footer-scroll-content {
-        background-color: #f3e9d2; /* Scroll paper */
-        color: #4a2e2e; /* Ink color */
-        padding: 2rem;
-        border: 1px solid #c8bdae;
-        box-shadow: inset 0 0 15px rgba(0,0,0,0.2);
-        position: relative;
-      }
-      .footer-separator {
-        width: 60%;
-        height: 2px;
-        background: linear-gradient(to right, transparent, #8a6d4e, transparent);
-        margin: 1.5rem auto;
-      }
       .footer-content h4 {
         font-family: 'Cairo', sans-serif;
         font-size: 1.5rem;
         font-weight: 900;
-        color: #4a2e2e;
+        color: #f3e9d2;
       }
       .footer-content p {
         margin-top: 0.25rem;
         font-size: 0.9rem;
-        color: #6b4f4f;
-      }
-      .technique-icon-grid {
-        display: flex;
-        justify-content: center;
-        gap: 1rem;
-        margin-top: 1.5rem;
-      }
-      .technique-icon-wrapper {
-        width: 2.5rem;
-        height: 2.5rem;
-        padding: 0.5rem;
-        background: rgba(74, 46, 46, 0.1);
-        border-radius: 50%;
-        border: 1px solid rgba(74, 46, 46, 0.2);
-        transition: all 0.3s ease;
-      }
-      .technique-icon-wrapper:hover {
-        background: rgba(74, 46, 46, 0.2);
-        transform: scale(1.1);
+        color: #c8bdae;
       }
       
       /* Akatsuki Footer Theme */
@@ -1176,19 +1119,8 @@
         border-color: #7f1d1d;
         box-shadow: 0 -5px 15px rgba(0,0,0,0.4), 0 5px 15px rgba(0,0,0,0.4), inset 0 0 10px #7f1d1d;
       }
-      body.theme-akatsuki .footer-scroll-content {
-        background-color: #270a0a;
-        color: #fecaca;
-        border-color: #450a0a;
-      }
       body.theme-akatsuki .footer-content h4 { color: #fca5a5; }
       body.theme-akatsuki .footer-content p { color: #fda4af; }
-      body.theme-akatsuki .footer-separator { background: linear-gradient(to right, transparent, #ef4444, transparent); }
-      body.theme-akatsuki .technique-icon-wrapper {
-        background: rgba(239, 68, 68, 0.1);
-        border-color: rgba(239, 68, 68, 0.3);
-      }
-      body.theme-akatsuki .technique-icon-wrapper:hover { background: rgba(239, 68, 68, 0.2); }
       
 
       /* === NEW: FULL SCREEN SCROLL DETAIL VIEW === */
@@ -1224,7 +1156,7 @@
         max-width: 900px;
         height: 90vh;
         max-height: 700px;
-        background: #f3e9d2; /* Default scroll color */
+        background: #f3e9d2;
         color: #4a2e2e;
         border: 8px solid;
         border-image: linear-gradient(to bottom, #6b4f4f, #a9876a) 1;
@@ -1237,12 +1169,6 @@
         transition: background-color 0.4s ease;
       }
       
-      /* Detail View Theming */
-      .scroll-view-content.theme-characters { background-color: #fde8e8; } /* Light Red */
-      .scroll-view-content.theme-arcs { background-color: #e0f2fe; } /* Light Blue */
-      .scroll-view-content.theme-eyes { background-color: #f3e8ff; } /* Light Purple */
-      .scroll-view-content.theme-clans { background-color: #f1f5f9; } /* Light Gray */
-
       body.theme-akatsuki .scroll-view-content {
           background-color: #270a0a;
           color: #fecaca;
@@ -1276,7 +1202,7 @@
         opacity: 0.6;
       }
       
-      /* === HOMEPAGE INTRO === */
+      /* === NEW: HOMEPAGE QUICK LOOK SECTION === */
         .quick-look-section {
             animation: cinematic-fade-in 1s 0.5s backwards;
         }

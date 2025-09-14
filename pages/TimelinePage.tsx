@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import * as ReactRouterDOM from 'react-router-dom';
+// FIX: Switched from require to a standard ES module import for react-router-dom to fix module resolution error.
+import { useNavigate } from 'react-router-dom';
 import { arcs } from '../data/arcs.ts';
 import InkBlotIcon from '../components/icons/InkBlotIcon.tsx';
 
@@ -59,7 +60,8 @@ const TimelineEvent = ({
 
 const TimelinePage = () => {
     const scrollContainerRef = useRef(null);
-    const navigate = ReactRouterDOM.useNavigate();
+    // FIX: Property 'useNavigate' does not exist on type 'typeof import...'.
+    const navigate = useNavigate();
 
     const EVENT_SPACING = 300;
     const Y_POSITIONS = [100, 300]; 

@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 // FIX: Replaced named imports with a namespace import for 'react-router-dom' to resolve module export errors.
-import * as ReactRouterDOM from 'react-router-dom';
+// FIX: Switched from require to a standard ES module import for react-router-dom to fix module resolution error.
+import { useNavigate, Link } from 'react-router-dom';
 import { useShinobiPro } from '../hooks/useShinobiPro.ts';
 import ForbiddenScrollIcon from '../components/icons/ForbiddenScrollIcon.tsx';
 import { ScaleIcon, SwatchIcon, PencilSquareIcon, SpeakerWaveIcon } from '@heroicons/react/24/solid';
@@ -8,7 +9,8 @@ import { ScaleIcon, SwatchIcon, PencilSquareIcon, SpeakerWaveIcon } from '@heroi
 
 const FeaturesPage = () => {
   const { isPro } = useShinobiPro();
-  const navigate = ReactRouterDOM.useNavigate();
+  // FIX: Property 'useNavigate' does not exist on type 'typeof import...'.
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!isPro) {
@@ -33,7 +35,8 @@ const FeaturesPage = () => {
             بصفتك عضو "برو"، هذه الأدوات والتحليلات الحصرية تحت إمرتك الآن.
         </p>
         <div className="w-full max-w-4xl space-y-6">
-            <ReactRouterDOM.Link to="/battle" state={{ from: "features" }} className="block">
+            {/* FIX: Property 'Link' does not exist on type 'typeof import...'. */}
+            <Link to="/battle" state={{ from: "features" }} className="block">
                 <div className="bg-[#1A1A1A]/70 border border-[#2D3748] rounded-lg p-6 backdrop-blur-sm text-right transform transition hover:border-green-400/50 hover:shadow-xl hover:shadow-green-500/20">
                     <h3 className="font-cairo text-2xl font-bold text-green-400 mb-2 flex items-center justify-end gap-3">
                         مقارنة الشخصيات
@@ -41,7 +44,7 @@ const FeaturesPage = () => {
                     </h3>
                     <p className="text-gray-400">خاصية حصرية تتيح لك وضع أي شينوبي ضد آخر في مواجهة ملحمية. حلل إحصائياتهم، قدراتهم، واحسم الجدل حول من هو الأقوى.</p>
                 </div>
-            </ReactRouterDOM.Link>
+            </Link>
              <div className="bg-[#1A1A1A]/70 border border-[#2D3748] rounded-lg p-6 backdrop-blur-sm text-right transform transition hover:border-red-400/50 hover:shadow-xl hover:shadow-red-500/20">
                 <h3 className="font-cairo text-2xl font-bold text-red-400 mb-2 flex items-center justify-end gap-3">
                    مظهر الأكاتسوكي

@@ -3,43 +3,38 @@ import React from 'react';
 const AkatsukiThemeIcon = (props) => (
   React.createElement(
     'svg',
-    { viewBox: "0 0 100 100", xmlns: "http://www.w3.org/2000/svg", ...props },
-    React.createElement(
-      'defs',
-      null,
-      React.createElement(
-        'radialGradient',
-        { id: "akatsukiThemeIconIris", cx: "50%", cy: "50%", r: "50%" },
-        React.createElement('stop', { offset: "0%", stopColor: "#ff1f1f" }),
-        React.createElement('stop', { offset: "100%", stopColor: "#a00000" })
-      ),
-      React.createElement(
-        'filter',
-        { id: "akatsukiIconGlow" },
-        React.createElement('feGaussianBlur', { stdDeviation: "2", result: "coloredBlur" }),
-        React.createElement(
-          'feMerge',
-          null,
-          React.createElement('feMergeNode', { in: "coloredBlur" }),
+    { viewBox: "0 0 100 106", xmlns: "http://www.w3.org/2000/svg", ...props, "aria-label": "Uchiha Symbol" },
+    React.createElement('defs', null,
+      React.createElement('filter', { id: "akatsuki-base-glow", x:"-50%", y:"-50%", width:"200%", height:"200%"},
+        React.createElement('feGaussianBlur', { in: "SourceAlpha", stdDeviation: "2", result: "blur" }),
+        React.createElement('feColorMatrix', {
+          in: "blur",
+          mode: "matrix",
+          values: "1 0 0 0 0  0 0.1 0 0 0  0 0 0.1 0 0  0 0 0 2 -0.5",
+          result: "dark_red_glow"
+        }),
+        React.createElement('feMerge', null,
+          React.createElement('feMergeNode', { in: "dark_red_glow" }),
           React.createElement('feMergeNode', { in: "SourceGraphic" })
         )
       )
     ),
-    React.createElement('circle', { cx: "50", cy: "50", r: "48", fill: "url(#akatsukiThemeIconIris)", filter: "url(#akatsukiIconGlow)" }),
-    React.createElement('circle', { cx: "50", cy: "50", r: "20", fill: "#000" }),
-    React.createElement('circle', { cx: "50", cy: "50", r: "22", stroke: "#3b0202", strokeWidth: "1.5", fill: "none" }),
-    [0, 120, 240].map(angle => (
+    React.createElement(
+      'g',
+      { filter: "url(#akatsuki-base-glow)" },
       React.createElement(
         'g',
-        { key: angle, transform: `rotate(${angle} 50 50)` },
+        { stroke: "#FFFFFF", strokeWidth: "2.5", strokeLinejoin: "round", strokeMiterlimit: "10" },
         React.createElement('path', {
-          d: "M 50,28.5 C 62,34 65,45 58,48 A 10,10 0 1 1 50,28.5 Z",
-          fill: "#0a0a0a",
-          stroke: "#000",
-          strokeWidth: "1"
+          fill: "#ef4444",
+          d: "M 2.5,50 A 47.5,47.5 0 1 1 97.5,50 C 75,65 25,65 2.5,50 Z"
+        }),
+        React.createElement('path', {
+          fill: "#ffffff",
+          d: "M 2.5,50 C 2.5,80 25,95 43,95 V 103.5 H 57 V 95 C 75,95 97.5,80 97.5,50 C 75,65 25,65 2.5,50 Z"
         })
       )
-    ))
+    )
   )
 );
 

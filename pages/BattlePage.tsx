@@ -1,9 +1,12 @@
 import React, { useState, useEffect, useMemo } from 'react';
+// FIX: Changed import to use require for react-router-dom to fix module resolution issues.
+// FIX: Switched from require to a standard ES module import for react-router-dom to fix module resolution error.
 import { useLocation, useNavigate } from 'react-router-dom';
 import { characters } from '../data/characters.ts';
 
 // Main Component
 const BattlePage = () => {
+    // FIX: Updated hook calls to use the ReactRouterDOM namespace.
     const location = useLocation();
     const navigate = useNavigate();
 
@@ -40,9 +43,13 @@ const BattlePage = () => {
     };
     
     const handleReset = () => {
+        // Keep the challenger, just reset the opponent and phase
+        const currentChallengerId = challenger?.id;
         setOpponent(null);
         setSearchTerm('');
         setPhase('select');
+        // Use navigate to reset the state but keep the challenger
+        navigate('/battle', { state: { challengerId: currentChallengerId }, replace: true });
     };
 
     const availableOpponents = useMemo(() =>

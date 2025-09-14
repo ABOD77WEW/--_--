@@ -1,7 +1,8 @@
 import React, { useMemo } from 'react';
 import { useFavorites } from '../hooks/useFavorites.ts';
 // FIX: Replaced named imports with a namespace import for 'react-router-dom' to resolve module export errors.
-import * as ReactRouterDOM from 'react-router-dom';
+// FIX: Switched from require to a standard ES module import for react-router-dom to fix module resolution error.
+import { Link } from 'react-router-dom';
 
 const FavoriteItemCard = ({ item, category }) => {
   const { toggleFavorite } = useFavorites();
@@ -81,9 +82,10 @@ const FavoritesPage = () => {
         <div className="text-center py-20">
           <p className="text-xl text-gray-500 mb-4">قائمة مفضلاتك فارغة.</p>
           <p className="text-gray-400">يمكنك إضافة العناصر عبر الضغط على أيقونة النجمة ⭐.</p>
-           <ReactRouterDOM.Link to="/characters" className="mt-6 inline-block bg-amber-600 hover:bg-amber-700 dark:bg-red-500 dark:hover:bg-red-600 text-white font-bold py-2 px-6 rounded-lg transition-colors">
+           {/* FIX: Property 'Link' does not exist on type 'typeof import...'. */}
+           <Link to="/characters" className="mt-6 inline-block bg-amber-600 hover:bg-amber-700 dark:bg-red-500 dark:hover:bg-red-600 text-white font-bold py-2 px-6 rounded-lg transition-colors">
             تصفح الشخصيات
-          </ReactRouterDOM.Link>
+          </Link>
         </div>
       ) : (
         <>

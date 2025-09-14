@@ -1,6 +1,7 @@
 import React from 'react';
 // FIX: Replaced named imports with a namespace import for 'react-router-dom' to resolve module export errors.
-import * as ReactRouterDOM from 'react-router-dom';
+// FIX: Switched from require to a standard ES module import for react-router-dom to fix module resolution error.
+import { useNavigate } from 'react-router-dom';
 import { characters } from '../data/characters.ts';
 import { useFavorites } from '../hooks/useFavorites.ts';
 import GlobalSearchBar from '../components/GlobalSearchBar.tsx';
@@ -79,7 +80,8 @@ const CharacterCard = ({ character, onCompare, isPro }) => {
 
 const CharactersPage = () => {
   const { isPro } = useShinobiPro();
-  const navigate = ReactRouterDOM.useNavigate();
+  // FIX: Property 'useNavigate' does not exist on type 'typeof import...'.
+  const navigate = useNavigate();
 
   const handleStartComparison = (character) => {
     navigate('/battle', { state: { challengerId: character.id } });
