@@ -278,19 +278,70 @@
         20%, 40%, 60%, 80% { transform: translateX(5px); }
       }
 
-      /* === NEW: Enhanced Hint Style & Animation === */
+      /* === NEW: SMALLER HINT BUTTON === */
+      .quiz-hint-container {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        margin-bottom: -1.75rem; /* Pull progress bar up (half of button height) */
+        z-index: 10;
+      }
+      .quiz-hint-button-bold {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 3.5rem; /* Smaller */
+        height: 3.5rem; /* Smaller */
+        background: radial-gradient(circle, #fef08a, #facc15);
+        border: 3px solid #fefce8;
+        border-radius: 9999px;
+        color: #4a2e2e;
+        backdrop-filter: blur(4px);
+        box-shadow: 0 0 20px rgba(251, 191, 36, 0.6), 0 4px 10px rgba(0,0,0,0.3);
+        transition: all 0.3s ease;
+        animation: hint-pulse 3s infinite;
+        position: relative;
+      }
+      .quiz-hint-button-bold:hover:not(:disabled) {
+        transform: scale(1.1);
+        animation-play-state: paused;
+        box-shadow: 0 0 30px rgba(251, 191, 36, 0.8), 0 6px 15px rgba(0,0,0,0.3);
+      }
+      .quiz-hint-button-bold:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        filter: grayscale(80%);
+        animation: none;
+      }
+      .quiz-hint-button-bold .w-10 { width: 2rem; } /* Adjust icon size */
+      .quiz-hint-button-bold .h-10 { height: 2rem; } /* Adjust icon size */
+
+      .hint-counter {
+        position: absolute;
+        top: -4px;
+        right: -4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 1.75rem; /* Smaller */
+        height: 1.75rem; /* Smaller */
+        font-size: 0.9rem; /* Smaller */
+        border-radius: 50%;
+        background-color: #f87171;
+        color: white;
+        font-weight: 900;
+        border: 2px solid white;
+      }
+      @keyframes hint-pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+      }
+
       @keyframes hint-reveal {
-        from {
-          opacity: 0;
-          transform: translateY(10px) scale(0.95);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0) scale(1);
-        }
+        from { opacity: 0; transform: translateY(10px) scale(0.95); }
+        to { opacity: 1; transform: translateY(0) scale(1); }
       }
       .hint-chakra-aura {
-        position: relative;
         border: 1px solid rgba(251, 191, 36, 0.5);
         background: rgba(251, 191, 36, 0.1);
         padding: 1rem 1.5rem;
@@ -298,57 +349,7 @@
         box-shadow: 0 0 20px rgba(251, 191, 36, 0.3);
         animation: hint-reveal 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
       }
-      .hint-chakra-aura::before {
-        content: '';
-        position: absolute;
-        inset: -2px;
-        border-radius: 0.85rem; /* slightly larger than parent */
-        background: radial-gradient(circle, rgba(251, 191, 36, 0.4) 0%, transparent 70%);
-        animation: chakra-flow 5s ease-in-out infinite;
-        z-index: -1;
-      }
-      @keyframes chakra-flow {
-          0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
-          50% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.9; }
-      }
 
-      /* === NEW: Sage Wisdom Hint Button === */
-      .quiz-hint-button {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        padding: 0.5rem 1rem;
-        background: rgba(251, 191, 36, 0.15);
-        border: 1px solid rgba(251, 191, 36, 0.6);
-        border-radius: 9999px;
-        color: #fef08a;
-        font-weight: bold;
-        backdrop-filter: blur(4px);
-        box-shadow: 0 0 15px rgba(251, 191, 36, 0.3);
-        transition: all 0.3s ease;
-      }
-      .quiz-hint-button:hover:not(:disabled) {
-        background: rgba(251, 191, 36, 0.3);
-        border-color: #facc15;
-        transform: scale(1.05);
-      }
-      .quiz-hint-button:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-        filter: grayscale(80%);
-      }
-      .hint-counter {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 1.5rem;
-        height: 1.5rem;
-        font-size: 0.9rem;
-        border-radius: 50%;
-        background-color: #facc15;
-        color: #4a2e2e;
-        font-weight: 900;
-      }
 
       /* Quiz Progress Bar */
       .quiz-progress-bar {
@@ -357,6 +358,7 @@
           box-shadow: inset 0 2px 4px rgba(0,0,0,0.4);
           padding: 4px;
           border-radius: 9999px;
+          position: relative;
       }
       .quiz-progress-bar-inner {
           background: linear-gradient(90deg, #be185d, #a855f7);
@@ -388,125 +390,118 @@
         to { opacity: 1; transform: translateY(0); }
       }
       
-      /* === NEW: SAGE OF SIX PATHS AWAKENING SCENE === */
+      /* === NEW: SIX PATHS AWAKENING SCENE === */
       .awakening-scene-bg {
-        position: fixed; inset: 0; z-index: 70;
-        background-color: #000;
-        display: flex; align-items: center; justify-content: center;
-        overflow: hidden;
-        animation: cinematic-fade-in 0.5s;
+          position: fixed; inset: 0; z-index: 70;
+          background-color: #000;
+          display: flex; align-items: center; justify-content: center;
+          overflow: hidden;
+          perspective: 1000px;
       }
-
       .awakening-container {
         position: relative;
-        width: 50vmin;
-        height: 50vmin;
+        width: 100%; height: 100%;
+        display: flex; align-items: center; justify-content: center;
       }
-      .awakening-container * { transition: all 0.3s ease-out; }
 
       .truth-seeking-orb {
-        position: absolute;
-        top: 50%; left: 50%;
-        width: 5vmin; height: 5vmin;
-        background: white;
-        border-radius: 50%;
-        transform: translate(-50%, -50%) scale(0);
-        box-shadow: 0 0 10px white, 0 0 20px white, 0 0 40px #a78bfa;
-        animation: orb-appear 1.5s forwards, orb-pulse 4s 1.5s infinite ease-in-out;
+        width: 10vmin; height: 10vmin;
+        background: #000; border-radius: 50%;
+        box-shadow: 0 0 10px #000, inset 0 0 5px #222;
+        animation: orb-appear 2s forwards;
       }
-      @keyframes orb-appear { to { transform: translate(-50%, -50%) scale(1); } }
-      @keyframes orb-pulse {
-        50% { box-shadow: 0 0 15px white, 0 0 30px #c4b5fd, 0 0 60px #a78bfa; transform: translate(-50%, -50%) scale(1.1); }
+      @keyframes orb-appear {
+          from { transform: scale(0); opacity: 0; }
+          to { transform: scale(1); opacity: 1; }
       }
 
       .chakra-wisp {
         position: absolute;
-        top: 50%; left: 50%;
-        width: 2px;
-        height: 150px;
-        background: linear-gradient(to top, transparent, var(--wisp-color), transparent);
-        transform-origin: top center;
+        width: 10vmin; height: 10vmin;
         opacity: 0;
-        animation: chakra-flow-in 2s ease-out forwards;
-        transition: transform 0.2s ease-out, opacity 0.2s ease-out;
+        cursor: pointer;
+        animation: wisp-orbit 10s linear infinite, wisp-fade-in 1s forwards;
+        transform: rotate(var(--angle)) translateY(-30vmin) rotate(-90deg);
+        filter: blur(1vmin);
       }
-      .chakra-wisp.interactive:not(.captured) {
-          cursor: pointer;
+      .chakra-wisp::before {
+        content: ''; position: absolute; inset: 0;
+        border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+        background: radial-gradient(circle, var(--wisp-color), transparent 70%);
+        animation: wisp-morph 8s ease-in-out infinite alternate;
       }
-      .chakra-wisp.interactive:not(.captured):hover {
-          transform: scale(1.5) rotate(var(--angle)) !important;
-          filter: brightness(2);
-      }
+      @keyframes wisp-fade-in { to { opacity: 0.8; } }
+      @keyframes wisp-orbit { to { transform: rotate(calc(var(--angle) + 360deg)) translateY(-30vmin) rotate(-90deg); } }
+      @keyframes wisp-morph { to { border-radius: 30% 70% 70% 30% / 30% 70% 30% 70%; } }
       .chakra-wisp.captured {
-          transform: scale(0) !important;
-          opacity: 0 !important;
+          animation: wisp-suck-in 0.8s ease-in forwards;
       }
-      @keyframes chakra-flow-in {
-        from { transform: rotate(var(--angle)) translateY(-100vh) scaleY(2); opacity: 0; }
-        50% { opacity: 1; }
-        to { transform: rotate(var(--angle)) translateY(-2.5vmin) scaleY(0); opacity: 0; }
+      @keyframes wisp-suck-in {
+          to { transform: rotate(var(--angle)) translateY(0) scale(0); opacity: 0; }
       }
-      
-      .awakening-rinnegan-container {
-        position: absolute; inset: 0;
-        opacity: 0;
-        transform: scale(0.2);
-        animation: rinnegan-unveil 2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-      }
-      @keyframes rinnegan-unveil {
-        to { opacity: 1; transform: scale(1); }
+      .awakening-prompt {
+        position: absolute; bottom: 10%;
+        color: #fff; font-size: 1.5rem; text-shadow: 0 0 10px #fff;
+        opacity: 0; animation: cinematic-fade-in 1s 3s forwards;
       }
 
+      .awakening-rinnegan-container {
+        animation: rinnegan-unveil 4s forwards;
+      }
+      @keyframes rinnegan-unveil {
+        0% { transform: scale(0); opacity: 0; }
+        30% { transform: scale(1); opacity: 1; filter: drop-shadow(0 0 20px #c084fc); }
+        70% { transform: scale(1.1); filter: drop-shadow(0 0 40px #c084fc) brightness(1.5); }
+        100% { transform: scale(1); filter: none; }
+      }
       .awakening-rinnegan {
-        width: 100%; height: 100%;
-        color: #a78bfa;
-        filter: drop-shadow(0 0 15px #c4b5fd) drop-shadow(0 0 30px #c4b5fd);
-        animation: animate-continuous-rotate 40s linear infinite;
+        width: 30vmin; height: 30vmin;
       }
 
       .shakujo-staff {
         position: absolute;
-        top: -20%; left: 50%;
-        width: 2vmin; height: 140%;
-        background: linear-gradient(90deg, #3730a3, #e0e7ff, #3730a3);
-        border-radius: 2vmin;
-        transform: translateX(-50%) scaleY(0);
-        transform-origin: center;
-        box-shadow: 0 0 15px #a78bfa;
-        animation: staff-materialize 1.5s cubic-bezier(0.83, 0, 0.17, 1) forwards;
+        width: 2vmin; height: 80vmin;
+        background: linear-gradient(to bottom, #fde047, #facc15, #4a2e2e, #4a2e2e);
+        border-radius: 1vmin;
+        opacity: 0;
+        animation: staff-appear 2s 1s forwards;
+        z-index: -1;
       }
-      @keyframes staff-materialize { to { transform: translateX(-50%) scaleY(1); } }
-      
+       @keyframes staff-appear {
+          from { opacity: 0; transform: translateY(100%); }
+          to { opacity: 1; transform: translateY(0); }
+      }
+
       .truth-seeking-orbs-container {
-        position: absolute; inset: 0;
-        animation: animate-continuous-rotate 25s linear infinite reverse;
+        position: absolute;
+        width: 100%; height: 100%;
+        display: flex; align-items: center; justify-content: center;
+        animation: orbs-rotate 20s linear infinite;
+      }
+      @keyframes orbs-rotate {
+          to { transform: rotate(360deg); }
       }
       .awakening-orb {
         position: absolute;
-        top: 50%; left: 50%;
-        margin: -3vmin;
-        width: 6vmin; height: 6vmin;
-        background: #111;
-        border: 2px solid #444;
+        width: 5vmin; height: 5vmin;
+        background: #000;
         border-radius: 50%;
-        box-shadow: inset 0 0 10px #000;
-        transform-origin: center;
-        opacity: 0;
-        animation: orb-fly-out 1s ease-out forwards;
+        animation: orb-fly-out 1s 0.5s ease-out forwards;
+        transform: var(--transform-end);
       }
-      @keyframes orb-fly-out {
-        to { transform: var(--transform-end); opacity: 1; }
+       @keyframes orb-fly-out {
+          from { top: 50%; left: 50%; transform: translate(-50%, -50%); }
+          to { top: 50%; left: 50%; transform: translate(-50%, -50%) var(--transform-end); }
       }
-      
+
       .ascension-flash {
-        position: fixed; inset: 0;
+        position: absolute; inset: 0;
         background: white;
         opacity: 0;
-        animation: ascension-flash-anim 1.5s ease-out forwards;
-        z-index: 75;
+        animation: flash-bang 1.5s ease-out forwards;
       }
-      @keyframes ascension-flash-anim {
-        50% { opacity: 1; }
+      @keyframes flash-bang {
+        0% { opacity: 1; }
         100% { opacity: 0; }
       }
 
@@ -530,27 +525,8 @@
         from { opacity: 0; transform: translateY(10px); text-shadow: 0 0 20px #fef08a; }
         to { opacity: 1; transform: translateY(0); text-shadow: 0 0 5px #fef08a; }
       }
-
-      .awakening-prompt {
-        position: absolute;
-        bottom: 5vh;
-        left: 50%;
-        transform: translateX(-50%);
-        color: white;
-        font-size: 1.2rem;
-        background: rgba(0,0,0,0.5);
-        padding: 0.5rem 1rem;
-        border-radius: 8px;
-        opacity: 0;
-        animation: prompt-fade-in-out 6s 1s ease-in-out;
-        pointer-events: none;
-      }
-      @keyframes prompt-fade-in-out {
-        0%, 100% { opacity: 0; }
-        20%, 80% { opacity: 1; }
-      }
       
-      /* === NEW: INFINITE TSUKUYOMI FAILURE SCENE === */
+      /* === INFINITE TSUKUYOMI FAILURE SCENE === */
       .tsukuyomi-failure-scene {
         position: absolute; inset: 0; z-index: 100;
         display: flex; flex-col; align-items: center; justify-content: center;
@@ -652,20 +628,20 @@
       }
 
 
-      /* ===== AKATSUKI THEME ===== */
-      @keyframes animate-clouds {
-          0% { background-position: 0 0; }
-          100% { background-position: -600px 0; }
+      /* ===== AKATSUKI THEME (Revamped) ===== */
+      @keyframes sky-flow {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
       }
       
       body.theme-akatsuki {
-        background-color: #0c0a09; /* even darker */
+        background-color: #110101;
         background-image: 
-          url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 60" width="150" height="100"><path d="M 86 30 C 82 14, 66 11, 57 17 C 48 9, 33 14, 29 24 C 20 20, 7 27, 6 38 C -5 47, 7 55, 16 51 C 18 57, 31 56, 37 51 C 43 57, 56 58, 62 52 C 75 56, 89 47, 86 30 Z" fill="rgba(255,255,255,0.03)"/></svg>'),
-          radial-gradient(circle at 100% 0%, #7f1d1d, transparent 50%);
-        background-repeat: repeat, no-repeat;
-        background-size: 300px, 100% 100%;
-        animation: animate-clouds 40s linear infinite;
+          radial-gradient(ellipse at 50% 100%, rgba(185, 28, 28, 0.4) 0%, transparent 60%),
+          linear-gradient(175deg, #000 0%, #110101 30%, #450a0a 100%);
+        background-size: 200% 200%;
+        animation: sky-flow 25s ease-in-out infinite;
       }
 
       body.theme-akatsuki ::-webkit-scrollbar-track { background: #111; }
@@ -673,9 +649,9 @@
       
       /* Navigation */
       body.theme-akatsuki .sidebar-chakra, body.theme-akatsuki .bottom-nav-chakra {
-        background: #0c0a09;
+        background: rgba(0,0,0,0.7);
+        backdrop-filter: blur(8px);
         border-color: #450a0a;
-        animation: none; /* Turn off chakra flow animation */
       }
       body.theme-akatsuki nav a {
         color: #e5e7eb !important;
@@ -685,11 +661,18 @@
       }
       body.theme-akatsuki .sidebar-chakra nav a.active {
         color: #fca5a5 !important;
+        font-weight: bold;
         background-color: rgba(220, 38, 38, 0.25) !important;
       }
       body.theme-akatsuki .sidebar-chakra nav a.active::after {
+         content: "";
          background-color: #DC2626 !important;
          box-shadow: 0 0 8px #DC2626 !important;
+         /* Resetting inherited properties that created the tomoe */
+         width: 4px;
+         height: 70%;
+         background-image: none;
+         animation: none;
       }
 
        body.theme-akatsuki .bottom-nav-chakra a.active {
@@ -704,32 +687,15 @@
         text-shadow: 0 0 8px rgba(239, 68, 68, 0.7);
       }
 
-      /* Character Card Ring */
-      .akatsuki-chakra-ring {
-          position: absolute;
-          inset: 0.5rem;
-          border-radius: 9999px;
-          padding: 2px;
-          background: conic-gradient(from 0deg, #DC2626, #111827, #DC2626);
-          animation: spin-gradient 4s linear infinite;
-      }
-      .akatsuki-chakra-ring::before {
-          content: '';
-          position: absolute;
-          inset: 2px;
-          background: #18181b;
-          border-radius: 9999px;
-      }
-
       /* Themed Cards */
       body.theme-akatsuki .themed-card {
-        background-color: rgba(24, 24, 27, 0.8);
-        border-color: #450a0a;
-        border-radius: 1.5rem 0.5rem;
+        background-color: rgba(12, 10, 9, 0.85);
+        border: 2px solid #3f3f46;
+        border-radius: 0.5rem;
       }
       body.theme-akatsuki .themed-card:hover {
-        border-color: #DC2626;
-        box-shadow: 0 10px 15px -3px rgba(220, 38, 38, 0.3), 0 4px 6px -2px rgba(220, 38, 38, 0.2);
+        box-shadow: 0 0 20px rgba(239, 68, 68, 0.6);
+        border-color: #ef4444;
       }
 
       /* Search Bar Override */
@@ -748,50 +714,51 @@
       body.theme-akatsuki .akatsuki-search-dropdown a:hover { background-color: rgba(220, 38, 38, 0.3) !important; }
       body.theme-akatsuki .akatsuki-search-dropdown h4 { color: #fca5a5; }
       
-      /* === SECRET CODE INPUT === */
+      /* === SECRET CODE INPUT (Ancient Scroll Theme) === */
       .secret-code-modal-bg {
-        position: absolute;
-        inset: 0;
-        background: rgba(10, 5, 15, 0.8);
-        backdrop-filter: blur(8px);
-        z-index: 10;
+        position: fixed; inset: 0;
+        background: rgba(0, 0, 0, 0.85);
+        backdrop-filter: blur(5px);
+        z-index: 100;
         animation: cinematic-fade-in 0.3s ease-out;
       }
       .secret-code-container {
         position: relative;
-        background: linear-gradient(145deg, #1f102b, #110818);
-        border: 2px solid #4a044e;
+        background-color: rgba(12, 10, 9, 0.95);
+        border: 2px solid #450a0a;
         border-radius: 1rem;
         padding: 2rem;
-        box-shadow: 0 0 30px rgba(126, 34, 206, 0.5);
+        box-shadow: 0 0 40px rgba(220, 38, 38, 0.4);
         animation: cinematic-fade-in 0.5s 0.1s ease-out backwards;
       }
       .secret-code-display {
-        background: #0c0313;
-        border: 2px solid #581c87;
+        background: #000;
+        border: 2px solid #7f1d1d;
         border-radius: 0.5rem;
         padding: 1rem;
         text-align: center;
-        font-size: 2.5rem;
+        font-size: 2rem;
         font-family: 'Cairo', monospace;
-        letter-spacing: 0.5em;
-        color: #c084fc;
-        height: 70px; /* Fixed height */
+        letter-spacing: 0.2em;
+        color: #fca5a5;
+        height: 70px;
         margin-bottom: 1.5rem;
-        box-shadow: inset 0 0 10px rgba(168, 85, 247, 0.5);
+        box-shadow: inset 0 0 10px rgba(239, 68, 68, 0.5);
+        text-shadow: 0 0 5px rgba(239, 68, 68, 0.7);
+        transition: all 0.3s ease;
       }
       .secret-code-keypad {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        gap: 1rem;
+        gap: 0.75rem;
       }
       .keypad-button {
-        background: linear-gradient(145deg, #2a0e4a, #1e0a36);
-        border: 1px solid #4a044e;
+        background: linear-gradient(145deg, #27272a, #18181b);
+        border: 1px solid #3f3f46;
         border-radius: 0.5rem;
         font-size: 1.75rem;
         font-weight: bold;
-        color: #e9d5ff;
+        color: #d4d4d8;
         height: 60px;
         display: flex;
         align-items: center;
@@ -800,19 +767,30 @@
         transition: all 0.2s ease;
         box-shadow: 0 4px 6px rgba(0,0,0,0.4);
       }
-      .keypad-button:hover {
-        background: #4a044e;
-        border-color: #a855f7;
+      .keypad-button:hover:not(:disabled) {
+        background: #450a0a;
+        border-color: #ef4444;
         transform: translateY(-2px);
-        box-shadow: 0 0 15px rgba(168, 85, 247, 0.6), 0 6px 10px rgba(0,0,0,0.3);
+        box-shadow: 0 0 15px rgba(239, 68, 68, 0.6), 0 6px 10px rgba(0,0,0,0.3);
+        color: #fecaca;
+      }
+       .keypad-button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
       }
 
       /* Animations for code status */
       @keyframes secret-code-success-anim {
-          50% { box-shadow: 0 0 20px #22c55e, 0 0 10px #22c55e inset; border-color: #4ade80; }
+          50% { 
+            box-shadow: 0 0 20px #22c55e, inset 0 0 10px #22c55e;
+            border-color: #4ade80;
+            text-shadow: 0 0 8px #4ade80;
+         }
       }
       .secret-code-success .secret-code-display {
         animation: secret-code-success-anim 1s ease-in-out;
+        color: #bbf7d0;
+        border-color: #22c55e;
       }
 
       @keyframes secret-code-failure-anim {
@@ -1030,14 +1008,16 @@
         justify-content: center;
         padding: 1rem;
         animation: cinematic-fade-in 0.5s ease-out;
+        overflow: hidden;
       }
+
       .scroll-view-content {
         position: relative;
         width: 100%;
         max-width: 900px;
         height: 90vh;
         max-height: 700px;
-        background: #f3e9d2;
+        background: #f3e9d2; /* Default scroll color */
         color: #4a2e2e;
         border: 8px solid;
         border-image: linear-gradient(to bottom, #6b4f4f, #a9876a) 1;
@@ -1046,7 +1026,28 @@
         animation: scroll-unfurl 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         display: flex;
         overflow: hidden;
+        z-index: 1;
+        transition: background-color 0.4s ease;
       }
+      
+      /* Detail View Theming */
+      .scroll-view-content.theme-characters { background-color: #fde8e8; } /* Light Red */
+      .scroll-view-content.theme-arcs { background-color: #e0f2fe; } /* Light Blue */
+      .scroll-view-content.theme-eyes { background-color: #f3e8ff; } /* Light Purple */
+      .scroll-view-content.theme-clans { background-color: #f1f5f9; } /* Light Gray */
+
+      body.theme-akatsuki .scroll-view-content {
+          background-color: #270a0a;
+          color: #fecaca;
+          border-image: linear-gradient(to bottom, #7f1d1d, #b91c1c) 1;
+      }
+       body.theme-akatsuki .scroll-view-content h1 { color: #fca5a5; }
+       body.theme-akatsuki .scroll-view-content blockquote { border-color: #ef4444; color: #fecaca; }
+       body.theme-akatsuki .scroll-view-content .scroll-ink-divider { background: linear-gradient(to right, transparent, #b91c1c, transparent); }
+       body.theme-akatsuki .scroll-view-content .list-disc li { color: #fecaca; }
+       body.theme-akatsuki .scroll-view-content .px-3.py-1 { background-color: rgba(239, 68, 68, 0.2); color: #fca5a5; }
+       body.theme-akatsuki .scroll-view-content .w-full.bg-black\/10 { background: rgba(0,0,0,0.3); }
+
 
       .scroll-view-content-inner {
         padding: 2rem 2.5rem;
@@ -1057,6 +1058,8 @@
       .scroll-view-content-inner::-webkit-scrollbar { width: 12px; }
       .scroll-view-content-inner::-webkit-scrollbar-track { background: #d1c4a8; }
       .scroll-view-content-inner::-webkit-scrollbar-thumb { background: #8a6d4e; border-radius: 10px; border: 3px solid #d1c4a8; }
+       body.theme-akatsuki .scroll-view-content-inner::-webkit-scrollbar-track { background: #111; }
+       body.theme-akatsuki .scroll-view-content-inner::-webkit-scrollbar-thumb { background: #ef4444; border-color: #111; }
 
       .scroll-ink-divider {
         width: 50%;

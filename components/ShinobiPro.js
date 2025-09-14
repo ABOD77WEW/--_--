@@ -215,13 +215,14 @@ const QuizModal = ({ onComplete }) => {
         ),
         isCodeInputOpen && React.createElement(SecretCodeModal, { onClose: () => setIsCodeInputOpen(false), onSubmit: handleCodeSubmit }),
         React.createElement('div', { className: "w-full max-w-4xl mx-auto flex flex-col flex-grow relative" },
-            React.createElement('div', { className: "w-full max-w-lg mx-auto my-4" },
-                React.createElement('div', { className: "flex justify-between items-center mb-2 px-2" },
-                    React.createElement('button', { onClick: handleUseHint, disabled: hintsRemaining === 0 || showHint, className: "quiz-hint-button", title: "استخدام تلميح" },
-                        React.createElement(SageWisdomIcon, { className: "w-6 h-6" }),
-                        React.createElement('span', { className: "font-semibold" }, "تلميح"),
-                        React.createElement('span', { className: "hint-counter" }, hintsRemaining)
-                    ),
+             React.createElement('div', {className: "quiz-hint-container"},
+                React.createElement('button', { onClick: handleUseHint, disabled: hintsRemaining === 0 || showHint, className: "quiz-hint-button-bold", title: "استخدام تلميح" },
+                    React.createElement(SageWisdomIcon, { className: "w-10 h-10" }),
+                    React.createElement('span', { className: "hint-counter" }, hintsRemaining)
+                )
+            ),
+            React.createElement('div', { className: "w-full max-w-lg mx-auto" },
+                 React.createElement('div', { className: "flex justify-between items-center mb-2 px-2 pt-2" },
                     React.createElement('div', { className: "text-sm font-bold text-gray-300" },
                         React.createElement('span', null, `السؤال ${currentIndex + 1} / ${questions.length}`)
                     )
@@ -290,15 +291,18 @@ const SixPathsAwakeningScene = ({ onComplete }) => {
     useEffect(() => {
         if (timeoutRef.current) clearTimeout(timeoutRef.current);
 
-        const speedBoost = capturedWisps.size * 400; // 400ms boost per wisp
         let nextStage = null;
         let delay = 0;
 
         switch (stage) {
             case 'void':      delay = 1500; nextStage = 'gathering'; break;
-            case 'gathering': delay = 2500 - speedBoost; nextStage = 'unveiling'; break;
-            case 'unveiling': delay = 4000 - speedBoost; nextStage = 'ascension'; break;
-            case 'ascension': delay = 1500 - (speedBoost / 2); nextStage = 'aftermath'; break;
+            case 'gathering': 
+                if (capturedWisps.size === chakraWisps.length) {
+                    delay = 500; nextStage = 'unveiling';
+                }
+                break;
+            case 'unveiling': delay = 4000; nextStage = 'ascension'; break;
+            case 'ascension': delay = 2500; nextStage = 'aftermath'; break;
             case 'aftermath': delay = 3000; nextStage = 'complete'; break;
         }
 
@@ -310,7 +314,7 @@ const SixPathsAwakeningScene = ({ onComplete }) => {
                 } else {
                     setStage(nextStage);
                 }
-            }, Math.max(200, delay));
+            }, delay);
         }
 
         return () => {
@@ -324,24 +328,23 @@ const SixPathsAwakeningScene = ({ onComplete }) => {
     };
   
     return React.createElement('div', { className: "awakening-scene-bg" },
-        React.createElement('div', { className: `awakening-container` },
-            stage === 'void' && React.createElement('div', { className: "truth-seeking-orb" }),
-            stage === 'gathering' && React.createElement(React.Fragment, null,
-                React.createElement('div', { className: "truth-seeking-orb" }),
-                chakraWisps.map(wisp => React.createElement('div', { 
-                    key: wisp.angle, 
-                    className: `chakra-wisp interactive ${capturedWisps.has(wisp.angle) ? 'captured' : ''}`,
-                    onClick: () => handleWispClick(wisp.angle),
-                    style: { '--wisp-color': wisp.color, '--angle': `${wisp.angle}deg`, animationDelay: `${wisp.delay}s` } 
-                }))
-            ),
-            stage === 'unveiling' && React.createElement('div', { className: "awakening-rinnegan-container", style: { animationDelay: '0s' } },
+        React.createElement('div', { className: "awakening-container" },
+            (stage === 'void' || stage === 'gathering') && React.createElement('div', { className: "truth-seeking-orb" }),
+            
+            stage === 'gathering' && chakraWisps.map(wisp => React.createElement('div', {
+                key: wisp.angle,
+                className: `chakra-wisp ${capturedWisps.has(wisp.angle) ? 'captured' : ''}`,
+                onClick: () => handleWispClick(wisp.angle),
+                style: { '--wisp-color': wisp.color, '--angle': `${wisp.angle}deg`, animationDelay: `${wisp.delay}s` }
+            })),
+            
+            (stage === 'unveiling' || stage === 'ascension') && React.createElement(
+                'div',
+                { className: "awakening-rinnegan-container", style: { animationDelay: stage === 'unveiling' ? '0s' : 'none' } },
                 React.createElement(RinneganIcon, { className: "awakening-rinnegan" })
             ),
+            
             stage === 'ascension' && React.createElement(React.Fragment, null,
-                React.createElement('div', { className: "awakening-rinnegan-container" },
-                    React.createElement(RinneganIcon, { className: "awakening-rinnegan" })
-                ),
                 React.createElement('div', { className: "shakujo-staff" }),
                 React.createElement('div', { className: "truth-seeking-orbs-container" },
                     [...Array(6)].map((_, i) => {
@@ -349,22 +352,25 @@ const SixPathsAwakeningScene = ({ onComplete }) => {
                         const radius = 40; // Percentage
                         const x = radius * Math.cos(angle * Math.PI / 180);
                         const y = radius * Math.sin(angle * Math.PI / 180);
-                        return React.createElement('div', { 
-                            key: i, 
+                        return React.createElement('div', {
+                            key: i,
                             className: "awakening-orb",
-                            style: {'--transform-end': `translate(${x}%, ${y}%)`, animationDelay: `${6 + i*0.1}s`}
+                            style: { '--transform-end': `translate(${x}%, ${y}%)`, animationDelay: `${1 + i * 0.1}s` }
                         });
                     })
                 )
-             )
+            )
         ),
-        stage === 'ascension' && React.createElement('div', { className: "ascension-flash", style:{animationDelay: '1.5s'}}),
+
+        stage === 'ascension' && React.createElement('div', { className: "ascension-flash", style: { animationDelay: '1.5s' } }),
+
         stage === 'aftermath' && React.createElement('div', { className: "awakening-aftermath" },
             React.createElement('div', { className: "awakening-text" },
                 React.createElement('h2', { className: "font-cairo text-4xl sm:text-5xl font-black" }, "لقد بلغت حكمة المسارات الستة"),
                 React.createElement('p', { className: "font-tajawal text-lg text-amber-600 mt-2" }, "عالم الشينوبي الحقيقي ينكشف أمامك.")
             )
         ),
+
         stage === 'gathering' && React.createElement('div', { className: "awakening-prompt" }, "انقر على خيوط التشاكرا لجمعها!")
     );
 };

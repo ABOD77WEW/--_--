@@ -66,6 +66,7 @@ const ComparisonButton = ({ onClick }) => {
 
 const CharacterCard = ({ character, onCompare, isPro }) => {
   const { openDetailView } = useShinobiPro();
+  
   return React.createElement(
     'div',
     {

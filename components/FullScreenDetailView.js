@@ -188,13 +188,15 @@ const FullScreenDetailView = () => {
             default: return React.createElement('div', null, 'تفاصيل غير معروفة');
         }
     }
+    
+    const themeClass = `theme-${category}`;
 
     return React.createElement(
         'div',
         { className: "scroll-view-container", onClick: closeDetailView },
         React.createElement(
             'div',
-            { className: "scroll-view-content", onClick: (e) => e.stopPropagation() },
+            { className: `scroll-view-content ${themeClass}`, onClick: (e) => e.stopPropagation() },
             React.createElement(DetailViewExitButton, { onClick: closeDetailView }),
             React.createElement(
                 'div',

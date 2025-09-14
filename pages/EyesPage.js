@@ -27,6 +27,7 @@ const FavoriteButton = ({ item, category, className }) => {
 const EyeCard = ({ eye }) => {
   const { openDetailView } = useShinobiPro();
   const SvgIcon = eye.svg;
+  
   return React.createElement(
     'div',
     {

@@ -26,6 +26,7 @@ const FavoriteButton = ({ item, category, className }) => {
 
 const ArcCard = ({ arc }) => {
   const { openDetailView } = useShinobiPro();
+  
   return React.createElement(
     'div',
     {

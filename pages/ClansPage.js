@@ -27,6 +27,7 @@ const FavoriteButton = ({ item, category, className }) => {
 const ClanCard = ({ clan }) => {
   const { openDetailView } = useShinobiPro();
   const Symbol = clan.symbol;
+
   return React.createElement(
     'div',
     {
