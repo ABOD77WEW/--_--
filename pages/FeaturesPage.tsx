@@ -3,12 +3,17 @@ import React, { useEffect } from 'react';
 // FIX: Switched from require to a standard ES module import for react-router-dom to fix module resolution error.
 import { useNavigate, Link } from 'react-router-dom';
 import { useShinobiPro } from '../hooks/useShinobiPro.ts';
-import ForbiddenScrollIcon from '../components/icons/ForbiddenScrollIcon.tsx';
-import { ScaleIcon, SwatchIcon, PencilSquareIcon, SpeakerWaveIcon } from '@heroicons/react/24/solid';
+import { ScaleIcon, SwatchIcon, PencilSquareIcon, SpeakerWaveIcon, KeyIcon } from '@heroicons/react/24/solid';
+
+const proThemes = [
+    { id: 'theme-akatsuki', name: 'الأكاتسوكي', class: 'preview-akatsuki', description: 'انغمس في ظلام الأكاتسوكي مع هذا المظهر الأيقوني.' },
+    { id: 'theme-war', name: 'حرب الشينوبي', class: 'preview-war', description: 'استشعر حرارة المعركة مع خلفية صحراوية مليئة بالغبار.' },
+    { id: 'theme-mist', name: 'قرية الضباب', class: 'preview-mist', description: 'أحِط نفسك بالغموض مع أجواء الضباب والمطر الخفيف.' },
+];
 
 
 const FeaturesPage = () => {
-  const { isPro } = useShinobiPro();
+  const { isPro, setBackgroundTheme } = useShinobiPro();
   // FIX: Property 'useNavigate' does not exist on type 'typeof import...'.
   const navigate = useNavigate();
 
@@ -23,49 +28,88 @@ const FeaturesPage = () => {
   }
 
   return (
-    <div className="text-center flex flex-col items-center justify-center min-h-[calc(100vh-10rem)] -mt-16">
-        <div className="relative mb-6">
-          <ForbiddenScrollIcon className="w-24 h-24 text-amber-400" style={{filter: 'drop-shadow(0 0 15px #fbbF24)'}} />
+    <div className="flex flex-col items-center justify-start min-h-[calc(100vh-10rem)] w-full">
+        <div className="features-hero w-full max-w-4xl text-center">
+            <KeyIcon className="w-24 h-24 mx-auto text-amber-400" style={{filter: 'drop-shadow(0 0 15px #fbbF24)', transform: 'rotate(-45deg)'}} />
+            <h1 className="font-cairo text-5xl md:text-6xl font-black text-transparent bg-clip-text 
+                           bg-gradient-to-br from-amber-300 to-orange-500 mt-4 mb-2">
+                مخطوطات النخبة
+            </h1>
+            <p className="font-tajawal text-lg md:text-xl text-gray-300 max-w-2xl mx-auto">
+                لقد أثبتّ جدارتك. هذه الأدوات والتحليلات الحصرية تحت إمرتك الآن.
+            </p>
         </div>
-        <h1 className="font-cairo text-5xl md:text-6xl font-black text-transparent bg-clip-text 
-                           bg-gradient-to-br from-amber-300 to-orange-500 mb-4">
-            مخطوطات المعرفة السرية
-        </h1>
-        <p className="font-tajawal text-lg md:text-xl text-gray-300 max-w-2xl mx-auto mt-2 mb-8">
-            بصفتك عضو "برو"، هذه الأدوات والتحليلات الحصرية تحت إمرتك الآن.
-        </p>
-        <div className="w-full max-w-4xl space-y-6">
-            {/* FIX: Property 'Link' does not exist on type 'typeof import...'. */}
-            <Link to="/battle" state={{ from: "features" }} className="block">
-                <div className="bg-[#1A1A1A]/70 border border-[#2D3748] rounded-lg p-6 backdrop-blur-sm text-right transform transition hover:border-green-400/50 hover:shadow-xl hover:shadow-green-500/20">
-                    <h3 className="font-cairo text-2xl font-bold text-green-400 mb-2 flex items-center justify-end gap-3">
-                        مقارنة الشخصيات
-                        <ScaleIcon className="w-7 h-7" />
-                    </h3>
-                    <p className="text-gray-400">خاصية حصرية تتيح لك وضع أي شينوبي ضد آخر في مواجهة ملحمية. حلل إحصائياتهم، قدراتهم، واحسم الجدل حول من هو الأقوى.</p>
+
+        <div className="w-full max-w-5xl space-y-8">
+            
+            {/* Exclusive Themes Section */}
+            {/* FIX: Cast style object to React.CSSProperties to allow for CSS custom properties. */}
+            <div className="feature-card-pro" style={{ '--hover-color': '#c084fc' } as React.CSSProperties}>
+                <div className="feature-content text-right">
+                    <div className="flex items-center justify-end gap-3 mb-4">
+                        <h3 className="font-cairo text-3xl font-bold text-purple-300">
+                           الخلفيات الحصرية
+                        </h3>
+                         <SwatchIcon className="w-8 h-8" />
+                    </div>
+                    <p className="text-gray-400 mb-6">غيّر أجواء الموسوعة بالكامل. اختر من بين هذه الخلفيات المصممة خصيصًا لأعضاء برو. انقر للتجربة.</p>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        {proThemes.map(theme => (
+                            <button key={theme.id} onClick={() => setBackgroundTheme(theme.id)} className="text-right transition-transform hover:scale-105 p-2 rounded-lg hover:bg-white/5">
+                                <div className={`feature-theme-preview ${theme.class}`}>
+                                     <div className="pro-badge">PRO</div>
+                                </div>
+                                <h4 className="font-cairo font-bold text-lg">{theme.name}</h4>
+                                <p className="text-sm text-gray-500">{theme.description}</p>
+                            </button>
+                        ))}
+                    </div>
+                </div>
+            </div>
+
+            {/* Battle Comparison Card */}
+            <Link to="/battle" state={{ from: "features" }}>
+                {/* FIX: Cast style object to React.CSSProperties to allow for CSS custom properties. */}
+                <div className="feature-card-pro" style={{ '--hover-color': '#22c55e' } as React.CSSProperties}>
+                    <div className="feature-content text-right">
+                        <div className="flex items-center justify-end gap-3">
+                            <h3 className="font-cairo text-3xl font-bold text-green-400">
+                                ساحة المعركة
+                            </h3>
+                            <ScaleIcon className="w-8 h-8" />
+                        </div>
+                        <p className="text-gray-400 mt-2">ضع أي شينوبي ضد آخر في مواجهة ملحمية. حلل إحصائياتهم، قدراتهم، واحسم الجدل حول من هو الأقوى.</p>
+                    </div>
                 </div>
             </Link>
-             <div className="bg-[#1A1A1A]/70 border border-[#2D3748] rounded-lg p-6 backdrop-blur-sm text-right transform transition hover:border-red-400/50 hover:shadow-xl hover:shadow-red-500/20">
-                <h3 className="font-cairo text-2xl font-bold text-red-400 mb-2 flex items-center justify-end gap-3">
-                   مظهر الأكاتسوكي
-                   <SwatchIcon className="w-7 h-7" />
-                </h3>
-                <p className="text-gray-400">اغمر نفسك في ظلام الأكاتسوكي. قم بتفعيل المظهر الحصري الذي يغير شكل الموسوعة بالكامل إلى طابع السحابة الحمراء الأيقوني.</p>
-            </div>
-             <div className="bg-[#1A1A1A]/70 border border-[#2D3748] rounded-lg p-6 backdrop-blur-sm text-right transform transition hover:border-blue-400/50 hover:shadow-xl hover:shadow-blue-500/20 opacity-70">
-                <h3 className="font-cairo text-2xl font-bold text-blue-400 mb-2 flex items-center justify-end gap-3">
-                   منشئ الجتسو <span className="text-xs bg-blue-900/80 text-blue-300 px-2 py-0.5 rounded-full">قريباً</span>
-                   <PencilSquareIcon className="w-7 h-7" />
-                </h3>
-                <p className="text-gray-400">أطلق العنان لإبداعك. صمم تقنيات النينجا الخاصة بك، حدد طبيعة التشاكرا، الرتبة، والتأثيرات.</p>
-            </div>
-             <div className="bg-[#1A1A1A]/70 border border-[#2D3748] rounded-lg p-6 backdrop-blur-sm text-right transform transition hover:border-indigo-400/50 hover:shadow-xl hover:shadow-indigo-500/20 opacity-70">
-                <h3 className="font-cairo text-2xl font-bold text-indigo-400 mb-2 flex items-center justify-end gap-3">
-                   لوحة أصوات الشينوبي <span className="text-xs bg-indigo-900/80 text-indigo-300 px-2 py-0.5 rounded-full">قريباً</span>
-                   <SpeakerWaveIcon className="w-7 h-7" />
-                </h3>
-                <p className="text-gray-400">استمع إلى أشهر صرخات المعارك، أصوات التقنيات، والاقتباسات الأيقونية من شخصياتك المفضلة.</p>
-            </div>
+
+            {/* Coming Soon Section */}
+             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {/* FIX: Cast style object to React.CSSProperties to allow for CSS custom properties. */}
+                <div className="feature-card-pro opacity-60 cursor-not-allowed" style={{ '--hover-color': '#3b82f6' } as React.CSSProperties}>
+                     <div className="feature-content text-right">
+                        <div className="flex items-center justify-end gap-3">
+                            <h3 className="font-cairo text-2xl font-bold text-blue-400">
+                                منشئ الجتسو
+                            </h3>
+                            <PencilSquareIcon className="w-7 h-7" />
+                        </div>
+                        <p className="text-gray-500 mt-2">قريباً: أطلق العنان لإبداعك وصمم تقنيات النينجا الخاصة بك.</p>
+                    </div>
+                </div>
+                {/* FIX: Cast style object to React.CSSProperties to allow for CSS custom properties. */}
+                <div className="feature-card-pro opacity-60 cursor-not-allowed" style={{ '--hover-color': '#8b5cf6' } as React.CSSProperties}>
+                     <div className="feature-content text-right">
+                        <div className="flex items-center justify-end gap-3">
+                            <h3 className="font-cairo text-2xl font-bold text-indigo-400">
+                                لوحة الأصوات
+                            </h3>
+                            <SpeakerWaveIcon className="w-7 h-7" />
+                        </div>
+                        <p className="text-gray-500 mt-2">قريباً: استمع للاقتباسات وأصوات التقنيات الأيقونية.</p>
+                    </div>
+                </div>
+             </div>
         </div>
     </div>
   );

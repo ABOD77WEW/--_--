@@ -374,7 +374,7 @@ const SixPathsAwakeningScene = ({ onComplete }) => {
 };
 
 const ShinobiPro = () => {
-    const { isPro, activatePro, isActivating, setIsActivating, isAkatsukiTheme, toggleAkatsukiTheme } = useShinobiPro();
+    const { isPro, activatePro, isActivating, setIsActivating } = useShinobiPro();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const navigate = ReactRouterDOM.useNavigate();
     const location = ReactRouterDOM.useLocation();
@@ -409,25 +409,13 @@ const ShinobiPro = () => {
     return React.createElement(
         React.Fragment, null,
         showButtons && React.createElement(
-            React.Fragment, null,
-            React.createElement('div', { className: `fixed top-4 left-4 z-50` },
-                React.createElement('button', {
-                    onClick: () => (isPro ? navigate('/pro') : setIsModalOpen(true)),
-                    className: `group flex items-center gap-4 p-2 pr-5 rounded-full border-2 backdrop-blur-sm transition-all duration-300 min-w-[260px] justify-start ${isPro ? 'pro-button-unreal shadow-[0_0_15px_#a855f7]' : 'pro-button-dormant'}`,
-                    title: isPro ? "عرض مزايا برو" : "فعّل شينوبي برو"
-                },
-                React.createElement('div', { className: "pro-button-content flex items-center gap-3" }, ProButtonContent)
-                )
-            ),
-            isPro && React.createElement('div', { className: `fixed bottom-4 left-4 z-50` },
-                React.createElement('button', { 
-                    onClick: toggleAkatsukiTheme, 
-                    title: "تفعيل مظهر الأكاتسوكي", 
-                    className: `group w-16 h-16 flex items-center justify-center rounded-full border-2 backdrop-blur-sm transition-all duration-300 pro-button-akatsuki shadow-[0_0_15px_#ef4444]`,
-                    "aria-pressed": isAkatsukiTheme
-                },
-                React.createElement(AkatsukiThemeIcon, { className: `w-12 h-12 pro-button-akatsuki-icon ${isAkatsukiTheme ? 'active' : ''}` })
-                )
+            'div', { className: `fixed top-4 left-4 z-50` },
+            React.createElement('button', {
+                onClick: () => (isPro ? navigate('/pro') : setIsModalOpen(true)),
+                className: `group flex items-center gap-4 p-2 pr-5 rounded-full border-2 backdrop-blur-sm transition-all duration-300 min-w-[260px] justify-start ${isPro ? 'pro-button-unreal shadow-[0_0_15px_#a855f7]' : 'pro-button-dormant'}`,
+                title: isPro ? "عرض مزايا برو" : "فعّل شينوبي برو"
+            },
+            React.createElement('div', { className: "pro-button-content flex items-center gap-3" }, ProButtonContent)
             )
         ),
         isModalOpen && React.createElement(QuizModal, { onComplete: handleCompleteQuiz }),

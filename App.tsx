@@ -18,6 +18,7 @@ import TimelinePage from './pages/TimelinePage.tsx';
 import ShinobiPro from './components/ShinobiPro.tsx';
 import Footer from './components/Footer.tsx';
 import FullScreenDetailView from './components/FullScreenDetailView.tsx';
+import SettingsMenu from './components/SettingsMenu.tsx';
 
 import { FavoritesProvider } from './hooks/useFavorites.ts';
 import { useShinobiPro, ShinobiProProvider } from './hooks/useShinobiPro.ts';
@@ -46,7 +47,7 @@ const PageWrapper = ({ children }) => {
 
 
 const ThemedAppLayout = () => {
-    const { isAkatsukiTheme } = useShinobiPro();
+    const { backgroundTheme } = useShinobiPro();
     // FIX: Property 'useLocation' does not exist on type 'typeof import...'.
     const location = useLocation();
     
@@ -55,16 +56,11 @@ const ThemedAppLayout = () => {
         root.classList.add('dark');
         root.classList.remove('light');
 
-        if(isAkatsukiTheme) {
-            document.body.classList.add('theme-akatsuki');
-        } else {
-            document.body.classList.remove('theme-akatsuki');
-        }
-
-        return () => {
-            document.body.classList.remove('theme-akatsuki');
-        }
-    }, [isAkatsukiTheme]);
+        const themes = ['theme-akatsuki', 'theme-default', 'theme-midnight', 'theme-forest', 'theme-ocean', 'theme-sunset', 'theme-sakura', 'theme-war', 'theme-mist'];
+        document.body.classList.remove(...themes);
+        document.body.classList.add(backgroundTheme);
+        
+    }, [backgroundTheme]);
 
     if(location.pathname === '/timeline') {
         return <TimelinePage />;
@@ -72,6 +68,7 @@ const ThemedAppLayout = () => {
 
     return (
         <>
+            <SettingsMenu />
             <FullScreenDetailView />
             <ShinobiPro />
             <div className="flex flex-row-reverse">

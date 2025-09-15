@@ -14,6 +14,7 @@ import TimelinePage from './pages/TimelinePage.js';
 import ShinobiPro from './components/ShinobiPro.js';
 import Footer from './components/Footer.js';
 import FullScreenDetailView from './components/FullScreenDetailView.js';
+import SettingsMenu from './components/SettingsMenu.js';
 import { FavoritesProvider } from './hooks/useFavorites.js';
 import { useShinobiPro, ShinobiProProvider } from './hooks/useShinobiPro.js';
 
@@ -37,7 +38,7 @@ const PageWrapper = ({ children }) => {
 };
 
 const ThemedAppLayout = () => {
-  const { isAkatsukiTheme } = useShinobiPro();
+  const { backgroundTheme } = useShinobiPro();
   const location = ReactRouterDOM.useLocation();
 
   useEffect(() => {
@@ -45,16 +46,11 @@ const ThemedAppLayout = () => {
     root.classList.add('dark');
     root.classList.remove('light');
 
-    if (isAkatsukiTheme) {
-      document.body.classList.add('theme-akatsuki');
-    } else {
-      document.body.classList.remove('theme-akatsuki');
-    }
+    const themes = ['theme-akatsuki', 'theme-default', 'theme-midnight', 'theme-forest', 'theme-ocean', 'theme-sunset', 'theme-sakura', 'theme-war', 'theme-mist'];
+    document.body.classList.remove(...themes);
+    document.body.classList.add(backgroundTheme);
 
-    return () => {
-      document.body.classList.remove('theme-akatsuki');
-    };
-  }, [isAkatsukiTheme]);
+  }, [backgroundTheme]);
   
   if (location.pathname === '/timeline') {
     return React.createElement(TimelinePage);
@@ -63,6 +59,7 @@ const ThemedAppLayout = () => {
   return React.createElement(
     React.Fragment,
     null,
+    React.createElement(SettingsMenu),
     React.createElement(FullScreenDetailView),
     React.createElement(ShinobiPro),
     React.createElement(
@@ -71,23 +68,23 @@ const ThemedAppLayout = () => {
       React.createElement(Navigation),
       React.createElement(
         'div',
-        { className: `flex-1 transition-all duration-300 md:mr-64 lg:mr-72 flex flex-col` },
+        { className: `flex-1 transition-all duration-300 md:mr-64 lg:mr-72` },
         React.createElement(
-          'div',
-          { className: 'container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 pb-24 md:pb-12 flex-grow' },
-          React.createElement(
-            ReactRouterDOM.Routes,
-            null,
-            React.createElement(ReactRouterDOM.Route, { path: '/', element: React.createElement(PageWrapper, null, React.createElement(HomePage)) }),
-            React.createElement(ReactRouterDOM.Route, { path: '/characters', element: React.createElement(PageWrapper, null, React.createElement(CharactersPage)) }),
-            React.createElement(ReactRouterDOM.Route, { path: '/arcs', element: React.createElement(PageWrapper, null, React.createElement(ArcsPage)) }),
-            React.createElement(ReactRouterDOM.Route, { path: '/eyes', element: React.createElement(PageWrapper, null, React.createElement(EyesPage)) }),
-            React.createElement(ReactRouterDOM.Route, { path: '/clans', element: React.createElement(PageWrapper, null, React.createElement(ClansPage)) }),
-            React.createElement(ReactRouterDOM.Route, { path: '/favorites', element: React.createElement(PageWrapper, null, React.createElement(FavoritesPage)) }),
-            React.createElement(ReactRouterDOM.Route, { path: '/pro', element: React.createElement(PageWrapper, null, React.createElement(ProPage)) }),
-            React.createElement(ReactRouterDOM.Route, { path: '/features', element: React.createElement(PageWrapper, null, React.createElement(FeaturesPage)) }),
-            React.createElement(ReactRouterDOM.Route, { path: '/battle', element: React.createElement(PageWrapper, null, React.createElement(BattlePage)) })
-          )
+            'div',
+            { className: "container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 pb-24 md:pb-12 min-h-screen" },
+            React.createElement(
+                ReactRouterDOM.Routes,
+                null,
+                React.createElement(ReactRouterDOM.Route, { path: '/', element: React.createElement(PageWrapper, null, React.createElement(HomePage)) }),
+                React.createElement(ReactRouterDOM.Route, { path: '/characters', element: React.createElement(PageWrapper, null, React.createElement(CharactersPage)) }),
+                React.createElement(ReactRouterDOM.Route, { path: '/arcs', element: React.createElement(PageWrapper, null, React.createElement(ArcsPage)) }),
+                React.createElement(ReactRouterDOM.Route, { path: '/eyes', element: React.createElement(PageWrapper, null, React.createElement(EyesPage)) }),
+                React.createElement(ReactRouterDOM.Route, { path: '/clans', element: React.createElement(PageWrapper, null, React.createElement(ClansPage)) }),
+                React.createElement(ReactRouterDOM.Route, { path: '/favorites', element: React.createElement(PageWrapper, null, React.createElement(FavoritesPage)) }),
+                React.createElement(ReactRouterDOM.Route, { path: '/pro', element: React.createElement(PageWrapper, null, React.createElement(ProPage)) }),
+                React.createElement(ReactRouterDOM.Route, { path: '/features', element: React.createElement(PageWrapper, null, React.createElement(FeaturesPage)) }),
+                React.createElement(ReactRouterDOM.Route, { path: '/battle', element: React.createElement(PageWrapper, null, React.createElement(BattlePage)) })
+            )
         ),
         React.createElement(Footer)
       )

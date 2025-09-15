@@ -1,11 +1,16 @@
 import React, { useEffect } from 'react';
 import * as ReactRouterDOM from 'react-router-dom';
 import { useShinobiPro } from '../hooks/useShinobiPro.js';
-import ForbiddenScrollIcon from '../components/icons/ForbiddenScrollIcon.js';
-import { ScaleIcon, SwatchIcon, PencilSquareIcon, SpeakerWaveIcon } from '@heroicons/react/24/solid';
+import { ScaleIcon, SwatchIcon, PencilSquareIcon, SpeakerWaveIcon, KeyIcon } from '@heroicons/react/24/solid';
+
+const proThemes = [
+    { id: 'theme-akatsuki', name: 'الأكاتسوكي', class: 'preview-akatsuki', description: 'انغمس في ظلام الأكاتسوكي مع هذا المظهر الأيقوني.' },
+    { id: 'theme-war', name: 'حرب الشينوبي', class: 'preview-war', description: 'استشعر حرارة المعركة مع خلفية صحراوية مليئة بالغبار.' },
+    { id: 'theme-mist', name: 'قرية الضباب', class: 'preview-mist', description: 'أحِط نفسك بالغموض مع أجواء الضباب والمطر الخفيف.' },
+];
 
 const FeaturesPage = () => {
-  const { isPro } = useShinobiPro();
+  const { isPro, setBackgroundTheme } = useShinobiPro();
   const navigate = ReactRouterDOM.useNavigate();
 
   useEffect(() => {
@@ -15,96 +20,86 @@ const FeaturesPage = () => {
   }, [isPro, navigate]);
 
   if (!isPro) {
-    return null; 
+    return null;
   }
-
-  const FeatureCard = ({ to, state, icon: Icon, iconColor, borderColor, shadowColor, title, description, badge }) => React.createElement(
-      ReactRouterDOM.Link,
-      { to: to, state: state, className: "block" },
-      React.createElement(
-          'div',
-          { className: `bg-[#1A1A1A]/70 border border-[#2D3748] rounded-lg p-6 backdrop-blur-sm text-right transform transition ${borderColor} ${shadowColor}` },
-          React.createElement(
-              'h3',
-              { className: `font-cairo text-2xl font-bold ${iconColor} mb-2 flex items-center justify-end gap-3` },
-              title,
-              badge && React.createElement('span', {className: `text-xs ${badge.bg} ${badge.text} px-2 py-0.5 rounded-full`}, "قريباً"),
-              React.createElement(Icon, { className: "w-7 h-7" })
-          ),
-          React.createElement('p', { className: "text-gray-400" }, description)
-      )
-  );
-
-  const StaticFeatureCard = ({ icon: Icon, iconColor, borderColor, shadowColor, title, description, badge }) => React.createElement(
-      'div',
-      { className: `bg-[#1A1A1A]/70 border border-[#2D3748] rounded-lg p-6 backdrop-blur-sm text-right transform transition ${borderColor} ${shadowColor} ${badge ? 'opacity-70' : ''}` },
-      React.createElement(
-          'h3',
-          { className: `font-cairo text-2xl font-bold ${iconColor} mb-2 flex items-center justify-end gap-3` },
-          title,
-          badge && React.createElement('span', {className: `text-xs ${badge.bg} ${badge.text} px-2 py-0.5 rounded-full`}, "قريباً"),
-          React.createElement(Icon, { className: "w-7 h-7" })
-      ),
-      React.createElement('p', { className: "text-gray-400" }, description)
-  );
 
   return React.createElement(
     'div',
-    { className: "text-center flex flex-col items-center justify-center min-h-[calc(100vh-10rem)] -mt-16" },
+    { className: "flex flex-col items-center justify-start min-h-[calc(100vh-10rem)] w-full" },
     React.createElement(
-      'div',
-      { className: "relative mb-6" },
-      React.createElement(ForbiddenScrollIcon, { className: "w-24 h-24 text-amber-400", style: { filter: 'drop-shadow(0 0 15px #fbbF24)' } })
+        'div', { className: "features-hero w-full max-w-4xl text-center" },
+        React.createElement(KeyIcon, { className: "w-24 h-24 mx-auto text-amber-400", style: {filter: 'drop-shadow(0 0 15px #fbbF24)', transform: 'rotate(-45deg)'} }),
+        React.createElement('h1', { className: "font-cairo text-5xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-br from-amber-300 to-orange-500 mt-4 mb-2" }, "مخطوطات النخبة"),
+        React.createElement('p', { className: "font-tajawal text-lg md:text-xl text-gray-300 max-w-2xl mx-auto" }, "لقد أثبتّ جدارتك. هذه الأدوات والتحليلات الحصرية تحت إمرتك الآن.")
     ),
     React.createElement(
-      'h1',
-      { className: "font-cairo text-5xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-br from-amber-300 to-orange-500 mb-4" },
-      "مخطوطات المعرفة السرية"
-    ),
-    React.createElement(
-      'p',
-      { className: "font-tajawal text-lg md:text-xl text-gray-300 max-w-2xl mx-auto mt-2 mb-8" },
-      "بصفتك عضو \"برو\"، هذه الأدوات والتحليلات الحصرية تحت إمرتك الآن."
-    ),
-    React.createElement(
-      'div',
-      { className: "w-full max-w-4xl space-y-6" },
-      React.createElement(FeatureCard, {
-        to: "/battle",
-        state: { from: "features" },
-        icon: ScaleIcon,
-        iconColor: "text-green-400",
-        borderColor: "hover:border-green-400/50",
-        shadowColor: "hover:shadow-xl hover:shadow-green-500/20",
-        title: "مقارنة الشخصيات",
-        description: "خاصية حصرية تتيح لك وضع أي شينوبي ضد آخر في مواجهة ملحمية. حلل إحصائياتهم، قدراتهم، واحسم الجدل حول من هو الأقوى."
-      }),
-      React.createElement(StaticFeatureCard, {
-        icon: SwatchIcon,
-        iconColor: "text-red-400",
-        borderColor: "hover:border-red-400/50",
-        shadowColor: "hover:shadow-xl hover:shadow-red-500/20",
-        title: "مظهر الأكاتسوكي",
-        description: "اغمر نفسك في ظلام الأكاتسوكي. قم بتفعيل المظهر الحصري الذي يغير شكل الموسوعة بالكامل إلى طابع السحابة الحمراء الأيقوني."
-      }),
-      React.createElement(StaticFeatureCard, {
-        icon: PencilSquareIcon,
-        iconColor: "text-blue-400",
-        borderColor: "hover:border-blue-400/50",
-        shadowColor: "hover:shadow-xl hover:shadow-blue-500/20",
-        title: "منشئ الجتسو",
-        description: "أطلق العنان لإبداعك. صمم تقنيات النينجا الخاصة بك، حدد طبيعة التشاكرا، الرتبة، والتأثيرات.",
-        badge: { bg: 'bg-blue-900/80', text: 'text-blue-300' }
-      }),
-      React.createElement(StaticFeatureCard, {
-        icon: SpeakerWaveIcon,
-        iconColor: "text-indigo-400",
-        borderColor: "hover:border-indigo-400/50",
-        shadowColor: "hover:shadow-xl hover:shadow-indigo-500/20",
-        title: "لوحة أصوات الشينوبي",
-        description: "استمع إلى أشهر صرخات المعارك، أصوات التقنيات، والاقتباسات الأيقونية من شخصياتك المفضلة.",
-        badge: { bg: 'bg-indigo-900/80', text: 'text-indigo-300' }
-      })
+        'div', { className: "w-full max-w-5xl space-y-8" },
+        React.createElement(
+            'div', { className: "feature-card-pro", style: { '--hover-color': '#c084fc' } },
+            React.createElement(
+                'div', { className: "feature-content text-right" },
+                React.createElement(
+                    'div', { className: "flex items-center justify-end gap-3 mb-4" },
+                    React.createElement('h3', { className: "font-cairo text-3xl font-bold text-purple-300" }, "الخلفيات الحصرية"),
+                    React.createElement(SwatchIcon, { className: "w-8 h-8" })
+                ),
+                React.createElement('p', { className: "text-gray-400 mb-6" }, "غيّر أجواء الموسوعة بالكامل. اختر من بين هذه الخلفيات المصممة خصيصًا لأعضاء برو. انقر للتجربة."),
+                React.createElement(
+                    'div', { className: "grid grid-cols-1 md:grid-cols-3 gap-4" },
+                    proThemes.map(theme => React.createElement(
+                        'button', { key: theme.id, onClick: () => setBackgroundTheme(theme.id), className: "text-right transition-transform hover:scale-105 p-2 rounded-lg hover:bg-white/5" },
+                        React.createElement(
+                            'div', { className: `feature-theme-preview ${theme.class}` },
+                            React.createElement('div', { className: "pro-badge" }, "PRO")
+                        ),
+                        React.createElement('h4', { className: "font-cairo font-bold text-lg" }, theme.name),
+                        React.createElement('p', { className: "text-sm text-gray-500" }, theme.description)
+                    ))
+                )
+            )
+        ),
+        React.createElement(
+            ReactRouterDOM.Link, { to: "/battle", state: { from: "features" } },
+            React.createElement(
+                'div', { className: "feature-card-pro", style: { '--hover-color': '#22c55e' } },
+                React.createElement(
+                    'div', { className: "feature-content text-right" },
+                    React.createElement(
+                        'div', { className: "flex items-center justify-end gap-3" },
+                        React.createElement('h3', { className: "font-cairo text-3xl font-bold text-green-400" }, "ساحة المعركة"),
+                        React.createElement(ScaleIcon, { className: "w-8 h-8" })
+                    ),
+                    React.createElement('p', { className: "text-gray-400 mt-2" }, "ضع أي شينوبي ضد آخر في مواجهة ملحمية. حلل إحصائياتهم، قدراتهم، واحسم الجدل حول من هو الأقوى.")
+                )
+            )
+        ),
+        React.createElement(
+            'div', { className: "grid grid-cols-1 md:grid-cols-2 gap-8" },
+            React.createElement(
+                'div', { className: "feature-card-pro opacity-60 cursor-not-allowed", style: { '--hover-color': '#3b82f6' } },
+                React.createElement(
+                    'div', { className: "feature-content text-right" },
+                    React.createElement(
+                        'div', { className: "flex items-center justify-end gap-3" },
+                        React.createElement('h3', { className: "font-cairo text-2xl font-bold text-blue-400" }, "منشئ الجتسو"),
+                        React.createElement(PencilSquareIcon, { className: "w-7 h-7" })
+                    ),
+                    React.createElement('p', { className: "text-gray-500 mt-2" }, "قريباً: أطلق العنان لإبداعك وصمم تقنيات النينجا الخاصة بك.")
+                )
+            ),
+            React.createElement(
+                'div', { className: "feature-card-pro opacity-60 cursor-not-allowed", style: { '--hover-color': '#8b5cf6' } },
+                React.createElement(
+                    'div', { className: "feature-content text-right" },
+                    React.createElement(
+                        'div', { className: "flex items-center justify-end gap-3" },
+                        React.createElement('h3', { className: "font-cairo text-2xl font-bold text-indigo-400" }, "لوحة الأصوات"),
+                        React.createElement(SpeakerWaveIcon, { className: "w-7 h-7" })
+                    ),
+                    React.createElement('p', { className: "text-gray-500 mt-2" }, "قريباً: استمع للاقتباسات وأصوات التقنيات الأيقونية.")
+                )
+            )
+        )
     )
   );
 };
