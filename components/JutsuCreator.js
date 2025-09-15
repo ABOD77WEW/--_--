@@ -23,6 +23,13 @@ const JutsuCreator = () => {
         setError(null);
         setResult(null);
 
+        // FIX: Prevent crash on static deployment where process.env is undefined.
+        if (typeof process === 'undefined' || !process.env.API_KEY) {
+            setError("ميزة مبتكر الجتسو غير متاحة. مفتاح API غير مهيأ في بيئة النشر.");
+            setIsLoading(false);
+            return;
+        }
+
         try {
             const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
