@@ -1,7 +1,9 @@
 import React, { useEffect } from 'react';
 import * as ReactRouterDOM from 'react-router-dom';
 import { useShinobiPro } from '../hooks/useShinobiPro.js';
-import { ScaleIcon, SwatchIcon, PencilSquareIcon, SpeakerWaveIcon, KeyIcon } from '@heroicons/react/24/solid';
+import { ScaleIcon, SwatchIcon, KeyIcon, SpeakerWaveIcon } from '@heroicons/react/24/solid';
+import JutsuCreator from '../components/JutsuCreator.js';
+import JutsuCreatorIcon from '../components/icons/JutsuCreatorIcon.js';
 
 const proThemes = [
     { id: 'theme-akatsuki', name: 'الأكاتسوكي', class: 'preview-akatsuki', description: 'انغمس في ظلام الأكاتسوكي مع هذا المظهر الأيقوني.' },
@@ -58,6 +60,19 @@ const FeaturesPage = () => {
                 )
             )
         ),
+         React.createElement(
+            'div', { className: "feature-card-pro", style: { '--hover-color': '#3b82f6' } },
+            React.createElement(
+                'div', { className: "feature-content text-right" },
+                React.createElement(
+                    'div', { className: "flex items-center justify-end gap-3 mb-4" },
+                    React.createElement('h3', { className: "font-cairo text-3xl font-bold text-blue-400" }, "مختبر الجتسو"),
+                    React.createElement(JutsuCreatorIcon, { className: "w-8 h-8" })
+                ),
+                React.createElement('p', { className: "text-gray-400 mb-6" }, "أطلق العنان لإبداعك. صف فكرتك لتقنية نينجا، ودع الذكاء الاصطناعي يحولها إلى حقيقة بتفاصيلها الكاملة."),
+                React.createElement(JutsuCreator)
+            )
+        ),
         React.createElement(
             ReactRouterDOM.Link, { to: "/battle", state: { from: "features" } },
             React.createElement(
@@ -74,30 +89,15 @@ const FeaturesPage = () => {
             )
         ),
         React.createElement(
-            'div', { className: "grid grid-cols-1 md:grid-cols-2 gap-8" },
+            'div', { className: "feature-card-pro opacity-60 cursor-not-allowed", style: { '--hover-color': '#8b5cf6' } },
             React.createElement(
-                'div', { className: "feature-card-pro opacity-60 cursor-not-allowed", style: { '--hover-color': '#3b82f6' } },
+                'div', { className: "feature-content text-right" },
                 React.createElement(
-                    'div', { className: "feature-content text-right" },
-                    React.createElement(
-                        'div', { className: "flex items-center justify-end gap-3" },
-                        React.createElement('h3', { className: "font-cairo text-2xl font-bold text-blue-400" }, "منشئ الجتسو"),
-                        React.createElement(PencilSquareIcon, { className: "w-7 h-7" })
-                    ),
-                    React.createElement('p', { className: "text-gray-500 mt-2" }, "قريباً: أطلق العنان لإبداعك وصمم تقنيات النينجا الخاصة بك.")
-                )
-            ),
-            React.createElement(
-                'div', { className: "feature-card-pro opacity-60 cursor-not-allowed", style: { '--hover-color': '#8b5cf6' } },
-                React.createElement(
-                    'div', { className: "feature-content text-right" },
-                    React.createElement(
-                        'div', { className: "flex items-center justify-end gap-3" },
-                        React.createElement('h3', { className: "font-cairo text-2xl font-bold text-indigo-400" }, "لوحة الأصوات"),
-                        React.createElement(SpeakerWaveIcon, { className: "w-7 h-7" })
-                    ),
-                    React.createElement('p', { className: "text-gray-500 mt-2" }, "قريباً: استمع للاقتباسات وأصوات التقنيات الأيقونية.")
-                )
+                    'div', { className: "flex items-center justify-end gap-3" },
+                    React.createElement('h3', { className: "font-cairo text-2xl font-bold text-indigo-400" }, "لوحة الأصوات"),
+                    React.createElement(SpeakerWaveIcon, { className: "w-7 h-7" })
+                ),
+                React.createElement('p', { className: "text-gray-500 mt-2" }, "قريباً: استمع للاقتباسات وأصوات التقنيات الأيقونية.")
             )
         )
     )

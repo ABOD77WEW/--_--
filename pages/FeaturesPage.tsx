@@ -3,7 +3,10 @@ import React, { useEffect } from 'react';
 // FIX: Switched from require to a standard ES module import for react-router-dom to fix module resolution error.
 import { useNavigate, Link } from 'react-router-dom';
 import { useShinobiPro } from '../hooks/useShinobiPro.ts';
-import { ScaleIcon, SwatchIcon, PencilSquareIcon, SpeakerWaveIcon, KeyIcon } from '@heroicons/react/24/solid';
+import { ScaleIcon, SwatchIcon, KeyIcon, SpeakerWaveIcon } from '@heroicons/react/24/solid';
+import JutsuCreator from '../components/JutsuCreator.tsx';
+import JutsuCreatorIcon from '../components/icons/JutsuCreatorIcon.tsx';
+
 
 const proThemes = [
     { id: 'theme-akatsuki', name: 'الأكاتسوكي', class: 'preview-akatsuki', description: 'انغمس في ظلام الأكاتسوكي مع هذا المظهر الأيقوني.' },
@@ -67,6 +70,20 @@ const FeaturesPage = () => {
                 </div>
             </div>
 
+             {/* Jutsu Creator Section */}
+            <div className="feature-card-pro" style={{ '--hover-color': '#3b82f6' } as React.CSSProperties}>
+                <div className="feature-content text-right">
+                    <div className="flex items-center justify-end gap-3 mb-4">
+                        <h3 className="font-cairo text-3xl font-bold text-blue-400">
+                           مختبر الجتسو
+                        </h3>
+                        <JutsuCreatorIcon className="w-8 h-8" />
+                    </div>
+                    <p className="text-gray-400 mb-6">أطلق العنان لإبداعك. صف فكرتك لتقنية نينجا، ودع الذكاء الاصطناعي يحولها إلى حقيقة بتفاصيلها الكاملة.</p>
+                    <JutsuCreator />
+                </div>
+            </div>
+
             {/* Battle Comparison Card */}
             <Link to="/battle" state={{ from: "features" }}>
                 {/* FIX: Cast style object to React.CSSProperties to allow for CSS custom properties. */}
@@ -84,32 +101,17 @@ const FeaturesPage = () => {
             </Link>
 
             {/* Coming Soon Section */}
-             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {/* FIX: Cast style object to React.CSSProperties to allow for CSS custom properties. */}
-                <div className="feature-card-pro opacity-60 cursor-not-allowed" style={{ '--hover-color': '#3b82f6' } as React.CSSProperties}>
-                     <div className="feature-content text-right">
-                        <div className="flex items-center justify-end gap-3">
-                            <h3 className="font-cairo text-2xl font-bold text-blue-400">
-                                منشئ الجتسو
-                            </h3>
-                            <PencilSquareIcon className="w-7 h-7" />
-                        </div>
-                        <p className="text-gray-500 mt-2">قريباً: أطلق العنان لإبداعك وصمم تقنيات النينجا الخاصة بك.</p>
+             <div className="feature-card-pro opacity-60 cursor-not-allowed" style={{ '--hover-color': '#8b5cf6' } as React.CSSProperties}>
+                 <div className="feature-content text-right">
+                    <div className="flex items-center justify-end gap-3">
+                        <h3 className="font-cairo text-2xl font-bold text-indigo-400">
+                            لوحة الأصوات
+                        </h3>
+                        <SpeakerWaveIcon className="w-7 h-7" />
                     </div>
+                    <p className="text-gray-500 mt-2">قريباً: استمع للاقتباسات وأصوات التقنيات الأيقونية.</p>
                 </div>
-                {/* FIX: Cast style object to React.CSSProperties to allow for CSS custom properties. */}
-                <div className="feature-card-pro opacity-60 cursor-not-allowed" style={{ '--hover-color': '#8b5cf6' } as React.CSSProperties}>
-                     <div className="feature-content text-right">
-                        <div className="flex items-center justify-end gap-3">
-                            <h3 className="font-cairo text-2xl font-bold text-indigo-400">
-                                لوحة الأصوات
-                            </h3>
-                            <SpeakerWaveIcon className="w-7 h-7" />
-                        </div>
-                        <p className="text-gray-500 mt-2">قريباً: استمع للاقتباسات وأصوات التقنيات الأيقونية.</p>
-                    </div>
-                </div>
-             </div>
+            </div>
         </div>
     </div>
   );

@@ -174,7 +174,6 @@
         background-blend-mode: normal, normal, overlay, normal;
         animation: war-sky-shift 30s ease-in-out infinite;
         position: relative;
-        overflow: hidden;
       }
       body.theme-war::before, body.theme-war::after {
         content: ''; position: fixed; inset: 0; z-index: -1; pointer-events: none;
@@ -1605,6 +1604,202 @@
           margin-bottom: 1rem;
           position: relative;
       }
+
+      /* === JUTSU CREATOR === */
+      .jutsu-form-input {
+        background-color: rgba(0,0,0,0.3);
+        border: 1px solid #4b5563;
+        border-radius: 0.5rem;
+        padding: 0.75rem 1rem;
+        width: 100%;
+        color: #e2e8f0;
+        transition: border-color 0.2s, box-shadow 0.2s;
+      }
+      .jutsu-form-input:focus {
+        outline: none;
+        border-color: #60a5fa;
+        box-shadow: 0 0 10px rgba(96, 165, 250, 0.4);
+      }
+      .jutsu-generate-button {
+        background: linear-gradient(90deg, #3b82f6, #6366f1);
+        color: white;
+        font-weight: bold;
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.5rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+      }
+      .jutsu-generate-button:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5);
+      }
+      .jutsu-generate-button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+
+      @keyframes chakra-swirl {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+      .jutsu-loader-spinner {
+        animation: chakra-swirl 1.5s linear infinite;
+        color: #60a5fa;
+      }
+      
+      .jutsu-result-scroll {
+        background: #f3e9d2;
+        color: #4a2e2e;
+        border: 4px solid #a9876a;
+        border-image: linear-gradient(to bottom, #6b4f4f, #a9876a) 1;
+        border-radius: 8px;
+        padding: 1.5rem 2rem;
+        margin-top: 2rem;
+        animation: scroll-unfurl 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+      .jutsu-result-scroll h4 {
+        font-family: 'Cairo', sans-serif;
+        font-weight: 900;
+        font-size: 1.25rem;
+        color: #6b4f4f;
+        border-bottom: 2px solid rgba(74, 46, 46, 0.2);
+        padding-bottom: 0.5rem;
+        margin-bottom: 1rem;
+      }
+      .jutsu-result-scroll .hand-seal {
+        background: #e4d8b9;
+        border: 1px solid #c8bdae;
+        border-radius: 0.375rem;
+        padding: 0.25rem 0.5rem;
+        font-family: 'Cairo', sans-serif;
+        font-weight: bold;
+      }
+      
+      /* --- TIMELINE PAGE --- */
+      .timeline-scroll-container {
+          position: fixed;
+          inset: 0;
+          z-index: 55;
+          background: #f3e9d2;
+          overflow: hidden;
+          display: flex;
+          flex-direction: column;
+      }
+       .timeline-exit-button {
+        position: fixed;
+        top: 1.5rem;
+        left: 1.5rem;
+        z-index: 20;
+        width: 3rem;
+        height: 3rem;
+        border-radius: 9999px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #4a2e2e;
+        border: 2px solid #fff;
+        color: #fff;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        cursor: pointer;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      }
+
+      .timeline-exit-button:hover {
+        transform: scale(1.1);
+        background: #6b4f4f;
+      }
+
+      .timeline-map-scroller {
+          flex-grow: 1;
+          overflow-x: scroll;
+          overflow-y: hidden;
+          cursor: grab;
+      }
+      .timeline-map-scroller.active { cursor: grabbing; }
+
+      .timeline-map-content {
+          position: relative;
+      }
+
+      .timeline-path-svg {
+          position: absolute;
+          top: 0;
+          left: 0;
+          pointer-events: none;
+      }
+      .timeline-path-svg path {
+          fill: none;
+          stroke: #8a6d4e;
+          stroke-width: 6px;
+          stroke-linecap: round;
+          stroke-dasharray: 15 10;
+          animation: path-dash 20s linear infinite;
+      }
+       @keyframes path-dash {
+          to { stroke-dashoffset: -1000; }
+      }
+
+      .timeline-scroll-event {
+          position: absolute;
+          width: 96px; /* marker size */
+          height: 96px; /* marker size */
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          opacity: 0;
+          transform: scale(0.8);
+          transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+      }
+       .timeline-scroll-event.is-visible {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      .timeline-event-marker {
+          width: 100%; height: 100%;
+          position: relative;
+          display: flex; align-items: center; justify-content: center;
+          transition: transform 0.3s ease;
+      }
+      .timeline-scroll-event:hover .timeline-event-marker {
+          transform: scale(1.1);
+      }
+
+      .timeline-event-marker .ink-blot {
+          position: absolute;
+          inset: 0;
+          color: #4a2e2e;
+          animation: animate-continuous-rotate 30s linear infinite;
+      }
+       .timeline-event-marker .emoji {
+          position: relative;
+          font-size: 3rem;
+          background: #f3e9d2;
+          padding: 0.5rem;
+          border-radius: 50%;
+      }
+
+       .timeline-event-info {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 250px;
+        padding: 0.75rem;
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(4px);
+        border: 2px solid #a9876a;
+        border-radius: 0.5rem;
+        text-align: center;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        color: #4a2e2e;
+        transition: opacity 0.3s 0.2s;
+        opacity: 0;
+      }
+      .timeline-scroll-event:hover .timeline-event-info {
+          opacity: 1;
+      }
+      .timeline-event-info.bottom { top: 110%; }
+      .timeline-event-info.top { bottom: 110%; }
 
     </style>
   <script type="importmap">
