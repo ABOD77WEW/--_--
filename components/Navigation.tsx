@@ -22,6 +22,8 @@ const bottomNavLinks = [
   { path: '/', name: 'الرئيسية', icon: (props) => <HomeIcon {...props} /> },
   { path: '/characters', name: 'الشخصيات', icon: (props) => <UserGroupIcon {...props} /> },
   { path: '/arcs', name: 'الآركات', icon: (props) => <FilmIcon {...props} /> },
+  { path: '/eyes', name: 'العيون', icon: (props) => <EyeIcon {...props} /> },
+  { path: '/clans', name: 'العشائر', icon: (props) => <FlagIcon {...props} /> },
   { path: '/favorites', name: 'المفضلة', icon: (props) => <StarIcon {...props} /> },
 ];
 
@@ -88,16 +90,16 @@ const Sidebar = () => {
 };
 
 const BottomNav = () => {
-    const { openSettings } = useShinobiPro();
+    const { isPro, openSettings } = useShinobiPro();
 
     const getLinkClasses = ({ isActive }) => {
-        const base = "flex flex-col items-center justify-center w-full pt-2 pb-1 transition-all duration-200";
+        const base = "flex flex-col items-center justify-center flex-shrink-0 w-20 h-full pt-2 pb-1 transition-all duration-200";
         const active = "active";
         const inactive = "hover:text-[#00f5d4]";
         return `${base} ${isActive ? active : inactive}`;
     };
     return(
-        <nav className="bottom-nav-chakra md:hidden fixed bottom-0 left-0 right-0 h-16 shadow-t-lg z-50 flex justify-around border-t">
+        <nav className="bottom-nav-chakra md:hidden fixed bottom-0 left-0 right-0 h-16 shadow-t-lg z-50 flex flex-nowrap overflow-x-auto border-t no-scrollbar">
             {bottomNavLinks.map(link => {
                 const Icon = link.icon;
                  return(
@@ -108,7 +110,16 @@ const BottomNav = () => {
                     </NavLink>
                 )
             })}
-             <button onClick={openSettings} className="flex flex-col items-center justify-center w-full pt-2 pb-1 text-gray-400 hover:text-white transition-colors">
+            {isPro && (() => {
+                const ProIcon = proNavLink.icon;
+                return (
+                    <NavLink to={proNavLink.path} className={({isActive}) => `${getLinkClasses({isActive})} ${!isActive ? 'text-yellow-400 hover:text-yellow-300' : ''}`}>
+                        <ProIcon className="w-6 h-6 mb-1" />
+                        <span className="text-xs font-bold">{proNavLink.name}</span>
+                    </NavLink>
+                )
+            })()}
+             <button onClick={openSettings} className="flex flex-col items-center justify-center flex-shrink-0 w-20 h-full pt-2 pb-1 text-gray-400 hover:text-white transition-colors">
                 <PaintBrushIcon className="w-6 h-6 mb-1" />
                 <span className="text-xs font-medium">الخلفيات</span>
             </button>

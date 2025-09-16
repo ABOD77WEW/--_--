@@ -20,6 +20,8 @@ const bottomNavLinks = [
   { path: '/', name: 'الرئيسية', icon: (props) => React.createElement(HomeIcon, props) },
   { path: '/characters', name: 'الشخصيات', icon: (props) => React.createElement(UserGroupIcon, props) },
   { path: '/arcs', name: 'الآركات', icon: (props) => React.createElement(FilmIcon, props) },
+  { path: '/eyes', name: 'العيون', icon: (props) => React.createElement(EyeIcon, props) },
+  { path: '/clans', name: 'العشائر', icon: (props) => React.createElement(FlagIcon, props) },
   { path: '/favorites', name: 'المفضلة', icon: (props) => React.createElement(StarIcon, props) },
 ];
 
@@ -102,18 +104,18 @@ const Sidebar = () => {
 };
 
 const BottomNav = () => {
-    const { openSettings } = useShinobiPro();
+    const { isPro, openSettings } = useShinobiPro();
 
     const getLinkClasses = ({ isActive }) => {
-        const base = "flex flex-col items-center justify-center w-full pt-2 pb-1 transition-all duration-200";
+        const base = "flex flex-col items-center justify-center flex-shrink-0 w-20 h-full pt-2 pb-1 transition-all duration-200";
         const active = "active";
         const inactive = "hover:text-[#00f5d4]";
         return `${base} ${isActive ? active : inactive}`;
     };
     return React.createElement(
         'nav',
-        { className: "bottom-nav-chakra md:hidden fixed bottom-0 left-0 right-0 h-16 shadow-t-lg z-50 flex justify-around border-t" },
-        bottomNavLinks.map(link => {
+        { className: "bottom-nav-chakra md:hidden fixed bottom-0 left-0 right-0 h-16 shadow-t-lg z-50 flex flex-nowrap overflow-x-auto border-t no-scrollbar" },
+        ...bottomNavLinks.map(link => {
             const Icon = link.icon;
             return React.createElement(
                 ReactRouterDOM.NavLink,
@@ -122,9 +124,20 @@ const BottomNav = () => {
                 React.createElement('span', { className: "text-xs font-medium" }, link.name)
             );
         }),
+        isPro && (() => {
+                const ProIcon = proNavLink.icon;
+                return React.createElement(
+                    ReactRouterDOM.NavLink, {
+                        to: proNavLink.path,
+                        className: ({isActive}) => `${getLinkClasses({isActive})} ${!isActive ? 'text-yellow-400 hover:text-yellow-300' : ''}`
+                    },
+                    React.createElement(ProIcon, { className: "w-6 h-6 mb-1" }),
+                    React.createElement('span', { className: "text-xs font-bold" }, proNavLink.name)
+                )
+        })(),
         React.createElement(
             'button',
-            { onClick: openSettings, className: "flex flex-col items-center justify-center w-full pt-2 pb-1 text-gray-400 hover:text-white transition-colors" },
+            { onClick: openSettings, className: "flex flex-col items-center justify-center flex-shrink-0 w-20 h-full pt-2 pb-1 text-gray-400 hover:text-white transition-colors" },
             React.createElement(PaintBrushIcon, { className: "w-6 h-6 mb-1" }),
             React.createElement('span', { className: "text-xs font-medium" }, "الخلفيات")
         )
