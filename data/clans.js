@@ -1,5 +1,5 @@
 import UchihaSymbol from '../components/icons/UchihaSymbol.js';
-import AkatsukiSymbol from '../components/icons/AkatsukiSymbol.js';
+import AkatsukiSymbol from '../components/AkatsukiSymbol.js';
 import AnbuSymbol from '../components/icons/AnbuSymbol.js';
 import SenjuSymbol from '../components/icons/SenjuSymbol.js';
 import HyugaSymbol from '../components/icons/HyugaSymbol.js';
