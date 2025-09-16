@@ -1,9 +1,7 @@
 import React, { useEffect } from 'react';
 import * as ReactRouterDOM from 'react-router-dom';
 import { useShinobiPro } from '../hooks/useShinobiPro.js';
-import { ScaleIcon, SwatchIcon, KeyIcon, SpeakerWaveIcon } from '@heroicons/react/24/solid';
-import JutsuCreator from '../components/JutsuCreator.js';
-import JutsuCreatorIcon from '../components/icons/JutsuCreatorIcon.js';
+import { ScaleIcon, SwatchIcon, KeyIcon, SpeakerWaveIcon, SparklesIcon } from '@heroicons/react/24/solid';
 
 const proThemes = [
     { id: 'theme-akatsuki', name: 'الأكاتسوكي', class: 'preview-akatsuki', description: 'انغمس في ظلام الأكاتسوكي مع هذا المظهر الأيقوني.' },
@@ -60,19 +58,6 @@ const FeaturesPage = () => {
                 )
             )
         ),
-         React.createElement(
-            'div', { className: "feature-card-pro", style: { '--hover-color': '#3b82f6' } },
-            React.createElement(
-                'div', { className: "feature-content text-right" },
-                React.createElement(
-                    'div', { className: "flex items-center justify-end gap-3 mb-4" },
-                    React.createElement('h3', { className: "font-cairo text-3xl font-bold text-blue-400" }, "مختبر الجتسو"),
-                    React.createElement(JutsuCreatorIcon, { className: "w-8 h-8" })
-                ),
-                React.createElement('p', { className: "text-gray-400 mb-6" }, "أطلق العنان لإبداعك. صف فكرتك لتقنية نينجا، ودع الذكاء الاصطناعي يحولها إلى حقيقة بتفاصيلها الكاملة."),
-                React.createElement(JutsuCreator)
-            )
-        ),
         React.createElement(
             ReactRouterDOM.Link, { to: "/battle", state: { from: "features" } },
             React.createElement(
@@ -86,6 +71,18 @@ const FeaturesPage = () => {
                     ),
                     React.createElement('p', { className: "text-gray-400 mt-2" }, "ضع أي شينوبي ضد آخر في مواجهة ملحمية. حلل إحصائياتهم، قدراتهم، واحسم الجدل حول من هو الأقوى.")
                 )
+            )
+        ),
+        React.createElement(
+            'div', { className: "feature-card-pro opacity-60 cursor-not-allowed", style: { '--hover-color': '#3b82f6' } },
+            React.createElement(
+                'div', { className: "feature-content text-right" },
+                React.createElement(
+                    'div', { className: "flex items-center justify-end gap-3" },
+                    React.createElement('h3', { className: "font-cairo text-2xl font-bold text-blue-400" }, "مختبر الجتسو"),
+                    React.createElement(SparklesIcon, { className: "w-7 h-7" })
+                ),
+                React.createElement('p', { className: "text-gray-500 mt-2" }, "قريباً: أطلق العنان لإبداعك وابتكر تقنيات نينجا فريدة باستخدام الذكاء الاصطناعي.")
             )
         ),
         React.createElement(

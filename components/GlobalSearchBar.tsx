@@ -19,7 +19,8 @@ const GlobalSearchBar = () => {
   const [results, setResults] = useState({ characters: [], arcs: [], eyes: [], clans: [] });
   const [isFocused, setIsFocused] = useState(false);
   const searchRef = useRef(null);
-  const { isAkatsukiTheme, openDetailView } = useShinobiPro();
+  const { backgroundTheme, openDetailView } = useShinobiPro();
+  const isAkatsukiTheme = backgroundTheme === 'theme-akatsuki';
 
   const performSearch = useCallback((currentQuery) => {
     if (!currentQuery) {
