@@ -48,10 +48,10 @@ const Sidebar = () => {
     { className: "sidebar-chakra fixed top-0 right-0 h-screen w-64 lg:w-72 shadow-2xl p-6 flex-col justify-between hidden md:flex border-l" },
     React.createElement(
       'div',
-      { className: "flex-grow flex flex-col" },
+      { className: "flex-grow flex flex-col overflow-y-auto no-scrollbar" },
       React.createElement(
         'div',
-        { className: "flex flex-col items-center mb-10 text-center" },
+        { className: "flex flex-col items-center mb-10 text-center flex-shrink-0" },
         React.createElement(SharinganLogo),
         React.createElement(
           'div',
@@ -78,7 +78,7 @@ const Sidebar = () => {
       ),
        React.createElement(
         'div',
-        { className: "mt-auto pt-4 border-t border-gray-700/50 flex flex-col gap-1" },
+        { className: "mt-auto pt-4 border-t border-gray-700/50 flex flex-col gap-1 flex-shrink-0" },
          isPro && (() => {
             const ProIcon = proNavLink.icon;
             return React.createElement(

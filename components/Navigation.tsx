@@ -46,8 +46,8 @@ const Sidebar = () => {
 
   return (
     <aside className="sidebar-chakra fixed top-0 right-0 h-screen w-64 lg:w-72 shadow-2xl p-6 flex-col justify-between hidden md:flex border-l">
-      <div className="flex-grow flex flex-col">
-        <div className="flex flex-col items-center mb-10 text-center">
+      <div className="flex-grow flex flex-col overflow-y-auto no-scrollbar">
+        <div className="flex flex-col items-center mb-10 text-center flex-shrink-0">
             <SharinganLogo />
             <div className="site-title-wrapper mt-4">
               <h1 className="font-cairo text-2xl font-black site-title">موسوعة الشينوبي</h1>
@@ -67,7 +67,7 @@ const Sidebar = () => {
                 )}
             )}
         </nav>
-        <div className="mt-auto pt-4 border-t border-gray-700/50 flex flex-col gap-1">
+        <div className="mt-auto pt-4 border-t border-gray-700/50 flex flex-col gap-1 flex-shrink-0">
              {isPro && (() => {
                 const ProIcon = proNavLink.icon;
                 return (
